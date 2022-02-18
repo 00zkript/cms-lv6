@@ -29,20 +29,20 @@ class NosotrosController extends Controller
 
    function update(Request $request)
     {
-        if ($request->ajax()){
-
-            $nosotros = Nosotros::findOrFail($request->idnosotros);
-            $nosotros->vision = $request->vision;
-            $nosotros->mision = $request->mision;
-            $nosotros->somos = $request->somos;
-            $nosotros->update();
-
-            return response()->json(['mensaje' => 'Información modificada satisfactoriamente']);
-
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $nosotros = Nosotros::findOrFail($request->idnosotros);
+        $nosotros->vision = $request->vision;
+        $nosotros->mision = $request->mision;
+        $nosotros->somos = $request->somos;
+        $nosotros->update();
+
+        return response()->json(['mensaje' => 'Información modificada satisfactoriamente']);
+
+
+
     }
 
 

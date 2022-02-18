@@ -30,6 +30,9 @@ class PaginaController extends Controller
 
     public function listar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
         $paginaActual = $request->input('paginaActual');
@@ -50,6 +53,9 @@ class PaginaController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
             $pagina = new Pagina();
@@ -61,14 +67,14 @@ class PaginaController extends Controller
             $pagina->save();
 
             return response()->json([
-                "mensaje"=> "Registro creado exitosamente.",
+                'mensaje'=> "Registro creado exitosamente.",
             ]);
 
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo crear el registro.",
+                'mensaje'=> "No se pudo crear el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -81,11 +87,14 @@ class PaginaController extends Controller
 
     public function show(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Pagina::query()->find($request->input('idpagina'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
         return response()->json($registro);
@@ -94,11 +103,14 @@ class PaginaController extends Controller
 
     public function edit(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Pagina::query()->find($request->input('idpagina'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
 
@@ -108,6 +120,10 @@ class PaginaController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $pagina = Pagina::query()->findOrFail($request->input('idpagina'));
 
@@ -119,13 +135,13 @@ class PaginaController extends Controller
             $pagina->update();
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizar el registro.",
+                'mensaje'=> "No se pudo actualizar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -138,19 +154,23 @@ class PaginaController extends Controller
 
     public function habilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $pagina = Pagina::query()->findOrFail($request->input('idpagina'));
             $pagina->estado    = 1;
             $pagina->update();
 
             return response()->json([
-                "mensaje"=> "Registro habilitado exitosamente.",
+                'mensaje'=> "Registro habilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -159,6 +179,10 @@ class PaginaController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $pagina = Pagina::query()->findOrFail($request->input('idpagina'));
             $pagina->estado    = 0;
@@ -166,13 +190,13 @@ class PaginaController extends Controller
             $pagina->update();
 
             return response()->json([
-                "mensaje"=> "Registro inhabilitado exitosamente.",
+                'mensaje'=> "Registro inhabilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);

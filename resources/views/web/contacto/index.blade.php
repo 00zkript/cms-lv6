@@ -67,7 +67,7 @@
 
                             <input class="ajustarc4" type="text" name="asunto" placeholder="Asunto">
 
-                            <input class="ajustarc5" type="text" name="mensaje" placeholder="Mensaje">
+                            <input class="ajustarc5" type="text" name='mensaje' placeholder='mensaje'>
 
 
 
@@ -140,7 +140,7 @@
 
 
                 })
-                .catch(errorToast)
+                .catch(errorResponse)
 
 
 

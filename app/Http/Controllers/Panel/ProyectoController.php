@@ -33,6 +33,9 @@ class ProyectoController extends Controller
 
     public function listar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
         $proyectoActual = $request->input('paginaActual');
@@ -53,6 +56,9 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
             $proyecto = new Proyecto();
@@ -82,14 +88,14 @@ class ProyectoController extends Controller
             }
 
             return response()->json([
-                "mensaje"=> "Registro creado exitosamente.",
+                'mensaje'=> "Registro creado exitosamente.",
             ]);
 
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo crear el registro.",
+                'mensaje'=> "No se pudo crear el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -102,11 +108,14 @@ class ProyectoController extends Controller
 
     public function show(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Proyecto::query()->find($request->input('idproyecto'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
         $registroImagenes = ProyectoImagen::query()->where('idproyecto',$registro->idproyecto)->get();
 
@@ -118,11 +127,14 @@ class ProyectoController extends Controller
 
     public function edit(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Proyecto::query()->find($request->input('idproyecto'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
         $registroImagenes = ProyectoImagen::query()->where('idproyecto',$registro->idproyecto)->get();
 
@@ -135,6 +147,9 @@ class ProyectoController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
             $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
@@ -173,13 +188,13 @@ class ProyectoController extends Controller
 
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizar el registro.",
+                'mensaje'=> "No se pudo actualizar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -192,19 +207,23 @@ class ProyectoController extends Controller
 
     public function habilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
             $proyecto->estado    = 1;
             $proyecto->update();
 
             return response()->json([
-                "mensaje"=> "Registro habilitado exitosamente.",
+                'mensaje'=> "Registro habilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -213,6 +232,10 @@ class ProyectoController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
             $proyecto->estado    = 0;
@@ -220,13 +243,13 @@ class ProyectoController extends Controller
             $proyecto->update();
 
             return response()->json([
-                "mensaje"=> "Registro inhabilitado exitosamente.",
+                'mensaje'=> "Registro inhabilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -236,6 +259,9 @@ class ProyectoController extends Controller
 
     public function removeFile(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
 
@@ -243,13 +269,13 @@ class ProyectoController extends Controller
             $imagen->delete();
 
             return response()->json([
-                "mensaje"=> "Archivo eliminado exitosamente.",
+                'mensaje'=> "Archivo eliminado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo eliminar el archivo.",
+                'mensaje'=> "No se pudo eliminar el archivo.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -261,7 +287,9 @@ class ProyectoController extends Controller
 
     public function sortFiles(Request $request)
     {
-
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         foreach (json_decode($request->stack) as $key => $item) {
             $imagen = ProyectoImagen::query()->find($item->key);
@@ -272,7 +300,7 @@ class ProyectoController extends Controller
 
 
         return response()->json([
-            "mensaje"=> "Orden modificado exitosamente.",
+            'mensaje'=> "Orden modificado exitosamente.",
         ]);
 
 

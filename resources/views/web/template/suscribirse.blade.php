@@ -43,7 +43,7 @@
                 $("#formSuscripcion")[0].reset();
 
             })
-            .catch(errorToast)
+            .catch(errorResponse)
 
 
 

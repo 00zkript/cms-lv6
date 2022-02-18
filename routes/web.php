@@ -4,9 +4,13 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
-// Route::get('/test', function(){
-
+// Route::get('/test', function(\Illuminate\Http\Request $request){
+//     if (!$request->ajax()){
+//         return back();
+//     }
 //     dd(session()->all());
+//
+//
 // });
 
 
@@ -35,7 +39,7 @@ Route::get('login-panel/salir', 'Panel\LoginController@salir')->name('login-pane
 
 Route::middleware(['admin'])->prefix('panel')->group(function (){
 
-    Route::resource('home','Panel\HomeController');
+    Route::resource('/home','Panel\HomeController')->only(['index']);
 
     Route::get('/configuracion','Panel\ConfiguracionController@edit')->name('configuracion.edit');
     Route::put('/configuracion/update','Panel\ConfiguracionController@update')->name('configuracion.update');
@@ -47,7 +51,7 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
 
 
 
-    Route::get('menu/getOrden','Panel\MenuController@getOrden')->name('menu.getOrden');
+    Route::get('menu/getPosicion','Panel\MenuController@getPosicion')->name('menu.getPosicion');
     Route::get('menu/getParientes','Panel\MenuController@getParientes')->name('menu.getParientes');
     Route::post('menu/habilitar','Panel\MenuController@habilitar')->name('menu.habilitar');
     Route::post('menu/inhabilitar','Panel\MenuController@inhabilitar')->name('menu.inhabilitar');

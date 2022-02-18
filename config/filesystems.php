@@ -55,6 +55,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'panel' => [
+            'driver' => 'local',
+            'root' => public_path('panel/img'),
+            'url' => env('APP_URL').'/panel/img',
+            'visibility' => 'public',
+        ],
+
+        'web' => [
+            'driver' => 'local',
+            'root' => public_path('/web'),
+            'url' => env('APP_URL').'/web',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

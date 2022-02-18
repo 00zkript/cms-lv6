@@ -172,7 +172,7 @@
                     const data = response.data;
 
                     stop();
-                    notificacion("success","Información modificada",data);
+                    notificacion("success","Información modificada",data.mensaje);
                     location.reload();
                 })
                 .catch(errorCatch)

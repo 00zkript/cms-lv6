@@ -18,6 +18,7 @@ class ProductoController extends Controller
     public function index()
     {
 
+
         $productos = Producto::query()
             ->with(['categoria'])
             ->orderBy('idproducto','DESC')
@@ -35,6 +36,9 @@ class ProductoController extends Controller
 
     public function listar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
         $productoActual = $request->input('paginaActual');
@@ -56,6 +60,9 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
             $producto = new Producto();
@@ -88,14 +95,14 @@ class ProductoController extends Controller
             $producto->save();
 
             return response()->json([
-                "mensaje"=> "Registro creado exitosamente.",
+                'mensaje'=> "Registro creado exitosamente.",
             ]);
 
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo crear el registro.",
+                'mensaje'=> "No se pudo crear el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -108,11 +115,14 @@ class ProductoController extends Controller
 
     public function show(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Producto::query()->find($request->input('idproducto'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
         $registro->imagenData = $this->oneFileData('producto',$registro->imagen);
@@ -124,11 +134,14 @@ class ProductoController extends Controller
 
     public function edit(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Producto::query()->find($request->input('idproducto'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
         $registro->imagenData = $this->oneFileData('producto',$registro->imagen);
@@ -141,6 +154,10 @@ class ProductoController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $producto = Producto::query()->findOrFail($request->input('idproducto'));
             $producto->idcategoria_producto = $request->input('idcategoria_productoEditar');
@@ -172,13 +189,13 @@ class ProductoController extends Controller
             $producto->update();
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizar el registro.",
+                'mensaje'=> "No se pudo actualizar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -191,19 +208,23 @@ class ProductoController extends Controller
 
     public function habilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $producto = Producto::query()->findOrFail($request->input('idproducto'));
             $producto->estado    = 1;
             $producto->update();
 
             return response()->json([
-                "mensaje"=> "Registro habilitado exitosamente.",
+                'mensaje'=> "Registro habilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -212,6 +233,10 @@ class ProductoController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $producto = Producto::query()->findOrFail($request->input('idproducto'));
             $producto->estado    = 0;
@@ -219,13 +244,13 @@ class ProductoController extends Controller
             $producto->update();
 
             return response()->json([
-                "mensaje"=> "Registro inhabilitado exitosamente.",
+                'mensaje'=> "Registro inhabilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -235,19 +260,23 @@ class ProductoController extends Controller
 
     public function eliminarPdf(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $producto = Producto::query()->findOrFail($request->input('idproducto'));
             $producto->pdf    = '';
             $producto->update();
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizado el registro.",
+                'mensaje'=> "No se pudo actualizado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);

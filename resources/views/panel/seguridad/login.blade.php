@@ -68,11 +68,15 @@
 
     <script src="{{asset('panel/js/jquery.min.js')}}"></script>
     <script src="{{asset('panel/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('generales/js/waitMe.min.js')}}"></script>
     <script src="{{asset('panel/pnotify/PNotify.js')}}"></script>
     <script src="{{asset('panel/pnotify/PNotifyButtons.js')}}"></script>
     <script src="{{asset('generales/js/funciones.js')}}"></script>
-
+    <script src="{{asset('generales/js/axios.min.js')}}"></script>
+    <script src="{{asset('generales/js/waitMe.min.js')}}"></script>
+    <script>
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}' ;
+        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    </script>
 
     <script !src="">
         $(function () {
@@ -85,40 +89,37 @@
         var verificarLogin = () => {
             $("#frmLogin").on("submit",(e)=>{
                 e.preventDefault();
-                 $.ajax({
-                        url:'{{route('login-panel.verificar')}}',
-                        method:'POST',
-                        dataType:'json',
-                        data: new FormData($("#frmLogin")[0]),
-                        cache:false,
-                        contentType:false,
-                        processData:false,
-                        beforeSend:function () {
-                            cargando();
-                         },
-                         success:function (data) {
 
-                            if (!data.error){
-                                $("#frmLogin button[type=submit]").prop('disabled',true);
-                                notificacion('success','Exito',data.mensaje);
-                                setTimeout(function () {
-                                    cargando('Redirigiendo...');
-                                    window.location.href = '{{route('home.index')}}';
-                                },3000);
+                axios.post('{{route('login-panel.verificar')}}',new FormData($("#frmLogin")[0]))
+                .then( response => {
+                    const data = response.data;
 
-                            }else{
-                                notificacion('error','Error',data.mensaje);
-                            }
 
-                         },
-                         error:function (data) {
+                    $("#frmLogin button[type=submit]").prop('disabled',true);
+                    notificacion('success','Exito',data.mensaje);
 
-                             notificacion('error','Error',data.mensaje);
-                         },
-                          complete:function () {
-                            stop();
-                          }
-                 });
+                    setTimeout(function () {
+                        cargando('Redirigiendo...');
+                        window.location.href = '{{route('home.index')}}';
+                    },3000);
+
+
+                })
+                .catch( error => {
+                    const response = error.response;
+                    const data = response.data;
+
+                    if (response.status == 400){
+                        notificacion('error','Error',data.mensaje);
+                        return false;
+                    }
+
+                    notificacion("error","Error","Error del servidor, contácte con soporte.");
+                    return  false;
+
+                })
+
+
             });
         }
 

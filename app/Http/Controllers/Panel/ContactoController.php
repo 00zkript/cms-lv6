@@ -19,6 +19,9 @@ class ContactoController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $contacto = Contacto::findOrFail($request->idcontacto);
         $contacto->direccion = $request->input('direccion');
@@ -36,7 +39,7 @@ class ContactoController extends Controller
         $contacto->pinterest = $request->input('pinterest');
         $contacto->update();
 
-        return response()->json('Información modificada satisfactoriamente');
+        return response()->json(['mensaje' => 'Información modificada satisfactoriamente']);
 
 
     }

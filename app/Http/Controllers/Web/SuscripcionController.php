@@ -16,12 +16,12 @@ class SuscripcionController extends Controller
 
             Mail::send(new SuscribirseMail($request->all()));
 
-            return response()->json(["mensaje" => "Se envió correctamente la solicitud de suscripción."]);
+            return response()->json(['mensaje' => "Se envió correctamente la solicitud de suscripción."]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo enviar tu solicitud, recargue y prueba nuevamente."
+                'mensaje'=> "No se pudo enviar tu solicitud, recargue y prueba nuevamente."
             ],400);
 
         }

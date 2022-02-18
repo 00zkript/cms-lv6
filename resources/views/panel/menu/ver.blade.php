@@ -17,33 +17,33 @@
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <p>Nombre:</p>
-                                <p id="nombreShow"></p>
+                            <p class="font-weight-bold">Nombre:</p>
+                            <p id="nombreShow"></p>
                             <hr>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p>Pariente:</p>
+                            <p class="font-weight-bold">Pariente:</p>
                             <p id="parienteShow"></p>
                             <hr>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p>Orden:</p>
-                            <p id="ordenShow"></p>
+                            <p class="font-weight-bold">Posicion:</p>
+                            <p id="posicionShow"></p>
                             <hr>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p>Tipo ruta:</p>
+                            <p class="font-weight-bold">Tipo ruta:</p>
                             <p id="tipoRutaShow"></p>
                             <hr>
                         </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p>Estado:</p>
-                            <p id="txtEstado"></p>
+                            <p class="font-weight-bold">Estado:</p>
+                            <p id="estadoShow"></p>
                         </div>
 
                     </div>

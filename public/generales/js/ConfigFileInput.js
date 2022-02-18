@@ -12,7 +12,7 @@ const configFileInput = ({
         file_icon_drag = false,
         required = false,
         otros = {}
-    }) => {
+    } = '') => {
 
     const config = {
         theme                       : 'fa',

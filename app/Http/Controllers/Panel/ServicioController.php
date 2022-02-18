@@ -32,6 +32,9 @@ class ServicioController extends Controller
 
     public function listar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
         $servicioActual = $request->input('paginaActual');
@@ -52,6 +55,9 @@ class ServicioController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
             $servicio = new Servicio();
@@ -66,14 +72,14 @@ class ServicioController extends Controller
             $servicio->save();
 
             return response()->json([
-                "mensaje"=> "Registro creado exitosamente.",
+                'mensaje'=> "Registro creado exitosamente.",
             ]);
 
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo crear el registro.",
+                'mensaje'=> "No se pudo crear el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -86,11 +92,14 @@ class ServicioController extends Controller
 
     public function show(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Servicio::query()->find($request->input('idservicio'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
         $registro->imagenData = $this->oneFileData('servicio',$registro->imagen);
 
@@ -100,11 +109,14 @@ class ServicioController extends Controller
 
     public function edit(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $registro = Servicio::query()->find($request->input('idservicio'));
 
         if(!$registro){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
         $registro->imagenData = $this->oneFileData('servicio',$registro->imagen);
 
@@ -114,6 +126,10 @@ class ServicioController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $servicio = Servicio::query()->findOrFail($request->input('idservicio'));
 
@@ -128,13 +144,13 @@ class ServicioController extends Controller
             $servicio->update();
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizar el registro.",
+                'mensaje'=> "No se pudo actualizar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -147,19 +163,23 @@ class ServicioController extends Controller
 
     public function habilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $servicio = Servicio::query()->findOrFail($request->input('idservicio'));
             $servicio->estado    = 1;
             $servicio->update();
 
             return response()->json([
-                "mensaje"=> "Registro habilitado exitosamente.",
+                'mensaje'=> "Registro habilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -168,6 +188,10 @@ class ServicioController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try {
             $servicio = Servicio::query()->findOrFail($request->input('idservicio'));
             $servicio->estado    = 0;
@@ -175,13 +199,13 @@ class ServicioController extends Controller
             $servicio->update();
 
             return response()->json([
-                "mensaje"=> "Registro inhabilitado exitosamente.",
+                'mensaje'=> "Registro inhabilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);

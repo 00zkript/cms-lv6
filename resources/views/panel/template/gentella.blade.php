@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- <meta name="token" id="token" content="{{csrf_token() }}"> --}}
-    <title>PROTTEC SAC | Administrador</title>
+    <title>{{ $empresaGeneral->nombre }} | Administrador</title>
 
 
     <link rel="icon" href="{{ asset('panel/img/empresa/'.$empresaGeneral->favicon) }}" sizes="32x32" />
@@ -88,16 +88,16 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a target="_blank" href="{{url('/') }}" class="site_title"><i class="fa fa-bank"></i> <span>PROTTEC SAC</span></a>
+                    <a target="_blank" href="{{url('/') }}" class="site_title"><i class="fa fa-bank"></i> <span>{{ $empresaGeneral->nombre }}</span></a>
                 </div>
                 <div class="clearfix"></div>
 
                 <div class="profile clearfix">
                     <div class="profile_pic">
-                        @if(empty(auth()->user()->foto))
+                        @if(empty(auth()->user()->imagen))
                             <img src="{{ asset('panel/img/img.webp') }}" alt="..." class="img-circle profile_img">
                         @else
-                            <img src="{{ asset('panel/img/usuario/'.auth()->user()->foto) }}" alt="..." class="img-circle profile_img">
+                            <img src="{{ asset('panel/img/usuario/'.auth()->user()->imagen) }}" alt="..." class="img-circle profile_img">
                         @endif
 
                     </div>
@@ -172,10 +172,10 @@
                         <li class="nav-item dropdown open" style="padding-left: 15px;">
                             <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
                                id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                @if(empty(auth()->user()->foto))
+                                @if(empty(auth()->user()->imagen))
                                     <img src="{{ asset('panel/img/img.webp') }}" alt="">{{auth()->user()->usuario}}
                                 @else
-                                    <img src="{{ asset('panel/img/usuario/'.auth()->user()->foto) }}" alt="">{{auth()->user()->usuario}}
+                                    <img src="{{ asset('panel/img/usuario/'.auth()->user()->imagen) }}" alt="">{{auth()->user()->usuario}}
                                 @endif
 
                             </a>
@@ -198,7 +198,7 @@
 
         <footer>
             <div class="pull-right">
-                PROTTEC SAC - CMS Admin by <a target="_blank" href="https://dezain.com.pe/">Dezain Estudio</a>
+                {{ $empresaGeneral->nombre }} - CMS Admin by <a target="_blank" href="https://dezain.com.pe/">Dezain Estudio</a>
             </div>
             <div class="clearfix"></div>
         </footer>

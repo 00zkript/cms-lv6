@@ -20,7 +20,7 @@
 
 
 
-                        {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="pariente">Pariente:</label>
                                 <select data-size="5" name="pariente" id="pariente" class="form-control selectpicker show-tick" data-live-search="true" title="[--Seleccione--]"> <option value="0">Sin Pariente</option>
@@ -28,7 +28,7 @@
 
                                 </select>
                             </div>
-                        </div> --}}
+                        </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label for="tipoRuta">Tipo de ruta: <span class="text-danger">(*)</span></label>
                                 <select id="tipoRuta" name="tipoRuta" class="form-control" required>
-                                    <option value="" >[---Seleccione---]</option>
+                                    <option value="" selected hidden>[---Seleccione---]</option>
                                     <option value="interna" >Interna</option>
                                     <option value="externa" >Externa</option>
                                 </select>
@@ -52,7 +52,7 @@
                             <div class="form-group">
                                 <label for="rutaInterna">Ruta interna: <span class="text-danger">(*)</span></label>
                                 <select id="rutaInterna" name="rutaInterna" class="form-control">
-                                        <option value="" >[---Seleccione---]</option>
+                                        <option value="" selected hidden>[---Seleccione---]</option>
                                     @foreach($rutaInterna as $r)
                                         <option value="{{ $r->key }}">{{ $r->name }}</option>
                                     @endforeach
@@ -73,8 +73,8 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="orden">Orden: <span class="text-danger">(*)</span></label>
-                                <select required data-size="5" name="orden" id="orden" class="form-control selectpicker show-tick"
+                                <label for="posicion">Orden: <span class="text-danger">(*)</span></label>
+                                <select required data-size="5" name="posicion" id="posicion" class="form-control selectpicker show-tick"
                                         data-live-search="true" title="[--Seleccione--]">
 
                                 </select>

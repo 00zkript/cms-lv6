@@ -20,52 +20,52 @@ class EmpresaController extends Controller
         $empresa = DB::table('empresa')
             ->first();
 
-        $empresa->faviconData = $this->oneFileData('empresa',$empresa->favicon);
-        $empresa->logoData = $this->oneFileData('empresa',$empresa->logo);
-        $empresa->logo_footerData = $this->oneFileData('empresa',$empresa->logo_footer);
-
         return view('panel.empresa.index')->with(compact('empresa'));
     }
 
     public function update(Request $request)
     {
-        if ($request->ajax()){
-
-            $empresa = Empresa::findOrFail($request->input('idempresa'));
-
-            // if($request->hasFile('logoFooter')){
-            //     $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('logoFooter'));
-            //     $empresa->logo_footer = basename($nombreImagen);
-            // }
-
-            if ($request->hasFile('favicon')){
-                $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('favicon'));
-                $empresa->favicon = basename($nombreImagen);
-            }
-
-            if ($request->hasFile('logo')){
-
-                $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('logo'));
-                $empresa->logo = basename($nombreImagen);
-
-            }
-            $empresa->titulo_pagina   = $request->input('tituloPagina');
-            $empresa->seo_keywords    = $request->input('keywords');
-            $empresa->seo_description = $request->input('description');
-            $empresa->seo_author      = $request->input('author');
-            $empresa->seguimiento_head   = $request->input('seguimientoHead');
-            $empresa->seguimiento_body   = $request->input('seguimientoBody');
-
-
-            $empresa->estado = 1;
-            $empresa->update();
-
-            return response()->json('Información modificada satisfactoriamente');
-
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $empresa = Empresa::findOrFail($request->input('idempresa'));
+
+
+        if ($request->hasFile('favicon')){
+            $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('favicon'));
+            $empresa->favicon = basename($nombreImagen);
+        }
+
+        if ($request->hasFile('logo')){
+
+            $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('logo'));
+            $empresa->logo = basename($nombreImagen);
+
+        }
+
+
+        if($request->hasFile('logo2')){
+             $nombreImagen = Storage::disk('panel')->putFile('empresa',$request->file('logo2'));
+             $empresa->logo2 = basename($nombreImagen);
+         }
+
+
+        $empresa->titulo_general   = $request->input('tituloGeneral');
+        $empresa->seo_keywords    = $request->input('keywords');
+        $empresa->seo_description = $request->input('description');
+        $empresa->seo_author      = $request->input('author');
+        $empresa->seguimiento_head   = $request->input('seguimientoHead');
+        $empresa->seguimiento_body   = $request->input('seguimientoBody');
+
+
+        $empresa->estado = 1;
+        $empresa->update();
+
+        return response()->json(['mensaje' => 'Información modificada satisfactoriamente']);
+
+
+
     }
 
 }

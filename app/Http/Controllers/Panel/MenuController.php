@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Route;
 
 
 class MenuController extends Controller
@@ -28,7 +27,9 @@ class MenuController extends Controller
 
     public function listar(Request $request)
     {
-
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
         $paginaActual = $request->input('paginaActual');
@@ -50,6 +51,10 @@ class MenuController extends Controller
     public function store(Request $request)
     {
 
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         try{
             $menu                        = new Menu;
             $menu->nombre                = $request->input('nombre');
@@ -65,18 +70,18 @@ class MenuController extends Controller
                 $menu->ruta   = $request->input('rutaExterna') ?: 'javscript:void(0);';
             }
 
-            $menu->orden                 = $request->input('orden');
+            $menu->posicion                 = $request->input('posicion');
             $menu->estado                = $request->input('estado');
             $menu->save();
 
             return response()->json([
-                "mensaje"=> "Registro creado exitosamente.",
+                'mensaje'=> "Registro creado exitosamente.",
             ]);
 
         }catch (\Throwable $th){
 
             return response()->json([
-                "mensaje"=> "No se pudo crear el registro.",
+                'mensaje'=> "No se pudo crear el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -87,6 +92,9 @@ class MenuController extends Controller
 
     public function show(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $menu = DB::table('menu AS m')
             ->leftJoin('menu AS me','m.idmenu','=','me.pariente')
@@ -95,7 +103,7 @@ class MenuController extends Controller
             ->first();
 
         if (!$menu){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
         return response()->json($menu);
@@ -104,13 +112,16 @@ class MenuController extends Controller
 
     public function edit(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $menu = DB::table('menu')
             ->where('idmenu',$request->input('idmenu'))
             ->first();
 
         if (!$menu){
-            return response()->json( ["mensaje" => "Registro no encontrado"],400);
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
         return response()->json($menu);
@@ -120,6 +131,9 @@ class MenuController extends Controller
 
     public function update(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try{
             $menu                             =  Menu::query()->findOrFail($request->input('idmenu'));
@@ -133,19 +147,19 @@ class MenuController extends Controller
             }
             $menu->slug                       =  Str::slug($request->input('nombreEditar'));
             $menu->pariente                   =  $request->input('parienteEditar') ?: 0;
-            $menu->orden                      =  $request->input('ordenEditar');
+            $menu->posicion                      =  $request->input('posicionEditar');
             $menu->estado                     =  $request->input('estadoEditar');
             $menu->update();
 
             return response()->json([
-                "mensaje"=> "Registro actualizado exitosamente.",
+                'mensaje'=> "Registro actualizado exitosamente.",
             ]);
 
         }catch (\Throwable $th){
 
 
             return response()->json([
-                "mensaje"=> "No se pudo actualizar el registro.",
+                'mensaje'=> "No se pudo actualizar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -155,6 +169,9 @@ class MenuController extends Controller
 
     public function habilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try {
 
@@ -165,13 +182,13 @@ class MenuController extends Controller
 
 
             return response()->json([
-                "mensaje"=> "Registro habilitado exitosamente.",
+                'mensaje'=> "Registro habilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -181,6 +198,9 @@ class MenuController extends Controller
 
     public function inhabilitar(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try{
 
@@ -189,13 +209,13 @@ class MenuController extends Controller
             $menu->update();
 
             return response()->json([
-                "mensaje"=> "Registro inhabilitado exitosamente.",
+                'mensaje'=> "Registro inhabilitado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -205,6 +225,9 @@ class MenuController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         try{
 
@@ -212,13 +235,13 @@ class MenuController extends Controller
             $menu->delete();
 
             return response()->json([
-                "mensaje"=> "Registro eliminado exitosamente.",
+                'mensaje'=> "Registro eliminado exitosamente.",
             ]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo eliminar el registro.",
+                'mensaje'=> "No se pudo eliminar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -226,18 +249,25 @@ class MenuController extends Controller
 
     }
 
-    public function getOrden()
+    public function getPosicion(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
         $menu = DB::table('menu')->count();
 
 
-        return response()->json($menu + 1);
+        return response()->json(["posicion_maxima" => $menu + 1]);
 
     }
 
-    public function getParientes()
+    public function getParientes(Request $request)
     {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
         $pagina = DB::table('menu')
             ->orderBy('pariente','asc')
             ->orderBy('idmenu','asc')

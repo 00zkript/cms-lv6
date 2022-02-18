@@ -13,50 +13,49 @@ class LoginController extends Controller
     {
         if (!auth()->check()) {
             return view('panel.seguridad.login');
-        }else{
-           return redirect()->route('home.index');
         }
+
+
+        return redirect()->route('home.index');
 
     }
 
     public function verificar(LoginRequest $request)
     {
-        if ($request->ajax()){
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
-            try{
+        try{
 
-                $usuario = $request->usuario;
-                $clave = $request->clave;
-                $recuerdame = $request->recuerdame;
-                $respuesta = [];
+            $usuario    = $request->input('usuario');
+            $clave      = $request->input('clave');
+            $recuerdame = $request->input('recuerdame');
 
-                $usuarioExistente = DB::table('usuario')
-                    ->where('usuario',$usuario)
-                    ->where('estado',1)
-                    ->first();
+            $usuarioExistente = DB::table('usuario')
+                ->where('usuario',$usuario)
+                ->where('estado',1)
+                ->first();
 
+            $mensaje = 'Usuario incorrecto';
+            $status = 400;
 
-                if (!empty($usuarioExistente) && decrypt($usuarioExistente->password) == $clave){
+            if (!empty($usuarioExistente) && decrypt($usuarioExistente->password) == $clave){
+                auth()->loginUsingId($usuarioExistente->idusuario,$recuerdame);
 
-                    $respuesta['error'] = false;
-                    $respuesta['mensaje'] = 'Usuario autenticado, redirigiendo...';
+                $mensaje ='Usuario autenticado, redirigiendo...';
+                $status = 200;
 
-                    auth()->loginUsingId($usuarioExistente->idusuario,$recuerdame);
-
-                }else{
-                    $respuesta['error'] = true;
-                    $respuesta['mensaje'] = 'Usuario incorrecto';
-                }
-
-                return response()->json($respuesta);
-
-            }catch (\Throwable $t){
-                die($t->getMessage());
             }
 
-        }else{
-            return back();
+
+            return response()->json(['mensaje' => $mensaje ], $status);
+
+        }catch (\Throwable $t){
+            die($t->getMessage());
         }
+
+
     }
 
     public function salir()

@@ -47,7 +47,6 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(['panel.*'],function ($view){
 
             $empresaGeneral = DB::table('empresa')
-                ->select('logo','favicon')
                 ->first();
 
 

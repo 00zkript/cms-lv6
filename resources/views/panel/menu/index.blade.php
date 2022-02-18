@@ -68,7 +68,7 @@
         const URL_INHABILITAR = "{{ route('menu.inhabilitar') }}";
         const URL_ELIMINAR    = "{{ route('menu.destroy','destroy') }}";
         const URL_VER         = "{{ route('menu.show','show') }}";
-        const URL_ORDEN       = "{{ route('menu.getOrden') }}";
+        const URL_POSICION       = "{{ route('menu.getPosicion') }}";
         const URL_PARIENTES   = "{{ route('menu.getParientes') }}";
 
 
@@ -78,8 +78,8 @@
                 e.preventDefault();
                 $("#frmCrear span.error").remove();
                 $("#frmCrear")[0].reset();
-                getOrden("crear");
-                // getParientes();
+                getPosicion("crear");
+                getParientes();
                 $("#frmCrear .selectpicker").selectpicker("refresh");
                 $("#modalCrear").modal("show");
 
@@ -123,8 +123,8 @@
                     $("#frmEditar")[0].reset();
 
                     $("#frmEditar input[name=idmenu]").val(data.idmenu);
-                    getOrden("editar",data.orden);
-                    // getParientes("editar");
+                    getPosicion("editar",data.posicion);
+                    getParientes("editar");
 
 
                     $("#nombreEditar").val(data.nombre);
@@ -148,10 +148,10 @@
                     }
 
 
-                    // setTimeout(() => {
-                    //     $("#parienteEditar").selectpicker("val",data.pariente);
+                    setTimeout(() => {
+                        $("#parienteEditar").selectpicker("val",data.pariente);
 
-                    // }, 700);
+                    }, 700);
 
 
 
@@ -179,12 +179,12 @@
                     stop();
                     $("#nombreShow").html(data.nombre);
                     $("#parienteShow").html(data.nombrePariente);
-                    $("#ordenShow").html(data.orden);
+                    $("#posicionShow").html(data.posicion);
                     $("#tipoRutaShow").html(data.tipo_ruta);
                     if (data.estado){
-                        $("#txtEstado").html('<label class="badge badge-success">Habilitado</label>');
+                        $("#estadoShow").html('<label class="badge badge-success">Habilitado</label>');
                     }else{
-                        $("#txtEstado").html('<label class="badge badge-danger">Inhabilitado</label>');
+                        $("#estadoShow").html('<label class="badge badge-danger">Inhabilitado</label>');
                     }
 
 
@@ -216,7 +216,7 @@
             $(document).on("change","#cantidadRegistros", function(e) {
                 e.preventDefault();
                 const paginaActual      = $("#paginaActual").val();
-                const cantidadRegistros = e.target.val();
+                const cantidadRegistros = e.target.value;
 
                 listado(cantidadRegistros,paginaActual);
 
@@ -389,19 +389,19 @@
         }
 
 
-        const getOrden = ( accion , valorActual = null ) => {
+        const getPosicion = ( accion , valorActual = null ) => {
 
 
-            let orderSelector = accion == "editar" ? "ordenEditar" : "orden";
+            let orderSelector = accion == "editar" ? "posicionEditar" : "posicion";
 
 
             $("#"+orderSelector+" option").remove();
 
-            axios(URL_ORDEN)
+            axios(URL_POSICION)
             .then(response => {
                 const data = response.data;
 
-                for (let i = 1; i <= data ; i++) {
+                for (let i = 1; i <= data.posicion_maxima ; i++) {
                     $("#"+orderSelector).append("<option "+ ( i == valorActual ? 'selected' : '') +" data-tokens="+i+" value="+i+">"+i+"</option>");
                 };
 
@@ -416,29 +416,29 @@
         }
 
 
-        // const getParientes = (accion) => {
+        const getParientes = (accion) => {
 
-        //     let parienteSelector = accion == "editar" ? "parienteEditar" : "pariente";
+            let parienteSelector = accion == "editar" ? "parienteEditar" : "pariente";
 
-        //     $("#"+parienteSelector+" option").remove()
-        //     axios(URL_PARIENTES)
-        //     .then(response => {
-        //         const data = response.data;
+            $("#"+parienteSelector+" option").remove()
+            axios(URL_PARIENTES)
+            .then(response => {
+                const data = response.data;
 
-        //         $("#"+parienteSelector).append("<option data-tokens='0' value='0'>Sin Parientes</option>");
-        //         data.forEach(ele => {
-        //             $("#"+parienteSelector).append("<option data-tokens="+ele.idmenu+" value="+ele.idmenu+">"+ele.nombre+"</option>");
+                $("#"+parienteSelector).append("<option data-tokens='0' value='0'>Sin Parientes</option>");
+                data.forEach(ele => {
+                    $("#"+parienteSelector).append("<option data-tokens="+ele.idmenu+" value="+ele.idmenu+">"+ele.nombre+"</option>");
 
-        //         });
-
-
-
-        //         $("#"+parienteSelector).selectpicker("refresh");
-        //     })
-        //     .catch(e => console.log(e))
+                });
 
 
-        // }
+
+                $("#"+parienteSelector).selectpicker("refresh");
+            })
+            .catch(e => console.log(e))
+
+
+        }
 
         const changeTypeRoute = () => {
 

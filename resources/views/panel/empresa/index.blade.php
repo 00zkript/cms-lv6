@@ -55,8 +55,8 @@
                                                 <div class="row">
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                         <div class="form-group">
-                                                            <label for="tituloPagina">Titulo Pagina:</label>
-                                                            <input type="text" name="tituloPagina" id="tituloPagina"  class="form-control" maxlength="300" placeholder="Titulo Pagina" value="{{ $empresa->titulo_pagina }}">
+                                                            <label for="tituloGeneral">Titulo Pagina:</label>
+                                                            <input type="text" name="tituloGeneral" id="tituloGeneral"  class="form-control" maxlength="300" placeholder="Titulo Pagina" value="{{ $empresa->titulo_general }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -139,14 +139,14 @@
                                                         </div>
                                                     </div>
 
-                                                    {{-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
+                                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
                                                         <div class="form-group">
-                                                            <label for="logoFooter" >Logo Footer:</label>
+                                                            <label for="logo2" >Logo #2:</label>
                                                             <div class="file-loading">
-                                                                <input  id="logoFooter" name="logoFooter" type="file" class="file" >
+                                                                <input  id="logo2" name="logo2" type="file" class="file" >
                                                             </div>
                                                         </div>
-                                                    </div> --}}
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -185,7 +185,7 @@
     <script  type="module">
 
 
-        const URL_MODIFICAR = '{{route('empresa.update','update')}}';
+        const URL_MODIFICAR = '{{ route('empresa.update','update') }}';
 
 
 
@@ -202,7 +202,7 @@
                     const data = response.data;
 
                     stop();
-                    notificacion("success","Información modificada",data);
+                    notificacion("success","Información modificada",data.mensaje);
                     location.reload();
 
                 })
@@ -216,9 +216,90 @@
 
 
 
-        $("#favicon").fileinput(configFileInput({ data : @json($empresa->faviconData) }));
-        $("#logo").fileinput(configFileInput({ data : @json($empresa->logoData) }));
-        // $("#logoFooter").fileinput(configFileInput({ data : @json($empresa->logo_footerData) }));
+
+        $("#favicon").fileinput({
+            theme                 : 'fa',
+            language              : 'es',
+            uploadAsync           : false,
+            dropZoneTitle         : 'Arrastre la imagen aquí',
+            showUpload            : false,
+            // required              : true,
+            // showRemove            : true,
+            allowedFileTypes      : ["image"],
+            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
+            overwriteInitial     : false,
+            initialPreviewAsData : true,
+            fileActionSettings    : {
+                showRemove  : false,
+                showUpload  : false,
+                showZoom    : true,
+                showDrag    : false,
+            },
+
+            initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->favicon) }}" ],
+            initialPreviewConfig : { caption : "{{ $empresa->favicon }}" , width : "120px", height : "120px" },
+            // uploadUrl            : "URL de subida",
+            // uploadExtraData      : false,
+            // deleteUrl            : "URL de eliminacion",
+            // deleteExtraData      : false;
+
+        });
+
+
+        $("#logo").fileinput({
+            theme                 : 'fa',
+            language              : 'es',
+            uploadAsync           : false,
+            dropZoneTitle         : 'Arrastre la imagen aquí',
+            showUpload            : false,
+            // required              : true,
+            // showRemove            : true,
+            allowedFileTypes      : ["image"],
+            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
+            overwriteInitial     : false,
+            initialPreviewAsData : true,
+            fileActionSettings    : {
+                showRemove  : false,
+                showUpload  : false,
+                showZoom    : true,
+                showDrag    : false,
+            },
+
+            initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->logo) }}" ],
+            initialPreviewConfig : { caption : "{{ $empresa->logo }}" , width : "120px", height : "120px" },
+            // uploadUrl            : "URL de subida",
+            // uploadExtraData      : false,
+            // deleteUrl            : "URL de eliminacion",
+            // deleteExtraData      : false;
+        });
+
+
+        $("#logo2").fileinput({
+            theme                 : 'fa',
+            language              : 'es',
+            uploadAsync           : false,
+            dropZoneTitle         : 'Arrastre la imagen aquí',
+            showUpload            : false,
+            // required              : true,
+            // showRemove            : true,
+            allowedFileTypes      : ["image"],
+            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
+            overwriteInitial     : false,
+            initialPreviewAsData : true,
+            fileActionSettings    : {
+                showRemove  : false,
+                showUpload  : false,
+                showZoom    : true,
+                showDrag    : false,
+            },
+
+            initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->logo2) }}" ],
+            initialPreviewConfig : { caption : "{{ $empresa->logo2 }}" , width : "120px", height : "120px" },
+            // uploadUrl            : "URL de subida",
+            // uploadExtraData      : false,
+            // deleteUrl            : "URL de eliminacion",
+            // deleteExtraData      : false;
+        });
 
 
 

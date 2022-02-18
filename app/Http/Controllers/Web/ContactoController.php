@@ -24,12 +24,12 @@ class ContactoController extends Controller
 
             Mail::send(new ContactoEmail($request->all()));
 
-            return response()->json(["mensaje" => "Se envió correctamente la solicitud de contacto."]);
+            return response()->json(['mensaje' => "Se envió correctamente la solicitud de contacto."]);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                "mensaje"=> "No se pudo enviar tu solicitud, recargue y prueba nuevamente."
+                'mensaje'=> "No se pudo enviar tu solicitud, recargue y prueba nuevamente."
             ],400);
 
         }

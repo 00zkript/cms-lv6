@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use Ause App\Http\Requests\Panel\UsuarioRequest;
+use App\Http\Requests\Panel\UsuarioRequest;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+
+    public function index()
     {
 
         $roles = DB::table('rol')
@@ -30,34 +26,35 @@ class UsuarioController extends Controller
             ->orderBy('u.idusuario','DESC')
             ->paginate(10,['*'],'pagina',1);
 
-            return view('panel.usuario.index')->with(compact('roles','usuarios'));
+        return view('panel.usuario.index')->with(compact('roles','usuarios'));
 
     }
 
     public function listar(Request $request)
     {
-       if ($request->ajax()){
-
-           $cantidadRegistros = $request->cantidadRegistros;
-           $paginaActual = $request->paginaActual;
-           $txtBuscar = $request->txtBuscar;
-
-           $usuarios = DB::table('usuario AS u')
-               ->join('rol AS r','u.idrol','=','r.idrol')
-               ->selectRaw('u.*,r.rol AS rol')
-               ->where('r.rol','LIKE','%'.$txtBuscar.'%')
-               ->orWhere('u.usuario','LIKE','%'.$txtBuscar.'%')
-               ->orderBy('u.idusuario','DESC')
-               ->paginate($cantidadRegistros,['*'],'pagina',$paginaActual);
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
 
-           return response()->json(view('panel.usuario.listado')->with(compact('usuarios'))->render());
+       $cantidadRegistros = $request->cantidadRegistros;
+       $paginaActual = $request->paginaActual;
+       $txtBuscar = $request->txtBuscar;
+
+       $usuarios = DB::table('usuario AS u')
+           ->join('rol AS r','u.idrol','=','r.idrol')
+           ->selectRaw('u.*,r.rol AS rol')
+           ->where('r.rol','LIKE','%'.$txtBuscar.'%')
+           ->orWhere('u.usuario','LIKE','%'.$txtBuscar.'%')
+           ->orderBy('u.idusuario','DESC')
+           ->paginate($cantidadRegistros,['*'],'pagina',$paginaActual);
+
+
+       return response()->json(view('panel.usuario.listado')->with(compact('usuarios'))->render());
 
 
 
-       }else{
-           return back();
-       }
+
 
     }
 
@@ -80,32 +77,29 @@ class UsuarioController extends Controller
      */
     public function store(UsuarioRequest $request)
     {
-        if ($request->ajax()){
-
-            $usuario = new User;
-            $usuario->idrol = $request->rol;
-            $usuario->usuario = $request->usuario;
-            $usuario->clave = encrypt($request->clave);
-            $usuario->nombres = $request->nombres;
-            $usuario->apellidos = $request->apellidos;
-            $usuario->correo = $request->correo;
-
-            if ($request->hasFile('foto')){
-                $foto = $request->file('foto');
-                $nombreFoto = time().'.'.$foto->getClientOriginalExtension();
-                $foto->move(public_path('panel/img/usuarios/'),$nombreFoto);
-                $usuario->foto = $nombreFoto;
-            }
-
-            $usuario->estado = $request->estado;
-
-            $usuario->save();
-
-            return response()->json('Usuario registrado satisfactoriamente');
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $usuario = new User();
+        $usuario->idrol = $request->input('rol');
+        $usuario->usuario = $request->input('usuario');
+        $usuario->clave = encrypt($request->input('clave'));
+        $usuario->nombres = $request->input('nombres');
+        $usuario->apellidos = $request->input('apellidos');
+        $usuario->correo = $request->input('correo');
+
+        if ($request->hasFile('foto')){
+            $nombreImagen = Storage::disk('panel')->put('usuario',$request->file('foto'));
+            $usuario->foto = basename($nombreImagen);
+        }
+
+        $usuario->estado = $request->input('estado');
+        $usuario->save();
+
+        return response()->json(['mensaje' =>'Usuario registrado satisfactoriamente']);
+
+
     }
 
     /**
@@ -116,25 +110,22 @@ class UsuarioController extends Controller
      */
     public function show(Request $request)
     {
-        if ($request->ajax()){
-
-            $usuario = DB::table('usuario AS u')
-                ->join('rol AS r','u.idrol','=','r.idrol')
-                ->selectRaw('u.*,r.rol')
-                ->where('u.idusuario',$request->idusuario)
-                ->first();
-
-            if (!empty($usuario)){
-
-                return response()->json($usuario);
-
-            }else{
-                return response()->json("Este registro no existe",400);
-            }
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $usuario = DB::table('usuario AS u')
+            ->join('rol AS r','u.idrol','=','r.idrol')
+            ->selectRaw('u.*,r.rol')
+            ->where('u.idusuario',$request->idusuario)
+            ->first();
+
+        if (!empty($usuario)){
+            return response()->json($usuario);
+
+        }
+
+        return response()->json(['mensaje' => "Este registro no existe"],400);
     }
 
     /**
@@ -145,23 +136,24 @@ class UsuarioController extends Controller
      */
     public function edit(Request $request)
     {
-        if ($request->ajax()){
-
-            $usuario = DB::table('usuario')
-                ->where('idusuario',$request->idusuario)
-                ->first();
-
-            if (!empty($usuario)){
-
-                return response()->json($usuario);
-
-            }else{
-                return response()->json("Este registro no existe",400);
-            }
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $usuario = DB::table('usuario')
+            ->where('idusuario',$request->idusuario)
+            ->first();
+
+        if (!empty($usuario)){
+
+            return response()->json($usuario);
+
+        }
+
+        return response()->json(['mensaje' => "Este registro no existe"],400);
+
+
+
     }
 
     /**
@@ -173,41 +165,40 @@ class UsuarioController extends Controller
      */
     public function update(UsuarioRequest $request)
     {
-        if ($request->ajax()){
-
-            $usuario =  User::findOrFail($request->idusuario);
-            $usuario->idrol = $request->rolEditar;
-            $usuario->usuario = $request->usuarioEditar;
-
-            if (!empty($request->claveEditar)){
-                $usuario->clave = encrypt($request->claveEditar);
-            }
-
-            $usuario->nombres = $request->nombresEditar;
-            $usuario->apellidos = $request->apellidosEditar;
-            $usuario->correo = $request->correoEditar;
-
-            if ($request->hasFile('fotoEditar')){
-
-                if (File::exists(public_path('panel/img/usuarios/'.$usuario->foto))){
-                    File::delete(public_path('panel/img/usuarios/'.$usuario->foto));
-                }
-
-                $foto = $request->file('fotoEditar');
-                $nombreFoto = time().'.'.$foto->getClientOriginalExtension();
-                $foto->move(public_path('panel/img/usuarios/'),$nombreFoto);
-                $usuario->foto = $nombreFoto;
-            }
-
-            $usuario->estado = $request->estadoEditar;
-
-            $usuario->update();
-
-            return response()->json('Usuario modificado satisfactoriamente');
-
-        }else{
-            return back();
+        if (!$request->ajax()){
+            return abort(403);
         }
+
+        $usuario =  User::findOrFail($request->input('idusuario'));
+        $usuario->idrol = $request->input('rolEditar');
+        $usuario->usuario = $request->input('usuarioEditar');
+
+        if (!empty($request->input('claveEditar'))){
+            $usuario->clave = encrypt($request->input('claveEditar'));
+        }
+
+        $usuario->nombres = $request->input('nombresEditar');
+        $usuario->apellidos = $request->input('apellidosEditar');
+        $usuario->correo = $request->input('correoEditar');
+
+        if ($request->hasFile('fotoEditar')){
+
+            if (Storage::disk('panel')->exists('usuario/'.$usuario->foto) ){
+                Storage::disk('pane')->delete("usuario/".$usuario->foto);
+            }
+
+            $nombreImagen = Storage::disk('panel')->put('usuario',$request->file('fotoEditar'));
+            $usuario->foto = basename($nombreImagen);
+
+        }
+
+        $usuario->estado = $request->input('estadoEditar');
+
+        $usuario->update();
+
+        return response()->json(['mensaje' =>'Usuario modificado satisfactoriamente']);
+
+
     }
 
     /**
@@ -219,46 +210,52 @@ class UsuarioController extends Controller
 
     public function habilitar(Request $request)
     {
-        if ($request->ajax()){
+        if (!$request->ajax()){
+            return abort(403);
+        }
 
-            $usuario = DB::table('usuario')
-                ->where('idusuario',$request->idusuario)
-                ->first();
+        $usuario = DB::table('usuario')
+            ->where('idusuario',$request->idusuario)
+            ->first();
 
-            if (!empty($usuario)){
+        if (!empty($usuario)){
 
-                $usuario = User::findOrFail($request->idusuario);
-                $usuario->estado = 1;
-                $usuario->update();
+            $usuario = User::findOrFail($request->idusuario);
+            $usuario->estado = 1;
+            $usuario->update();
 
-                return response()->json('Registro habilitado satisfactoriamente');
-
-            }else{
-                return response()->json("Este registro no existe",400);
-            }
+            return response()->json(['mensaje'=>'Registro habilitado satisfactoriamente']);
 
         }
+
+
+        return response()->json(['mensaje' =>"Este registro no existe"],400);
+
+
+
     }
 
     public function destroy(Request $request)
     {
-        if ($request->ajax()){
+        if (!$request->ajax()) {
+            return back();
+        }
 
-            $usuario = DB::table('usuario')
-                ->where('idusuario',$request->idusuario)
-                ->first();
+        $usuario = DB::table('usuario')
+            ->where('idusuario', $request->idusuario)
+            ->first();
 
-            if (!empty($usuario)){
+        if (!empty($usuario)) {
 
-                $usuario = User::findOrFail($request->idusuario);
-                $usuario->estado = 0;
-                $usuario->update();
+            $usuario = User::findOrFail($request->idusuario);
+            $usuario->estado = 0;
+            $usuario->update();
 
-                return response()->json('Registro inhabilitado satisfactoriamente');
-
-            }else{
-                return response()->json("Este registro no existe",400);
-            }
+            return response()->json(['mensaje' => 'Registro inhabilitado satisfactoriamente']);
 
         }
+        return response()->json(['mensaje' => "Este registro no existe"], 400);
     }
+
+
+}
