@@ -163,13 +163,13 @@
 
                     stop();
 
-                    $("#tituloShow").html(data.titulo);
+                    $("#nombreShow").html(data.nombre);
                     $("#contenidoShow").html(data.contenido);
 
 
 
                     if(data.imagen){
-                        const img = `<img src="${ data.imagenData.url[0] }" style ="width: 200px;" >`;
+                        const img = `<img src="${ BASE_URL+"/panel/img/servicio/"+data.imagen }" style ="width: 200px;" >`;
                         $("#imagenShow").html(img);
                     }
 

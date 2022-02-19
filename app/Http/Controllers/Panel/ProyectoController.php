@@ -42,7 +42,7 @@ class ProyectoController extends Controller
 
         $proyectos = Proyecto::query()
             ->when($txtBuscar,function($query) use($txtBuscar){
-                return $query->where('titulo','LIKE','%'.$txtBuscar.'%');
+                return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
             ->orderBy('idproyecto','DESC')
             ->paginate($cantidadRegistros,['*'],'pagina',$proyectoActual);
@@ -61,8 +61,8 @@ class ProyectoController extends Controller
 
         try {
             $proyecto = new Proyecto();
-            $proyecto->titulo    = $request->input('titulo');
-            $proyecto->slug      = Str::slug($request->input('titulo'));
+            $proyecto->nombre    = $request->input('nombre');
+            $proyecto->slug      = Str::slug($request->input('nombre'));
             $proyecto->contenido = $request->input('contenido');
             // if ($request->hasFile('imagen')){
             //     $nombreImagen = Storage::disk('panel')->putFile('proyecto',$request->file('imagen'));
@@ -80,7 +80,7 @@ class ProyectoController extends Controller
                         $imagen             = new ProyectoImagen();
                         $imagen->idproyecto = $proyecto->idproyecto ;
                         $imagen->nombre     = basename($nombreImagen);
-                        $imagen->orden      = $key+1;
+                        $imagen->posicion      = $key+1;
                         $imagen->save();
                     }
                 }
@@ -111,14 +111,12 @@ class ProyectoController extends Controller
             return abort(403);
         }
 
-        $registro = Proyecto::query()->find($request->input('idproyecto'));
+        $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
-        $registroImagenes = ProyectoImagen::query()->where('idproyecto',$registro->idproyecto)->get();
 
-        $registro->imagenData = $this->allFilesData('proyecto',$registroImagenes,'idproyecto_imagen');
 
         return response()->json($registro);
 
@@ -130,14 +128,11 @@ class ProyectoController extends Controller
             return abort(403);
         }
 
-        $registro = Proyecto::query()->find($request->input('idproyecto'));
+        $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
-        $registroImagenes = ProyectoImagen::query()->where('idproyecto',$registro->idproyecto)->get();
-
-        $registro->imagenData = $this->allFilesData('proyecto',$registroImagenes,'idproyecto_imagen');
 
 
         return response()->json($registro);
@@ -153,8 +148,8 @@ class ProyectoController extends Controller
         try {
             $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
 
-            $proyecto->titulo    = $request->input('tituloEditar');
-            $proyecto->slug    =  Str::slug($request->input('tituloEditar'));
+            $proyecto->nombre    = $request->input('nombreEditar');
+            $proyecto->slug    =  Str::slug($request->input('nombreEditar'));
             $proyecto->contenido = $request->input('contenidoEditar');
             $proyecto->estado    = $request->input('estadoEditar');
             // if ($request->hasFile('imagenEditar')){
@@ -171,15 +166,15 @@ class ProyectoController extends Controller
 
                         $max = ProyectoImagen::query()
                             ->where('idproyecto',$proyecto->idproyecto)
-                            ->orderBy('orden','desc')
+                            ->orderBy('posicion','desc')
                             ->first();
 
-                        $orden = $max ? ($max->orden + $key + 1) : ($key + 1);
+                        $posicion = $max ? ($max->posicion + $key + 1) : ($key + 1);
 
                         $imagen             = new ProyectoImagen();
                         $imagen->idproyecto = $proyecto->idproyecto ;
                         $imagen->nombre     = basename($nombreImagen);
-                        $imagen->orden      = $orden;
+                        $imagen->posicion      = $posicion;
                         $imagen->save();
                     }
                 }
@@ -292,7 +287,7 @@ class ProyectoController extends Controller
 
         foreach (json_decode($request->stack) as $key => $item) {
             $imagen = ProyectoImagen::query()->find($item->key);
-            $imagen->orden = $key+1;
+            $imagen->posicion = $key+1;
             $imagen->update();
         }
 

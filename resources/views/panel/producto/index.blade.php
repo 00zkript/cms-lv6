@@ -135,7 +135,17 @@
                     $("#presion_hastaEditar").val(data.presion_hasta);
 
 
-                    $("#imagenEditar").fileinput('destroy').fileinput(fileinputSetting({ data : data.imagenData }));
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle : 'Arrastre la imagen aquí',
+                        initialPreview : [ BASE_URL+"/panel/img/producto/"+data.imagen ],
+                        initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
+                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
+                        // uploadUrl : "#",
+                        // uploadExtraData : _ => {},
+                        // deleteUrl : "#",
+                        // deleteExtraData : _ => {},
+                    });
+
                     $("#pdfEditar").fileinput('destroy').fileinput(fileinputSetting({
                         titulo: 'Arrastre el archivo aquí',
                         tipo_archivo : ['pdf'],
@@ -399,8 +409,12 @@
             } )
         }
 
-        $("#imagen").fileinput(fileinputSetting());
-        $("#imagenEditar").fileinput(fileinputSetting());
+        $("#imagen").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
+        $("#imagenEditar").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
 
 
         $("#pdf").fileinput(fileinputSetting({ titulo: 'Arrastre el archivo aquí', tipo_archivo : ['pdf'], }));

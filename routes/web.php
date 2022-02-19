@@ -73,6 +73,13 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
     Route::resource('servicio', 'Panel\ServicioController');
 
 
+    Route::post('proyecto/sortFiles','Panel\ProyectoController@sortFiles')->name('proyecto.sortFiles');
+    Route::post('proyecto/removeFile','Panel\ProyectoController@removeFile')->name('proyecto.removeFile');
+    Route::post('proyecto/habilitar','Panel\ProyectoController@habilitar')->name('proyecto.habilitar');
+    Route::post('proyecto/listar','Panel\ProyectoController@listar')->name('proyecto.listar');
+    Route::resource('proyecto', 'Panel\ProyectoController');
+
+
 
     Route::post('categoria-producto/habilitar','Panel\CategoriaProductoController@habilitar')->name('categoria-producto.habilitar');
     Route::post('categoria-producto/listar','Panel\CategoriaProductoController@listar')->name('categoria-producto.listar');
@@ -86,11 +93,7 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
 
 
 
-    Route::post('proyecto/sortFiles','Panel\ProyectoController@sortFiles')->name('proyecto.sortFiles');
-    Route::post('proyecto/removeFile','Panel\ProyectoController@removeFile')->name('proyecto.removeFile');
-    Route::post('proyecto/habilitar','Panel\ProyectoController@habilitar')->name('proyecto.habilitar');
-    Route::post('proyecto/listar','Panel\ProyectoController@listar')->name('proyecto.listar');
-    Route::resource('proyecto', 'Panel\ProyectoController');
+
 
 
 

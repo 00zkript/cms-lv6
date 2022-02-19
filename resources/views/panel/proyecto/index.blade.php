@@ -124,20 +124,21 @@
                     $("#frmEditar input[name=idproyecto]").val(data.idproyecto);
 
 
-                    $("#tituloEditar").val(data.titulo);
+                    $("#nombreEditar").val(data.nombre);
                     CKEDITOR.instances.contenidoEditar.setData(data.contenido);
 
+                    const {urls : $urls,settings : $settings} = allFilesData(BASE_URL+"/panel/img/proyecto/",data.imagenes)
 
-                    $("#imagenEditar").fileinput('destroy').fileinput(fileinputSetting({
-                        url_file_remove: URL_FILE_REMOVE,
-                        file_icon_remove: true,
-                        file_icon_drag:true,
-                        data : data.imagenData,
-                        extra : {
-                            _token : "{{ csrf_token() }}",
-                        }
-
-                    }));
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle : 'Arrastre la imagen aquí',
+                        fileActionSettings : { showRemove : true, showUpload : false, showZoom : true, showDrag : true},
+                        initialPreview : $urls,
+                        initialPreviewConfig : $settings,
+                        // uploadUrl : "#",
+                        // uploadExtraData : _ => {},
+                        deleteUrl : URL_FILE_REMOVE,
+                        deleteExtraData : _ => {},
+                    });
 
 
 
@@ -147,7 +148,7 @@
                     $("#modalEditar").modal("show");
 
                 })
-                .catch(errorCatch)
+                // .catch(errorCatch)
 
 
 
@@ -165,13 +166,13 @@
 
                     stop();
 
-                    $("#tituloShow").html(data.titulo);
+                    $("#nombreShow").html(data.nombre);
                     $("#contenidoShow").html(data.contenido);
 
 
 
                     if(data.imagen){
-                        const img = `<img src="${ data.imagenData.url[0] }" style ="width: 200px;" >`;
+                        const img = `<img src="${ BASE_URL+"/panel/img/protecto/"+data.imagenes[0].nombre }" style ="width: 200px;" >`;
                         $("#imagenShow").html(img);
                     }
 
@@ -221,7 +222,6 @@
 
             $(document).on("submit","#frmBuscar", function(e) {
                 e.preventDefault();
-                const txtBuscar         = $("#txtBuscar").val();
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
@@ -401,8 +401,15 @@
         }
 
 
-        $("#imagen").fileinput(fileinputSetting({ file_icon_remove: true }));
-        $("#imagenEditar").fileinput(fileinputSetting({ file_icon_remove: true }));
+        $("#imagen").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí',
+            fileActionSettings : { howRemove : true, showUpload : false, showZoom : true, showDrag : true},
+        });
+
+        $("#imagenEditar").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí',
+            fileActionSettings : { showRemove : true, showUpload : false, showZoom : true, showDrag : true},
+        });
 
 
 

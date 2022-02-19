@@ -84,27 +84,27 @@ const getFirstElemnto = (data) => {
 
 const allFilesData = (path, data, type = null ) => {
 
-    const $url = [];
-    const $datos = [];
+    const $urls = [];
+    const $settings = [];
 
     if ( data.length > 0 ){
 
         data.forEach( (item ,idx) => {
 
-            $url.push(path+'/'+item.nombre);
+            $urls.push(path+'/'+item.nombre);
             const setting = { caption : path+'/'+item.nombre , width : "120px", height : "120px", key : getFirstElemnto(item) };
 
             if (type){
                 setting.type = type;
             }
 
-            $datos.push(setting);
+            $settings.push(setting);
 
         })
 
     }
 
-    return {url : $url, datos : $datos };
+    return {urls : $urls, settings : $settings };
 }
 
 

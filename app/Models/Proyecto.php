@@ -10,4 +10,10 @@ class Proyecto extends Model
     protected $primaryKey = 'idproyecto';
     public $timestamps = false;
     protected $guarded = [];
+
+
+    public function imagenes()
+    {
+        return $this->hasMany(ProyectoImagen::class,'idproyecto','idproyecto')->orderBy('posicion');
+    }
 }

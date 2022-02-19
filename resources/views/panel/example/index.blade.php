@@ -169,13 +169,13 @@
 
 
                     if(data.imagen){
-                        const img = `<img src="${ data.imagenData.url[0] }" style ="width: 200px;" >`;
+                        const img = `<img src="${ BASE_URL+"/panel/img/example/"+data.imagen }" style ="width: 200px;" >`;
                         $("#imagenShow").html(img);
                     }
 
 
                     if(data.pdf){
-                        const pdf = `<a href="${ data.pdfData.url[0] }" target="_blank">Ver PDF</a>`;
+                        const pdf = `<a href="${ BASE_URL+"/panel/img/example/"+data.pdf }" target="_blank">Ver PDF</a>`;
                         $("#pdfShow").html(pdf);
                     }
 

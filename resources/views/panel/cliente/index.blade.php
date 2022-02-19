@@ -124,7 +124,16 @@
                     $("#nombreEditar").val(data.nombre);
 
 
-                    $("#imagenEditar").fileinput('destroy').fileinput(fileinputSetting({ data : data.imagenData }));
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle : 'Arrastre la imagen aquí',
+                        initialPreview : [ BASE_URL+"/panel/img/cliente/"+data.imagen ],
+                        initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
+                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
+                        // uploadUrl : "#",
+                        // uploadExtraData : _ => {},
+                        // deleteUrl : "#",
+                        // deleteExtraData : _ => {},
+                    });
 
 
 
@@ -157,7 +166,7 @@
 
 
                     if(data.imagen){
-                        const img = `<img src="${ data.imagenData.url[0] }" style ="width: 200px;" >`;
+                        const img = `<img src="${ BASE_URL+"/panel/img/cliente/"+data.imagen }" style ="width: 200px;" >`;
                         $("#imagenShow").html(img);
                     }
 
@@ -366,8 +375,13 @@
             } )
         }
 
-        $("#imagen").fileinput(fileinputSetting());
-        $("#imagenEditar").fileinput(fileinputSetting());
+        $("#imagen").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
+
+        $("#imagenEditar").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
 
 
 

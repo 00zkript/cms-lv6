@@ -125,8 +125,6 @@ class ProductoController extends Controller
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
-        $registro->imagenData = $this->oneFileData('producto',$registro->imagen);
-        $registro->pdfData = $this->oneFileData('producto',$registro->pdf,'pdf');
 
         return response()->json($registro);
 
@@ -144,8 +142,6 @@ class ProductoController extends Controller
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
-        $registro->imagenData = $this->oneFileData('producto',$registro->imagen);
-        $registro->pdfData = $this->oneFileData('producto',$registro->pdf,'pdf');
 
 
         return response()->json($registro);
