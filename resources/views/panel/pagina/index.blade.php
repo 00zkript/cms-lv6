@@ -4,6 +4,7 @@
 @include('panel.pagina.editar')
 @include('panel.pagina.habilitar')
 @include('panel.pagina.inhabilitar')
+@include('panel.pagina.eliminar')
 @include('panel.pagina.ver')
     <div class="container-fluid">
         <div class="row">
@@ -60,12 +61,13 @@
     <script >
 
         const URL_LISTADO     = "{{ route('pagina.listar') }}";
+        const URL_VER         = "{{ route('pagina.show','show') }}";
         const URL_GUARDAR     = "{{ route('pagina.store') }}";
         const URL_EDIT        = "{{ route('pagina.edit','edit') }}";
         const URL_MODIFICAR   = "{{ route('pagina.update','update') }}";
         const URL_HABILITAR   = "{{ route('pagina.habilitar') }}";
-        const URL_INHABILITAR = "{{ route('pagina.destroy','destroy') }}";
-        const URL_VER         = "{{ route('pagina.show','show') }}";
+        const URL_INHABILITAR = "{{ route('pagina.inhabilitar') }}";
+        const URL_ELIMINAR = "{{ route('pagina.destroy','destroy') }}";
 
 
 
@@ -97,6 +99,13 @@
                 var idpagina = $(this).closest('div.dropdown-menu').data('idpagina');
                 $("#frmInhabilitar input[name=idpagina]").val(idpagina);
                 $("#modalInhabilitar").modal("show");
+            });
+
+            $(document).on("click",".btnModalEliminar",function(e){
+                e.preventDefault();
+                var idpagina = $(this).closest('div.dropdown-menu').data('idpagina');
+                $("#frmEliminar input[name=idpagina]").val(idpagina);
+                $("#modalEliminar").modal("show");
             });
 
             $(document).on("click",".btnModalEditar",function(e){
@@ -198,23 +207,23 @@
 
             $(document).on("submit","#frmBuscar", function(e) {
                 e.preventDefault();
-                const txtBuscar         = $("#txtBuscar").val();
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
-                listado(cantidadRegistros,1,txtBuscar);
+                listado(cantidadRegistros,1);
 
             } )
 
         }
 
-        const listado = async (cantidadRegistros = 10,paginaActual = 1,txtBuscar = "") => {
+        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
             cargando();
 
-            let form = new FormData();
-            form.append("cantidadRegistros",cantidadRegistros);
-            form.append("paginaActual",paginaActual);
-            form.append("txtBuscar",txtBuscar);
+            const form = {
+                cantidadRegistros : cantidadRegistros,
+                paginaActual : paginaActual,
+                txtBuscar : $("#txtBuscar").val().trim(),
+            }
 
             try{
                 const response = await axios.post(URL_LISTADO, form );
@@ -298,9 +307,7 @@
 
                     notificacion("success","Habilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 })
                 .catch( errorCatch )
@@ -326,9 +333,7 @@
 
                     notificacion("success","Inhabilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 } )
                 .catch( errorCatch )
@@ -336,6 +341,29 @@
             } )
         }
 
+        const eliminar = () => {
+            $(document).on( "submit","#frmEliminar" , function(e){
+                e.preventDefault();
+
+                var form = new FormData($(this)[0]);
+
+                cargando('Procesando...');
+
+                axios.post(URL_ELIMINAR,form)
+                    .then( response => {
+                        const data = response.data;
+                        stop();
+                        $("#modalEliminar").modal("hide");
+
+                        notificacion("success","Eliminado",data.mensaje);
+
+                        listado($("#cantidadRegistros").val(),$("#paginaActual").val());
+
+                    } )
+                    .catch( errorCatch )
+
+            } )
+        }
 
 
 
@@ -347,6 +375,7 @@
             modificar();
             habilitar();
             inhabilitar();
+            eliminar();
 
             CKEDITOR.replace('contenido',{ height : 800 });
             CKEDITOR.replace('contenidoEditar',{ height : 800 });

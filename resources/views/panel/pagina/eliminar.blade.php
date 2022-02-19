@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmEliminar" autocomplete="off">
-                    <input type="hidden" name="idregistro" required>
+                    <input type="hidden" name="idpagina" required>
                     @csrf
                     @method('DELETE')
                     <div class="row">

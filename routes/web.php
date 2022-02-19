@@ -62,10 +62,15 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
 
 
 
+    Route::post('pagina/inhabilitar','Panel\PaginaController@inhabilitar')->name('pagina.inhabilitar');
     Route::post('pagina/habilitar','Panel\PaginaController@habilitar')->name('pagina.habilitar');
     Route::post('pagina/listar','Panel\PaginaController@listar')->name('pagina.listar');
     Route::resource('pagina','Panel\PaginaController');
 
+    Route::post('servicio/inhabilitar','Panel\ServicioController@inhabilitar')->name('servicio.inhabilitar');
+    Route::post('servicio/habilitar','Panel\ServicioController@habilitar')->name('servicio.habilitar');
+    Route::post('servicio/listar','Panel\ServicioController@listar')->name('servicio.listar');
+    Route::resource('servicio', 'Panel\ServicioController');
 
 
 
@@ -90,9 +95,7 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
 
 
 
-    Route::post('servicio/habilitar','Panel\ServicioController@habilitar')->name('servicio.habilitar');
-    Route::post('servicio/listar','Panel\ServicioController@listar')->name('servicio.listar');
-    Route::resource('servicio', 'Panel\ServicioController');
+
 
 
 

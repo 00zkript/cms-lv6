@@ -29,6 +29,7 @@
                                 @else
                                     <button class="dropdown-item btnModalHabilitar" type="button"><i class="fa fa-check"> Habilitar</i></button>
                                 @endif
+                                <button class="dropdown-item btnModalEliminar" type="button"><i class="fa fa-trash"></i> Eliminar</button>
                             </div>
                         </div>
                     </td>

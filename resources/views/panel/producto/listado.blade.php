@@ -31,7 +31,7 @@
                                 @else
                                     <button class="dropdown-item btnModalHabilitar" type="button"><i class="fa fa-check"> Habilitar</i></button>
                                 @endif
-                                {{-- <button class="dropdown-item btnModalEliminar" type="button"><i class="fa fa-times"> Eliminar</i></button> --}}
+                                {{-- <button class="dropdown-item btnModalEliminar" type="button"><i class="fa fa-trash"> Eliminar</i></button> --}}
 
                             </div>
                         </div>

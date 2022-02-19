@@ -198,19 +198,20 @@
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
-                listado(cantidadRegistros,1,txtBuscar);
+                listado(cantidadRegistros,1);
 
             } )
 
         }
 
-        const listado = async (cantidadRegistros = 10,paginaActual = 1,txtBuscar = "") => {
+        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
             cargando();
 
-            let form = new FormData();
-            form.append("cantidadRegistros",cantidadRegistros);
-            form.append("paginaActual",paginaActual);
-            form.append("txtBuscar",txtBuscar);
+            const form = {
+                cantidadRegistros : cantidadRegistros,
+                paginaActual : paginaActual,
+                txtBuscar : $("#txtBuscar").val().trim(),
+            }
 
             try{
                 const response = await axios.post(URL_LISTADO, form );
@@ -292,9 +293,7 @@
 
                     notificacion("success","Habilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 })
                 .catch( errorCatch )
@@ -320,9 +319,7 @@
 
                     notificacion("success","Inhabilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 } )
                 .catch( errorCatch )
@@ -346,9 +343,7 @@
 
                     notificacion("success","Eliminado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 } )
                 .catch( errorCatch )

@@ -177,7 +177,7 @@ class PaginaController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function inhabilitar(Request $request)
     {
         if (!$request->ajax()){
             return abort(403);
@@ -197,6 +197,31 @@ class PaginaController extends Controller
 
             return response()->json([
                 'mensaje'=> "No se pudo inhabilitado el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
+        }
+    }
+
+
+    public function destroy(Request $request)
+    {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
+        try {
+            $pagina = Pagina::query()->findOrFail($request->input('idpagina'));
+            $pagina->delete();
+
+            return response()->json([
+                'mensaje'=> "Registro eliminado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo eliminado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);

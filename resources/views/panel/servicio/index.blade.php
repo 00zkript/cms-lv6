@@ -67,8 +67,8 @@
         const URL_EDIT        = "{{ route('servicio.edit','edit') }}";
         const URL_MODIFICAR   = "{{ route('servicio.update','update') }}";
         const URL_HABILITAR   = "{{ route('servicio.habilitar') }}";
-        const URL_INHABILITAR = "{{ route('servicio.destroy','destroy') }}";
-        const URL_ELIMINAR    = "";
+        const URL_INHABILITAR   = "{{ route('servicio.habilitar') }}";
+        const URL_ELIMINAR = "{{ route('servicio.destroy','destroy') }}";
 
 
 
@@ -122,11 +122,20 @@
                     $("#frmEditar input[name=idservicio]").val(data.idservicio);
 
 
-                    $("#tituloEditar").val(data.titulo);
+                    $("#nombreEditar").val(data.nombre);
                     CKEDITOR.instances.contenidoEditar.setData(data.contenido);
 
 
-                    $("#imagenEditar").fileinput('destroy').fileinput(configFileInput({ data : data.imagenData }));
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle : 'Arrastre la imagen aquí',
+                        initialPreview : [ BASE_URL+"/panel/img/servicio/"+data.imagen ],
+                        initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
+                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
+                        // uploadUrl : "#",
+                        // uploadExtraData : _ => {},
+                        // deleteUrl : "#",
+                        // deleteExtraData : _ => {},
+                    });
 
 
 
@@ -214,19 +223,20 @@
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
-                listado(cantidadRegistros,1,txtBuscar);
+                listado(cantidadRegistros,1);
 
             } )
 
         }
 
-        const listado = async (cantidadRegistros = 10,paginaActual = 1,txtBuscar = "") => {
+        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
             cargando();
 
-            let form = new FormData();
-            form.append("cantidadRegistros",cantidadRegistros);
-            form.append("paginaActual",paginaActual);
-            form.append("txtBuscar",txtBuscar);
+            const form = {
+                cantidadRegistros : cantidadRegistros,
+                paginaActual : paginaActual,
+                txtBuscar : $("#txtBuscar").val().trim(),
+            }
 
             try{
                 const response = await axios.post(URL_LISTADO, form );
@@ -310,9 +320,7 @@
 
                     notificacion("success","Habilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 })
                 .catch( errorCatch )
@@ -338,9 +346,7 @@
 
                     notificacion("success","Inhabilitado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 } )
                 .catch( errorCatch )
@@ -364,9 +370,7 @@
 
                     notificacion("success","Eliminado",data.mensaje);
 
-                    const cantidadRegistros = $("#cantidadRegistros").val();
-                    const paginaActual      = $("#paginaActual").val();
-                    listado(cantidadRegistros,paginaActual);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
                 } )
                 .catch( errorCatch )
@@ -374,8 +378,15 @@
             } )
         }
 
-        $("#imagen").fileinput(configFileInput({}));
-        $("#imagenEditar").fileinput(configFileInput({}));
+
+
+        $("#imagen").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
+
+        $("#imagenEditar").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí'
+        });
 
 
 
@@ -388,6 +399,7 @@
             modificar();
             habilitar();
             inhabilitar();
+            eliminar();
 
             CKEDITOR.replace('contenido',{ height : 200 });
             CKEDITOR.replace('contenidoEditar',{ height : 200 });

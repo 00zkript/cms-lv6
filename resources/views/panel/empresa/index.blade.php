@@ -218,87 +218,23 @@
 
 
         $("#favicon").fileinput({
-            theme                 : 'fa',
-            language              : 'es',
-            uploadAsync           : false,
             dropZoneTitle         : 'Arrastre la imagen aquí',
-            showUpload            : false,
-            // required              : true,
-            // showRemove            : true,
-            allowedFileTypes      : ["image"],
-            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
-            overwriteInitial     : false,
-            initialPreviewAsData : true,
-            fileActionSettings    : {
-                showRemove  : false,
-                showUpload  : false,
-                showZoom    : true,
-                showDrag    : false,
-            },
-
             initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->favicon) }}" ],
             initialPreviewConfig : { caption : "{{ $empresa->favicon }}" , width : "120px", height : "120px" },
-            // uploadUrl            : "URL de subida",
-            // uploadExtraData      : false,
-            // deleteUrl            : "URL de eliminacion",
-            // deleteExtraData      : false;
-
         });
 
 
         $("#logo").fileinput({
-            theme                 : 'fa',
-            language              : 'es',
-            uploadAsync           : false,
             dropZoneTitle         : 'Arrastre la imagen aquí',
-            showUpload            : false,
-            // required              : true,
-            // showRemove            : true,
-            allowedFileTypes      : ["image"],
-            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
-            overwriteInitial     : false,
-            initialPreviewAsData : true,
-            fileActionSettings    : {
-                showRemove  : false,
-                showUpload  : false,
-                showZoom    : true,
-                showDrag    : false,
-            },
-
             initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->logo) }}" ],
             initialPreviewConfig : { caption : "{{ $empresa->logo }}" , width : "120px", height : "120px" },
-            // uploadUrl            : "URL de subida",
-            // uploadExtraData      : false,
-            // deleteUrl            : "URL de eliminacion",
-            // deleteExtraData      : false;
         });
 
 
         $("#logo2").fileinput({
-            theme                 : 'fa',
-            language              : 'es',
-            uploadAsync           : false,
             dropZoneTitle         : 'Arrastre la imagen aquí',
-            showUpload            : false,
-            // required              : true,
-            // showRemove            : true,
-            allowedFileTypes      : ["image"],
-            // allowedFileExtensions : ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
-            overwriteInitial     : false,
-            initialPreviewAsData : true,
-            fileActionSettings    : {
-                showRemove  : false,
-                showUpload  : false,
-                showZoom    : true,
-                showDrag    : false,
-            },
-
             initialPreview       : [ "{{ asset("panel/img/empresa/".$empresa->logo2) }}" ],
             initialPreviewConfig : { caption : "{{ $empresa->logo2 }}" , width : "120px", height : "120px" },
-            // uploadUrl            : "URL de subida",
-            // uploadExtraData      : false,
-            // deleteUrl            : "URL de eliminacion",
-            // deleteExtraData      : false;
         });
 
 

@@ -241,7 +241,6 @@
 </script>
 <script src="{{ asset('generales/js/funciones.js') }}"></script>
 <script src="{{ asset('generales/js/jquery.mask.js') }}"></script>
-<script src="{{ asset('generales/js/ConfigFileInput.js') }}"></script>
 <script src="{{ asset('generales/js/waitMe.min.js') }}"></script>
 
 
@@ -275,6 +274,31 @@
             'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
         }
     });
+
+    //File input set dafault
+    const fileinputSetting = $.fn.fileinput.defaults;
+
+    fileinputSetting.theme                 = 'fa';
+    fileinputSetting.language              = 'es';
+    fileinputSetting.uploadAsync           = false;
+    fileinputSetting.showUpload            = false;
+    fileinputSetting.allowedFileTypes      = ["image"];
+    // fileinputSetting.allowedFileExtensions = ['jpg', 'png', 'jpeg','gif','webp','tiff','tif','svg','bmp','mp4']
+    fileinputSetting.overwriteInitial      = false;
+    fileinputSetting.initialPreviewAsData  = true;
+    fileinputSetting.fileActionSettings    = { showRemove  : false, showUpload  : false, showZoom    : true, showDrag    : false};
+    // fileinputSetting.uploadUrl            = "URL de subida",
+    // fileinputSetting.uploadExtraData      = false,
+    // fileinputSetting.deleteUrl            = "URL de eliminacion",
+    // fileinputSetting.deleteExtraData      = false;
+
+    $.fn.fileinput.defaults = fileinputSetting;
+
+    const BASE_URL = "{{ url('/') }}";
+
+
+
+
 
     $(function () {
         $("div .modal").removeAttr("tabindex");
