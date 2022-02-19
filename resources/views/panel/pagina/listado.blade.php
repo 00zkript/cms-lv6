@@ -13,20 +13,16 @@
 
             @foreach($paginas AS $item)
                 <tr>
-                    <td>{{str_pad($item->idpagina,7,'0000000',STR_PAD_LEFT)}}</td>
-                    <td>{{$item->titulo}}</td>
+                    <td>{{ str_pad($item->idpagina,7,'0000000',STR_PAD_LEFT) }}</td>
+                    <td>{{ $item->titulo }}</td>
                     <td>{!! $item->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu-{{$item->idpagina}}" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" data-boundary="viewport" >
                                 Seleccione
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu-{{$item->idpagina}}" data-idpagina="{{$item->idpagina}}">
-                                <a href="{{ route('web.pagina.detalle',$item->slug) }}" target="_blank">
-                                    <button class="dropdown-item " type="button"><i class="fa fa-eye"></i>
-                                        Ver
-                                    </button>
-                                </a>
+                            <div class="dropdown-menu" data-idpagina="{{$item->idpagina}}" data-slug="{{ $item->slug  }}">
+                                <button class="dropdown-item btnModalVer" type="button"><i class="fa fa-eye"></i>Ver</button>
                                 <button class="dropdown-item btnModalEditar" type="button"><i class="fa fa-pencil"></i> Editar</button>
                                 @if($item->estado)
                                     <button class="dropdown-item btnModalInhabilitar" type="button"><i class="fa fa-times"> Inhabilitar</i></button>

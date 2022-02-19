@@ -20,7 +20,7 @@
                     <td>{!! $m->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"  data-toggle="dropdown" >
+                            <button class="btn btn-secondary dropdown-toggle" type="button"  data-toggle="dropdown" data-boundary="viewport" >
                                 Seleccione
                             </button>
                             <div class="dropdown-menu"  data-idmenu="{{$m->idmenu}}">

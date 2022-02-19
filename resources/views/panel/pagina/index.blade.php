@@ -134,10 +134,13 @@
 
             $(document).on("click",".btnModalVer",function(e){
                 e.preventDefault();
-                var idpagina = $(this).closest('div.dropdown-menu').data('idpagina');
+                const idpagina = $(this).closest('div.dropdown-menu').data('idpagina');
+                const slug = $(this).closest('div.dropdown-menu').data('slug');
 
 
-                cargando('Procesando...');
+                window.open("{{ url('/') }}/pagina/"+slug,slug,"width=1200px,height=900px")
+
+                /*cargando('Procesando...');
                 axios(URL_VER,{ params: {idpagina : idpagina} })
                 .then(response => {
                     const data = response.data;
@@ -160,7 +163,7 @@
                     $("#modalVer").modal("show");
 
                 })
-                .catch(errorCatch)
+                .catch(errorCatch)*/
 
 
             });

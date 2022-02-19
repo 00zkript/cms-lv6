@@ -23,6 +23,8 @@ Route::post('/contacto/enviar','Web\ContactoController@enviar')->name('web.conta
 
 Route::post('/suscripcion/enviar','Web\SuscripcionController@enviar')->name('web.suscripcion.enviar');
 
+Route::get('/pagina','Web\PaginaController@index')->name('web.pagina');
+Route::get('/pagina/{slug}','Web\PaginaController@detalle')->name('web.pagina.detalle');
 
 
 
