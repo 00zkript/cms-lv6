@@ -13,7 +13,6 @@ use Illuminate\Support\Str;
 class ProyectoController extends Controller
 {
 
-    use ImageHelperTrait;
 
     public function index()
     {

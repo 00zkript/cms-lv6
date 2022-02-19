@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 
 class ServicioController extends Controller
 {
-    use ImageHelperTrait;
 
 
     public function index()
@@ -42,7 +41,7 @@ class ServicioController extends Controller
 
         $servicios = Servicio::query()
             ->when($txtBuscar,function($query) use($txtBuscar){
-                return $query->where('titulo','LIKE','%'.$txtBuscar.'%');
+                return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
             ->orderBy('idservicio','DESC')
             ->paginate($cantidadRegistros,['*'],'pagina',$servicioActual);
