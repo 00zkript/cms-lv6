@@ -137,7 +137,9 @@
                         // uploadUrl : "#",
                         // uploadExtraData : _ => {},
                         deleteUrl : URL_FILE_REMOVE,
-                        deleteExtraData : _ => {},
+                        deleteExtraData : {
+                            _token : "{{ csrf_token() }}",
+                        },
                     });
 
 
