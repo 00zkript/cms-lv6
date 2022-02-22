@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\ImageHelperTrait;
 use App\Models\CategoriaProducto;
 use App\Models\Producto;
+use App\Models\ProductoImagen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -72,22 +73,18 @@ class ProductoController extends Controller
             $producto->slug                 = Str::slug($request->input('titulo'));
             $producto->contenido            = $request->input('contenido');
 
-            if ($request->hasFile('imagen')){
-                $nombreImagen = Storage::disk('panel')->putFile('producto',$request->file('imagen'));
-                $producto->imagen = basename($nombreImagen);
-            }
+            if (is_array($request->imagen)) {
+                foreach ($request->imagen as $key => $img) {
+                    if ($request->hasFile('imagen.'.$key)){
+                        $nombreImagen = Storage::disk('panel')->putFile('proyecto',$img);
 
-
-            $producto->modelo_desde            = $request->input('modelo_desde');
-            $producto->modelo_hasta            = $request->input('modelo_hasta');
-            $producto->caudal_desde            = $request->input('caudal_desde');
-            $producto->caudal_hasta            = $request->input('caudal_hasta');
-            $producto->presion_desde            = $request->input('presion_desde');
-            $producto->presion_hasta            = $request->input('presion_hasta');
-
-            if ($request->hasFile('pdf')){
-                $nombreImagen = Storage::disk('panel')->putFile('producto',$request->file('pdf'));
-                $producto->pdf = basename($nombreImagen);
+                        $imagen             = new ProductoImagen();
+                        $imagen->idproyecto = $proyecto->idproyecto ;
+                        $imagen->nombre     = basename($nombreImagen);
+                        $imagen->posicion      = $key+1;
+                        $imagen->save();
+                    }
+                }
             }
 
             $producto->estado               = $request->input('estado');
@@ -162,23 +159,28 @@ class ProductoController extends Controller
             $producto->slug                 = Str::slug($request->input('tituloEditar'));
             $producto->contenido            = $request->input('contenidoEditar');
 
-            if ($request->hasFile('imagenEditar')){
-                $nombreImagen = Storage::disk('panel')->putFile('producto',$request->file('imagenEditar'));
-                $producto->imagen = basename($nombreImagen);
+            if (is_array($request->imagenEditar)) {
+                foreach ($request->imagenEditar as $key => $img) {
+                    if ($request->hasFile('imagenEditar.'.$key)){
+                        $nombreImagen = Storage::disk('panel')->putFile('proyecto',$img);
+
+                        $max = ProductoImagen::query()
+                            ->where('idproyecto',$proyecto->idproyecto)
+                            ->orderBy('posicion','desc')
+                            ->first();
+
+                        $posicion = $max ? ($max->posicion + $key + 1) : ($key + 1);
+
+                        $imagen             = new ProductoImagen();
+                        $imagen->idproyecto = $proyecto->idproyecto ;
+                        $imagen->nombre     = basename($nombreImagen);
+                        $imagen->posicion      = $posicion;
+                        $imagen->save();
+                    }
+                }
             }
 
 
-            $producto->modelo_desde            = $request->input('modelo_desdeEditar');
-            $producto->modelo_hasta            = $request->input('modelo_hastaEditar');
-            $producto->caudal_desde            = $request->input('caudal_desdeEditar');
-            $producto->caudal_hasta            = $request->input('caudal_hastaEditar');
-            $producto->presion_desde            = $request->input('presion_desdeEditar');
-            $producto->presion_hasta            = $request->input('presion_hastaEditar');
-
-            if ($request->hasFile('pdfEditar')){
-                $nombreImagen = Storage::disk('panel')->putFile('producto',$request->file('pdfEditar'));
-                $producto->pdf = basename($nombreImagen);
-            }
 
             $producto->estado               = $request->input('estadoEditar');
 
@@ -277,6 +279,55 @@ class ProductoController extends Controller
                 "linea" => $th->getLine(),
             ],400);
         }
+    }
+
+    public function removeFile(Request $request)
+    {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
+        try {
+
+            $imagen = ProductoImagen::query()->findOrFail($request->input('key'));
+            $imagen->delete();
+
+            return response()->json([
+                'mensaje'=> "Archivo eliminado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo eliminar el archivo.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
+        }
+
+    }
+
+
+
+    public function sortFiles(Request $request)
+    {
+        if (!$request->ajax()){
+            return abort(403);
+        }
+
+        foreach (json_decode($request->stack) as $key => $item) {
+            $imagen = ProductoImagen::query()->find($item->key);
+            $imagen->posicion = $key+1;
+            $imagen->update();
+        }
+
+
+
+        return response()->json([
+            'mensaje'=> "Orden modificado exitosamente.",
+        ]);
+
+
     }
 
 
