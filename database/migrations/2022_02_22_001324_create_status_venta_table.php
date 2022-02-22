@@ -14,8 +14,10 @@ class CreateStatusVentaTable extends Migration
     public function up()
     {
         Schema::create('status_venta', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigIncrements('idstatus_venta');
+            $table->string('nombre',45)->nullable();
+            $table->boolean('estado')->default(0);
+//            $table->timestamps();
         });
     }
 

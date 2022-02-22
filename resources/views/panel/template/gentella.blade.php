@@ -124,17 +124,35 @@
                                 </ul>
                             </li>
 
+                            <li><a><i class="fa fa-file-text"></i> Producto <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li> <a href="{{ route('categoria-producto.index') }}">Categorias</a> </li>
+                                    <li> <a href="{{ route('producto.index') }}">Productos</a> </li>
+                                    <li> <a href="#">Marcas</a> </li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa fa-file-text"></i> Ventas <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li> <a href="#">Cliente</a> </li>
+                                    <li> <a href="#">Cupon</a> </li>
+                                    <li> <a href="#">venta</a> </li>
 
+                                </ul>
+                            </li>
 
                             <li><a><i class="fa fa-file-text"></i> Contenido <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li> <a href="{{ route('categoria-producto.index') }}">Categoria de productos</a> </li>
-                                    <li> <a href="{{ route('producto.index') }}">Productos</a> </li>
-                                    <li> <a href="{{ route('proyecto.index') }}">Proyectos</a> </li>
                                     <li> <a href="{{ route('servicio.index') }}">Servicios</a> </li>
                                     <li> <a href="{{ route('pagina.index') }}">Paginas</a> </li>
                                 </ul>
                             </li>
+
+
+
+
+
+
+
 
 
                             <li><a><i class="fa fa-tasks"></i> General <span class="fa fa-chevron-down"></span></a>

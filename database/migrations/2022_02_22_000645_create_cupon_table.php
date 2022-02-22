@@ -16,7 +16,6 @@ class CreateCuponTable extends Migration
         Schema::create('cupon', function (Blueprint $table) {
             $table->bigIncrements('idcupon');
             $table->integer('idtipo_descuento');
-            $table->integer('idtipo_usuario');
             $table->integer('idtipo_uso');
             $table->string('nombre',250);
             $table->decimal('monto',11,2);

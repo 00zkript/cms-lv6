@@ -14,8 +14,12 @@ class CreateTipoComprobanteTable extends Migration
     public function up()
     {
         Schema::create('tipo_comprobante', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigIncrements('idtipo_comprobante');
+            $table->string('nombre',45)->nullable();
+            $table->string('nro_correlativo',45)->nullable();
+            $table->string('nro_serie',45)->nullable();
+            $table->boolean('estado')->default(0);
+//            $table->timestamps();
         });
     }
 

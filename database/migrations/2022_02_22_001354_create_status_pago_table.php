@@ -14,8 +14,10 @@ class CreateStatusPagoTable extends Migration
     public function up()
     {
         Schema::create('status_pago', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigIncrements('status_pago');
+            $table->string('nombre',45)->nullable();
+            $table->boolean('estado')->default(0);
+//            $table->timestamps();
         });
     }
 

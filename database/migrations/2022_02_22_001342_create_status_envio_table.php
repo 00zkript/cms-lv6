@@ -14,8 +14,10 @@ class CreateStatusEnvioTable extends Migration
     public function up()
     {
         Schema::create('status_envio', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigIncrements('idstatus_envio');
+            $table->string('nombre',45)->nullable();
+            $table->boolean('estado')->default(0);
+//            $table->timestamps();
         });
     }
 

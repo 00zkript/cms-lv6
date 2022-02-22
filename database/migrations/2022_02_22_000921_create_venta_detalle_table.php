@@ -14,7 +14,13 @@ class CreateVentaDetalleTable extends Migration
     public function up()
     {
         Schema::create('venta_detalle', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idventa_detalle');
+            $table->integer('idventa')->nullable();
+            $table->integer('idproducto')->nullable();
+            $table->decimal('precio')->nullable();
+            $table->integer('cantidad')->nullable();
+            $table->decimal('total',11,2)->nullable();
+            $table->boolean('estado')->default(0);
             $table->timestamps();
         });
     }

@@ -14,8 +14,10 @@ class CreateTipoUsoTable extends Migration
     public function up()
     {
         Schema::create('tipo_uso', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigIncrements('idtipo_uso');
+            $table->string('nombre',45)->nullable();
+            $table->boolean('estado')->default(0);
+//            $table->timestamps();
         });
     }
 
