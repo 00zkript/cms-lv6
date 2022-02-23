@@ -68,7 +68,8 @@
         const URL_MODIFICAR    = "{{ route('producto.update','update') }}";
         const URL_HABILITAR    = "{{ route('producto.habilitar') }}";
         const URL_INHABILITAR  = "{{ route('producto.destroy','destroy') }}";
-        const URL_ELIMINAR_PDF = "{{ route('producto.eliminarPdf') }}";
+        const URL_ELIMINAR_FILE = "{{ route('producto.removeFile') }}";
+        const URL_SORT_FILES   = "{{ route('producto.sortFiles') }}";
         const URL_ELIMINAR     = "";
 
 
@@ -81,7 +82,8 @@
                 $("#frmCrear")[0].reset();
                 CKEDITOR.instances.contenido.setData('');
 
-                $("#frmCrear .selectpicker").selectpicker("refresh");
+                // $("#frmCrear .selectpicker").selectpicker("refresh");
+                $("#frmCrear .selectpicker").selectpicker("render");
                 $("#modalCrear").modal("show");
 
 
@@ -101,12 +103,12 @@
                 $("#modalInhabilitar").modal("show");
             });
 
-            $(document).on("click",".btnModalEliminar",function(e){
+            /*$(document).on("click",".btnModalEliminar",function(e){
                 e.preventDefault();
                 var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
                 $("#frmEliminar input[name=idproducto]").val(idproducto);
                 $("#modalEliminar").modal("show");
-            });
+            });*/
 
             $(document).on("click",".btnModalEditar",function(e){
                 e.preventDefault();
@@ -123,40 +125,36 @@
                     $("#frmEditar input[name=idproducto]").val(data.idproducto);
 
 
-                    $("#idcategoria_productoEditar").val(data.idcategoria_producto);
-                    $("#tituloEditar").val(data.titulo);
-                    $("#subtituloEditar").val(data.subtitulo);
+                    console.log(data.categoria)
+                    const $idcategorias = data.categoria.map( (elem) => {
+                        return elem.idcategoria_producto;
+                    })
+
+
+                    $("#idcategoria_productoEditar").selectpicker("val",$idcategorias);
+                    $("#codigoEditar").val(data.codigo);
+                    $("#nombreEditar").val(data.nombre);
+                    $("#precioEditar").val(data.precio);
+                    $("#stockEditar").val(data.stock);
+                    if (data.destacado){
+                        $("#destacadoEditar").attr('checked',true);
+                    }
+                    $("#descripcionEditar").val(data.descripcion);
                     CKEDITOR.instances.contenidoEditar.setData(data.contenido);
-                    $("#modelo_desdeEditar").val(data.modelo_desde);
-                    $("#modelo_hastaEditar").val(data.modelo_hasta);
-                    $("#caudal_desdeEditar").val(data.caudal_desde);
-                    $("#caudal_hastaEditar").val(data.caudal_hasta);
-                    $("#presion_desdeEditar").val(data.presion_desde);
-                    $("#presion_hastaEditar").val(data.presion_hasta);
 
-
+                    const imagenSetting = allFilesData(BASE_URL+"/panel/img/producto",data.imagenes)
                     $("#imagenEditar").fileinput('destroy').fileinput({
                         dropZoneTitle : 'Arrastre la imagen aquí',
-                        initialPreview : [ BASE_URL+"/panel/img/producto/"+data.imagen ],
-                        initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
-                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
+                        initialPreview : imagenSetting.urls,
+                        initialPreviewConfig : imagenSetting.settings,
+                        fileActionSettings : { showRemove : true, showDrag: true },
                         // uploadUrl : "#",
                         // uploadExtraData : _ => {},
-                        // deleteUrl : "#",
-                        // deleteExtraData : _ => {},
+                        deleteUrl : URL_ELIMINAR_FILE,
+                        deleteExtraData : {
+                            _token : "{{ csrf_token() }}"
+                        },
                     });
-
-                    $("#pdfEditar").fileinput('destroy').fileinput(fileinputSetting({
-                        titulo: 'Arrastre el archivo aquí',
-                        tipo_archivo : ['pdf'],
-                        data : data.pdfData,
-                        // url_file_remove : URL_ELIMINAR_PDF,
-                        extra : {
-                            _token : '{{ csrf_token() }}',
-                            idproducto : data.idproducto,
-                        }
-                    }));
-
 
 
 
@@ -385,7 +383,22 @@
             } )
         }
 
-        const eliminar = () => {
+        const sortFiles = () => {
+            $('#imagenEditar').on('filesorted', function(event, params) {
+                // console.log('preview',params.previewId,'old',params.oldIndex,'new index',params.newIndex,'stack',params.stack);
+
+                axios.post(URL_SORT_FILES,{stack : JSON.stringify(params.stack) })
+                    .then( response => {
+                        console.log(response.data);
+                    })
+                    .catch( e => {
+                        console.log(e)
+                    })
+
+            });
+        }
+
+        /*const eliminar = () => {
             $(document).on( "submit","#frmEliminar" , function(e){
                 e.preventDefault();
 
@@ -407,7 +420,7 @@
                 .catch( errorCatch )
 
             } )
-        }
+        }*/
 
         $("#imagen").fileinput({
             dropZoneTitle : 'Arrastre la imagen aquí'
@@ -417,11 +430,6 @@
         });
 
 
-        $("#pdf").fileinput(fileinputSetting({ titulo: 'Arrastre el archivo aquí', tipo_archivo : ['pdf'], }));
-        $("#pdfEditar").fileinput(fileinputSetting({ titulo: 'Arrastre el archivo aquí', tipo_archivo : ['pdf'], }));
-
-
-
         $(function () {
             modales();
             filtros();
@@ -429,6 +437,7 @@
             modificar();
             habilitar();
             inhabilitar();
+            sortFiles();
 
             CKEDITOR.replace('contenido',{ height : 200 });
             CKEDITOR.replace('contenidoEditar',{ height : 200 });

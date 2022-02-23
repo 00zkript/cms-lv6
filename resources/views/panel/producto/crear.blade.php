@@ -21,9 +21,8 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="idcategoria_producto">Categoria: <span class="text-danger">(*)</span></label>
-                                <select name="idcategoria_producto" id="idcategoria_producto" required  class="form-control" >
-                                    <option value="" selected hidden>[--- Seleccion ---]</option>
+                                <label for="idcategoria_producto">Categoria: </label>
+                                <select name="idcategoria_producto[]" id="idcategoria_producto"  class="form-control selectpicker" data-title="[--- Seleccion ---]"  multiple>
                                     @foreach ($categorias as $categoria )
                                         <option value="{{ $categoria->idcategoria_producto }}">{{ $categoria->nombre }}</option>
                                     @endforeach
@@ -33,82 +32,56 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="titulo">Titulo: <span class="text-danger">(*)</span></label>
-                                <input type="text" name="titulo" id="titulo" required class="form-control"  placeholder="Titulo">
+                                <label for="codigo">Código: </label>
+                                <input type="text" name="codigo" id="codigo" class="form-control"  placeholder="Código">
                             </div>
                         </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="subtitulo">SubTitulo: </label>
-                                <input type="text" name="subtitulo" id="subtitulo"  class="form-control"  placeholder="SubTitulo">
+                                <label for="nombre">Nombre: <span class="text-danger">(*)</span></label>
+                                <input type="text" name="nombre" id="nombre" required class="form-control"  placeholder="Nombre">
                             </div>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="contenido">Contenido: <span class="text-danger">(*)</span></label>
-                                <textarea id="contenido" cols="30" rows="10" class="form-control" placeholder="Descripcion"></textarea>
+                                <label for="precio">Precio: <span class="text-danger">(*)</span></label>
+                                <input type="number" name="precio" id="precio" step="0.01" min="0" required class="form-control"  placeholder="Precio">
                             </div>
                         </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Modelo:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="modelo_desde">Desde: </label>
-                                        <input type="text" name="modelo_desde" id="modelo_desde"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="modelo_hasta">Hasta: </label>
-                                        <input type="text" name="modelo_hasta" id="modelo_hasta"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Caudal:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="caudal_desde">Desde: </label>
-                                        <input type="text" name="caudal_desde" id="caudal_desde"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="caudal_hasta">Hasta: </label>
-                                        <input type="text" name="caudal_hasta" id="caudal_hasta"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="stock">Stock: <span class="text-danger">(*)</span></label>
+                                <input type="number" name="stock" id="stock" min="0" required class="form-control"  placeholder="Stock">
                             </div>
                         </div>
 
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Presión:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="presion_desde">Desde: <span class="text-danger">(*)</span></label>
-                                        <input type="text" name="presion_desde" id="presion_desde"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 pt-3 pb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="destacado" name="destacado" value="1" >
+                                <label class="custom-control-label" for="destacado">Destacado</label>
+                            </div>
+                        </div>
 
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="presion_hasta">Hasta: <span class="text-danger">(*)</span></label>
-                                        <input type="text" name="presion_hasta" id="presion_hasta"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
+
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="descripcion">Descripción: </label>
+                                <textarea id="descripcion" name="descripcion" cols="30" rows="10" class="form-control" placeholder="Descripción"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="contenido">Contenido: </label>
+                                <textarea id="contenido" cols="30" rows="10" class="form-control" placeholder="Contenido"></textarea>
                             </div>
                         </div>
 
@@ -117,20 +90,12 @@
                             <div class="form-group">
                                 <label for="imagen" >Imagen:</label>
                                 <div class="file-loading">
-                                    <input  id="imagen" name="imagen" type="file" class="file" >
+                                    <input  id="imagen" name="imagen[]" required multiple type="file" class="file" >
                                 </div>
                             </div>
                         </div>
 
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="pdf" >PDF:</label>
-                                <div class="file-loading">
-                                    <input  id="pdf" name="pdf" type="file" class="file" >
-                                </div>
-                            </div>
-                        </div>
 
 
 

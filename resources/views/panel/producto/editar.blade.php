@@ -24,8 +24,7 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="idcategoria_productoEditar">Categoria: <span class="text-danger">(*)</span></label>
-                                <select name="idcategoria_productoEditar" id="idcategoria_productoEditar" required  class="form-control" >
-                                    <option value="" >[--- Seleccion ---]</option>
+                                <select name="idcategoria_productoEditar[]" id="idcategoria_productoEditar" class="form-control selectpicker" data-title="[--- Seleccion ---]" multiple>
                                     @foreach ($categorias as $categoria )
                                         <option value="{{ $categoria->idcategoria_producto }}">{{ $categoria->nombre }}</option>
                                     @endforeach
@@ -35,82 +34,55 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="tituloEditar">Titulo: <span class="text-danger">(*)</span></label>
-                                <input type="text" name="tituloEditar" id="tituloEditar" required class="form-control"  placeholder="Titulo">
+                                <label for="codigoEditar">Código: </label>
+                                <input type="text" name="codigoEditar" id="codigoEditar" class="form-control"  placeholder="Código">
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="nombreEditar">nombre: <span class="text-danger">(*)</span></label>
+                                <input type="text" name="nombreEditar" id="nombreEditar" required class="form-control"  placeholder="nombre">
                             </div>
                         </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="subtituloEditar">SubTitulo: </label>
-                                <input type="text" name="subtituloEditar" id="subtituloEditar"  class="form-control"  placeholder="SubTitulo">
+                                <label for="precioEditar">Precio: <span class="text-danger">(*)</span></label>
+                                <input type="number" name="precioEditar" id="precioEditar" step="0.01" min="0" required class="form-control"  placeholder="Precio">
+                            </div>
+                        </div>
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="stockEditar">Stock: <span class="text-danger">(*)</span></label>
+                                <input type="number" name="stockEditar" id="stockEditar" min="0" required class="form-control"  placeholder="Stock">
+                            </div>
+                        </div>
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 pt-3 pb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="destacadoEditar" name="destacadoEditar" value="1" >
+                                <label class="custom-control-label" for="destacadoEditar">Destacado</label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="descripcionEditar">Descripción: </label>
+                                <textarea id="descripcionEditar" name="descripcionEditar" cols="30" rows="10" class="form-control" placeholder="Descripción"></textarea>
                             </div>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="contenidoEditar">Contenido: <span class="text-danger">(*)</span></label>
+                                <label for="contenidoEditar">Contenido: </label>
                                 <textarea id="contenidoEditar" cols="30" rows="10" class="form-control" placeholder="Descripcion"></textarea>
-                            </div>
-                        </div>
-
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Modelo:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="modelo_desdeEditar">Desde: </label>
-                                        <input type="text" name="modelo_desdeEditar" id="modelo_desdeEditar"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="modelo_hastaEditar">Hasta: </label>
-                                        <input type="text" name="modelo_hastaEditar" id="modelo_hastaEditar"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Caudal:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="caudal_desdeEditar">Desde: </label>
-                                        <input type="text" name="caudal_desdeEditar" id="caudal_desdeEditar"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="caudal_hastaEditar">Hasta: </label>
-                                        <input type="text" name="caudal_hastaEditar" id="caudal_hastaEditar"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h2>Presión:</h2>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="presion_desdeEditar">Desde: </label>
-                                        <input type="text" name="presion_desdeEditar" id="presion_desdeEditar"  class="form-control"  placeholder="Desde">
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group">
-                                        <label for="presion_hastaEditar">Hasta: </label>
-                                        <input type="text" name="presion_hastaEditar" id="presion_hastaEditar"  class="form-control"  placeholder="Hasta">
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -119,20 +91,11 @@
                             <div class="form-group">
                                 <label for="imagenEditar" >Imagen:</label>
                                 <div class="file-loading">
-                                    <input  id="imagenEditar" name="imagenEditar" type="file" class="file" >
+                                    <input  id="imagenEditar" name="imagenEditar[]" multiple type="file" class="file" >
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="pdfEditar" >PDF:</label>
-                                <div class="file-loading">
-                                    <input  id="pdfEditar" name="pdfEditar" type="file" class="file" >
-                                </div>
-                            </div>
-                        </div>
 
 
 

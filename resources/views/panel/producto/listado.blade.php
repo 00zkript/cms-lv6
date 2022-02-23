@@ -5,7 +5,7 @@
             <tr class="text-center">
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Categoria</th>
+{{--                <th>Categoria</th>--}}
                 <th>Estado</th>
                 <th>Opciones</th>
             </tr>
@@ -14,9 +14,9 @@
 
             @foreach($productos AS $item)
                 <tr>
-                    <td>{{str_pad($item->idproducto,7,'0000000',STR_PAD_LEFT)}}</td>
-                    <td>{{$item->titulo}}</td>
-                    <td>{{$item->categoria->nombre}}</td>
+                    <td>{{ str_pad($item->idproducto,7,'0000000',STR_PAD_LEFT) }}</td>
+                    <td>{{ $item->nombre }}</td>
+{{--                    <td>{{ $item->categoria ? $item->categoria->nombre : 'Sin categoria'}}</td>--}}
                     <td>{!! $item->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">
