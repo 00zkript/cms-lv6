@@ -15,78 +15,82 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', 'Web\HomeController@index')->name('web.home');
+Route::get('/', [App\Http\Controllers\Web\HomeController::class,'index'])->name('web.home');
 
 
-Route::get('/contactar','Web\ContactoController@index')->name('web.contacto');
-Route::post('/contacto/enviar','Web\ContactoController@enviar')->name('web.contacto.enviar');
+Route::get('/contactar',[App\Http\Controllers\Web\ContactoController::class,'index'])->name('web.contacto');
+Route::post('/contacto/enviar',[App\Http\Controllers\Web\ContactoController::class,'enviar'])->name('web.contacto.enviar');
 
-Route::post('/suscripcion/enviar','Web\SuscripcionController@enviar')->name('web.suscripcion.enviar');
+Route::post('/suscripcion/enviar',[App\Http\Controllers\Web\SuscripcionController::class,'enviar'])->name('web.suscripcion.enviar');
 
-Route::get('/pagina','Web\PaginaController@index')->name('web.pagina');
-Route::get('/pagina/{slug}','Web\PaginaController@detalle')->name('web.pagina.detalle');
-
-
-
+Route::get('/pagina',[App\Http\Controllers\Web\PaginaController::class,'index'])->name('web.pagina');
+Route::get('/pagina/{slug}',[App\Http\Controllers\Web\PaginaController::class,'detalle'])->name('web.pagina.detalle');
 
 
 
 
 
-Route::get('login-panel', 'Panel\LoginController@index')->name('login-panel');
-Route::post('login-panel/verificar', 'Panel\LoginController@verificar')->name('login-panel.verificar');
-Route::get('login-panel/salir', 'Panel\LoginController@salir')->name('login-panel.salir');
+
+
+
+Route::get('login-panel', [App\Http\Controllers\Panel\LoginController::class,'index'])->name('login-panel');
+Route::post('login-panel/verificar', [App\Http\Controllers\Panel\LoginController::class,'verificar'])->name('login-panel.verificar');
+Route::get('login-panel/salir', [App\Http\Controllers\Panel\LoginController::class,'salir'])->name('login-panel.salir');
 
 
 
 Route::middleware(['admin'])->prefix('panel')->group(function (){
 
-    Route::resource('/home','Panel\HomeController')->only(['index']);
+    Route::resource('/home',App\Http\Controllers\Panel\HomeController::class)->only(['index']);
 
-    Route::get('/configuracion','Panel\ConfiguracionController@edit')->name('configuracion.edit');
-    Route::put('/configuracion/update','Panel\ConfiguracionController@update')->name('configuracion.update');
-
-
-    Route::resource('empresa','Panel\EmpresaController');
-    Route::resource('contacto','Panel\ContactoController')->only(['index','update']);
-    Route::resource('nosotros', 'Panel\NosotrosController')->only(['index','update']);
+    Route::get('/configuracion',[App\Http\Controllers\Panel\ConfiguracionController::class,'edit'])->name('configuracion.edit');
+    Route::put('/configuracion/update',[App\Http\Controllers\Panel\ConfiguracionController::class,'update'])->name('configuracion.update');
 
 
-
-    Route::get('menu/getPosicion','Panel\MenuController@getPosicion')->name('menu.getPosicion');
-    Route::get('menu/getParientes','Panel\MenuController@getParientes')->name('menu.getParientes');
-    Route::post('menu/habilitar','Panel\MenuController@habilitar')->name('menu.habilitar');
-    Route::post('menu/inhabilitar','Panel\MenuController@inhabilitar')->name('menu.inhabilitar');
-    Route::post('menu/listar','Panel\MenuController@listar')->name('menu.listar');
-    Route::resource('menu','Panel\MenuController');
+    Route::resource('empresa',App\Http\Controllers\Panel\EmpresaController::class);
+    Route::resource('contacto',App\Http\Controllers\Panel\ContactoController::class)->only(['index','update']);
+    Route::resource('nosotros', App\Http\Controllers\Panel\NosotrosController::class)->only(['index','update']);
 
 
 
-    Route::post('pagina/inhabilitar','Panel\PaginaController@inhabilitar')->name('pagina.inhabilitar');
-    Route::post('pagina/habilitar','Panel\PaginaController@habilitar')->name('pagina.habilitar');
-    Route::post('pagina/listar','Panel\PaginaController@listar')->name('pagina.listar');
-    Route::resource('pagina','Panel\PaginaController');
-
-    Route::post('servicio/inhabilitar','Panel\ServicioController@inhabilitar')->name('servicio.inhabilitar');
-    Route::post('servicio/habilitar','Panel\ServicioController@habilitar')->name('servicio.habilitar');
-    Route::post('servicio/listar','Panel\ServicioController@listar')->name('servicio.listar');
-    Route::resource('servicio', 'Panel\ServicioController');
+    Route::get('menu/getPosicion',[App\Http\Controllers\Panel\MenuController::class,'getPosicion'])->name('menu.getPosicion');
+    Route::get('menu/getParientes',[App\Http\Controllers\Panel\MenuController::class,'getParientes'])->name('menu.getParientes');
+    Route::post('menu/habilitar',[App\Http\Controllers\Panel\MenuController::class,'habilitar'])->name('menu.habilitar');
+    Route::post('menu/inhabilitar',[App\Http\Controllers\Panel\MenuController::class,'inhabilitar'])->name('menu.inhabilitar');
+    Route::post('menu/listar',[App\Http\Controllers\Panel\MenuController::class,'listar'])->name('menu.listar');
+    Route::resource('menu',App\Http\Controllers\Panel\MenuController::class);
 
 
 
+    Route::post('pagina/inhabilitar',[App\Http\Controllers\Panel\PaginaController::class,'inhabilitar'])->name('pagina.inhabilitar');
+    Route::post('pagina/habilitar',[App\Http\Controllers\Panel\PaginaController::class,'habilitar'])->name('pagina.habilitar');
+    Route::post('pagina/listar',[App\Http\Controllers\Panel\PaginaController::class,'listar'])->name('pagina.listar');
+    Route::resource('pagina',App\Http\Controllers\Panel\PaginaController::class);
+
+    Route::post('servicio/inhabilitar',[App\Http\Controllers\Panel\ServicioController::class,'inhabilitar'])->name('servicio.inhabilitar');
+    Route::post('servicio/habilitar',[App\Http\Controllers\Panel\ServicioController::class,'habilitar'])->name('servicio.habilitar');
+    Route::post('servicio/listar',[App\Http\Controllers\Panel\ServicioController::class,'listar'])->name('servicio.listar');
+    Route::resource('servicio', App\Http\Controllers\Panel\ServicioController::class);
 
 
-    Route::post('categoria-producto/habilitar','Panel\CategoriaProductoController@habilitar')->name('categoria-producto.habilitar');
-    Route::post('categoria-producto/listar','Panel\CategoriaProductoController@listar')->name('categoria-producto.listar');
-    Route::resource('categoria-producto', 'Panel\CategoriaProductoController');
 
 
-    Route::post('producto/sortFiles','Panel\ProductoController@sortFiles')->name('producto.sortFiles');
-    Route::post('producto/removeFile','Panel\ProductoController@removeFile')->name('producto.removeFile');
-    Route::post('producto/habilitar','Panel\ProductoController@habilitar')->name('producto.habilitar');
-    Route::post('producto/listar','Panel\ProductoController@listar')->name('producto.listar');
-    Route::resource('producto', 'Panel\ProductoController');
 
+    Route::post('categoria-producto/habilitar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'habilitar'])->name('categoria-producto.habilitar');
+    Route::post('categoria-producto/listar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'listar'])->name('categoria-producto.listar');
+    Route::resource('categoria-producto', App\Http\Controllers\Panel\CategoriaProductoController::class);
+
+
+    Route::post('producto/sortFiles',[App\Http\Controllers\Panel\ProductoController::class,'sortFiles'])->name('producto.sortFiles');
+    Route::post('producto/removeFile',[App\Http\Controllers\Panel\ProductoController::class,'removeFile'])->name('producto.removeFile');
+    Route::post('producto/habilitar',[App\Http\Controllers\Panel\ProductoController::class,'habilitar'])->name('producto.habilitar');
+    Route::post('producto/listar',[App\Http\Controllers\Panel\ProductoController::class,'listar'])->name('producto.listar');
+    Route::resource('producto', App\Http\Controllers\Panel\ProductoController::class);
+
+
+    Route::post('marca/habilitar',[App\Http\Controllers\Panel\MarcaController::class,'habilitar'])->name('marca.habilitar');
+    Route::post('marca/listar',[App\Http\Controllers\Panel\MarcaController::class,'listar'])->name('marca.listar');
+    Route::resource('marca', App\Http\Controllers\Panel\MarcaController::class);
 
 
 

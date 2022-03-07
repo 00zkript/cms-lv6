@@ -23,10 +23,22 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="idcategoria_productoEditar">Categoria: <span class="text-danger">(*)</span></label>
+                                <label for="idcategoria_productoEditar">Categoría: <span class="text-danger">(*)</span></label>
                                 <select name="idcategoria_productoEditar[]" id="idcategoria_productoEditar" class="form-control selectpicker" data-title="[--- Seleccion ---]" multiple>
                                     @foreach ($categorias as $categoria )
                                         <option value="{{ $categoria->idcategoria_producto }}">{{ $categoria->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="idmarcaEditar">Marca: </label>
+                                <select name="idmarcaEditar" id="idmarcaEditar"  class="form-control" >
+                                    <option value="" selected hidden>[--- Selección ---]</option>
+                                    @foreach ($marcas as $marca )
+                                        <option value="{{ $marca->idmarca }}">{{ $marca->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>

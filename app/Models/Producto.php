@@ -12,7 +12,7 @@ class Producto extends Model
     protected $guarded = [];
 
 
-    public function categoria()
+    public function categorias()
     {
         return $this->belongsToMany(CategoriaProducto::class,'categoria_has_producto','idproducto','idcategoria');
     }
@@ -20,6 +20,11 @@ class Producto extends Model
     public function imagenes()
     {
         return $this->hasMany(ProductoImagen::class,'idproducto','idproducto');
+    }
+
+    public function marca()
+    {
+        return $this->hasOne(Marca::class,'idmarca','idmarca');
     }
 
 }

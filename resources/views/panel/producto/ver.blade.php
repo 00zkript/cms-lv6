@@ -17,16 +17,54 @@
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <p class="text-capitalize">titulo:</p>
-                                <p id="tituloShow"></p>
+                            <p class="text-capitalize">Categoría:</p>
+                            <p id="categoriaShow"></p>
                             <hr>
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <p class="text-capitalize">subtitulo:</p>
-                                <p id="subtituloShow"></p>
+                            <p class="text-capitalize">marca:</p>
+                            <p id="marcaShow"></p>
                             <hr>
                         </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">Código:</p>
+                            <p id="codigoShow"></p>
+                            <hr>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">nombre:</p>
+                            <p id="nombreShow"></p>
+                            <hr>
+                        </div>
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">precio:</p>
+                            <p id="precioShow"></p>
+                            <hr>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">stock:</p>
+                            <p id="stockShow"></p>
+                            <hr>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">destacado:</p>
+                            <p id="destacadoShow"></p>
+                            <hr>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">descripción:</p>
+                            <p id="descripcionShow"></p>
+                            <hr>
+                        </div>
+
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <p class="text-capitalize">contenido:</p>
@@ -34,26 +72,6 @@
                             <hr>
                         </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-capitalize">modelo:</p>
-                            <p id="modelo_desdeShow"></p>
-                            <p id="modelo_hastaShow"></p>
-                            <hr>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-capitalize">caudal:</p>
-                            <p id="caudal_desdeShow"></p>
-                            <p id="caudal_hastaShow"></p>
-                            <hr>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-capitalize">presión:</p>
-                            <p id="presion_desdeShow"></p>
-                            <p id="presion_hastaShow"></p>
-                            <hr>
-                        </div>
 
 
 
@@ -63,16 +81,11 @@
                             <hr>
                         </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p class="text-capitalize">pdf:</p>
-                            <p id="pdfShow"></p>
-                            <hr>
-                        </div>
-
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <p class="text-capitalize">Estado:</p>
                             <p id="estadoShow"></p>
+                            <hr>
                         </div>
 
                     </div>

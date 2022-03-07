@@ -3,25 +3,26 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\CategoriaProducto;
+use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class CategoriaProductoController extends Controller
+class MarcaController extends Controller
 {
 
 
     public function index()
     {
 
-        $categoriaProducto = CategoriaProducto::query()
-            ->orderBy('idcategoria_producto','DESC')
+        $marcas = Marca::query()
+            ->orderBy('idmarca','DESC')
             ->paginate(10,['*'],'pagina',1);
 
 
 
 
-        return view('panel.categoriaProducto.index')->with(compact('categoriaProducto'));
+        return view('panel.marca.index')->with(compact('marcas'));
 
 
     }
@@ -34,19 +35,19 @@ class CategoriaProductoController extends Controller
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
-        $categoriaActual = $request->input('paginaActual');
+        $marcaActual = $request->input('paginaActual');
         $txtBuscar = $request->input('txtBuscar');
 
-        $categoriaProducto = CategoriaProducto::query()
+        $marcas = Marca::query()
             ->when($txtBuscar,function($query) use($txtBuscar){
                 return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
-            ->orderBy('idcategoria_producto','DESC')
-            ->paginate($cantidadRegistros,['*'],'pagina',$categoriaActual);
+            ->orderBy('idmarca','DESC')
+            ->paginate($cantidadRegistros,['*'],'pagina',$marcaActual);
 
 
 
-        return response()->json(view('panel.categoriaProducto.listado')->with(compact('categoriaProducto'))->render());
+        return response()->json(view('panel.marca.listado')->with(compact('marcas'))->render());
 
     }
 
@@ -57,12 +58,18 @@ class CategoriaProductoController extends Controller
         }
 
         try {
-            $categoria = new CategoriaProducto();
-            $categoria->nombre    = $request->input('nombre');
-            $categoria->slug      = Str::slug($request->input('nombre'));
-            $categoria->estado    = $request->input('estado');
+            $marca = new Marca();
+            $marca->nombre    = $request->input('nombre');
+            $marca->slug      = Str::slug($request->input('nombre'));
+            $marca->estado    = $request->input('estado');
 
-            $categoria->save();
+            if($request->hasFile('imagen')){
+                $nombreImagen = Storage::disk('panel')->putFile('marca',$request->file('imagen'));
+                $marca->imagen = basename($nombreImagen);
+            }
+
+            $marca->save();
+
 
             return response()->json([
                 'mensaje'=> "Registro creado exitosamente.",
@@ -89,7 +96,7 @@ class CategoriaProductoController extends Controller
             return abort(403);
         }
 
-        $registro = CategoriaProducto::query()->find($request->input('idcategoria_producto'));
+        $registro = Marca::query()->find($request->input('idmarca'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
@@ -105,7 +112,7 @@ class CategoriaProductoController extends Controller
             return abort(403);
         }
 
-        $registro = CategoriaProducto::query()->find($request->input('idcategoria_producto'));
+        $registro = Marca::query()->find($request->input('idmarca'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
@@ -123,12 +130,17 @@ class CategoriaProductoController extends Controller
         }
 
         try {
-            $categoria = CategoriaProducto::query()->findOrFail($request->input('idcategoria_producto'));
-            $categoria->nombre    = $request->input('nombreEditar');
-            $categoria->slug      = Str::slug($request->input('nombreEditar'));
-            $categoria->estado    = $request->input('estadoEditar');
+            $marca = Marca::query()->findOrFail($request->input('idmarca'));
+            $marca->nombre    = $request->input('nombreEditar');
+            $marca->slug      = Str::slug($request->input('nombreEditar'));
+            $marca->estado    = $request->input('estadoEditar');
 
-            $categoria->update();
+            if($request->hasFile('imagenEditar')){
+                $nombreImagen = Storage::disk('panel')->putFile('marca',$request->file('imagenEditar'));
+                $marca->imagen = basename($nombreImagen);
+            }
+
+            $marca->update();
 
             return response()->json([
                 'mensaje'=> "Registro actualizado exitosamente.",
@@ -155,9 +167,9 @@ class CategoriaProductoController extends Controller
         }
 
         try {
-            $categoria = CategoriaProducto::query()->findOrFail($request->input('idcategoria_producto'));
-            $categoria->estado    = 1;
-            $categoria->update();
+            $marca = Marca::query()->findOrFail($request->input('idmarca'));
+            $marca->estado    = 1;
+            $marca->update();
 
             return response()->json([
                 'mensaje'=> "Registro habilitado exitosamente.",
@@ -180,10 +192,10 @@ class CategoriaProductoController extends Controller
         }
 
         try {
-            $categoria = CategoriaProducto::query()->findOrFail($request->input('idcategoria_producto'));
-            $categoria->estado    = 0;
+            $marca = Marca::query()->findOrFail($request->input('idmarca'));
+            $marca->estado    = 0;
 
-            $categoria->update();
+            $marca->update();
 
             return response()->json([
                 'mensaje'=> "Registro inhabilitado exitosamente.",

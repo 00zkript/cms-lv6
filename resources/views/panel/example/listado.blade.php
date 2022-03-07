@@ -13,8 +13,8 @@
 
             @foreach($registros AS $item)
                 <tr>
-                    <td>{{str_pad($item->idregistro,7,'0000000',STR_PAD_LEFT)}}</td>
-                    <td>{{$item->titulo}}</td>
+                    <td>{{ str_pad($item->idregistro,7,'0000000',STR_PAD_LEFT)}}</td>
+                    <td>{{ $item->titulo}}</td>
                     <td>{!! $item->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">

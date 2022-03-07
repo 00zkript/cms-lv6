@@ -128,7 +128,7 @@
                                 <ul class="nav child_menu">
                                     <li> <a href="{{ route('categoria-producto.index') }}">Categorias</a> </li>
                                     <li> <a href="{{ route('producto.index') }}">Productos</a> </li>
-                                    <li> <a href="#">Marcas</a> </li>
+                                    <li> <a href="{{ route('marca.index') }}">Marcas</a> </li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-file-text"></i> Ventas <span class="fa fa-chevron-down"></span></a>
@@ -314,6 +314,40 @@
 
     const BASE_URL = "{{ url('/') }}";
 
+
+    const errorCatch = ( error ) => {
+
+        const response = error.response;
+        const data = response.data;
+        let mensaje = '';
+        stop();
+
+
+        if (response.status == 422){
+            notificacion("error","Error",listErrors(data));
+
+        }
+
+        if (response.status == 500){
+            notificacion("error","Error","Error del servidor, contácte con soporte.");
+        }
+
+
+        if (response.status == 419){
+            notificacion("error","Error","Error del servidor, contácte con soporte.");
+        }
+
+        if (response.status == 400){
+            mensaje = data.mensaje
+            notificacion("error","Error",mensaje);
+
+        }
+
+        console.log(data);
+        return false;
+
+
+    }
 
 
 

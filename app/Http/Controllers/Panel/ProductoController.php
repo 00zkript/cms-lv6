@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\ImageHelperTrait;
 use App\Models\CategoriaHasProducto;
 use App\Models\CategoriaProducto;
+use App\Models\Marca;
 use App\Models\Producto;
 use App\Models\ProductoImagen;
 use Illuminate\Http\Request;
@@ -21,15 +22,15 @@ class ProductoController extends Controller
 
 
         $productos = Producto::query()
-//            ->with(['categoria'])
             ->orderBy('idproducto','DESC')
             ->paginate(10,['*'],'pagina',1);
 
 
         $categorias = CategoriaProducto::query()->where('estado',1)->get();
+        $marcas = Marca::query()->where('estado',1)->get();
 
 
-        return view('panel.producto.index')->with(compact('productos','categorias'));
+        return view('panel.producto.index')->with(compact('productos','categorias','marcas'));
 
 
     }
@@ -46,7 +47,6 @@ class ProductoController extends Controller
         $txtBuscar = $request->input('txtBuscar');
 
         $productos = Producto::query()
-//            ->with(['categoria'])
             ->when($txtBuscar,function($query) use($txtBuscar){
                 return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
@@ -69,6 +69,7 @@ class ProductoController extends Controller
             $producto = new Producto();
             $producto->codigo               = $request->input('codigo');
             $producto->nombre               = $request->input('nombre');
+            $producto->idmarca               = $request->input('idmarca');
             $producto->slug                 = Str::slug($request->input('nombre'));
             $producto->precio               = $request->input('precio');
             $producto->stock               = $request->input('stock');
@@ -129,7 +130,7 @@ class ProductoController extends Controller
         }
 
         $registro = Producto::query()
-            ->with(['categoria','imagenes'])
+            ->with(['categorias','imagenes','marca'])
             ->find($request->input('idproducto'));
 
         if(!$registro){
@@ -148,7 +149,7 @@ class ProductoController extends Controller
         }
 
         $registro = Producto::query()
-            ->with(['categoria','imagenes'])
+            ->with(['categorias','imagenes'])
             ->find($request->input('idproducto'));
 
         if(!$registro){
@@ -171,6 +172,7 @@ class ProductoController extends Controller
             $producto = Producto::query()->findOrFail($request->input('idproducto'));
             $producto->codigo               = $request->input('codigoEditar');
             $producto->nombre               = $request->input('nombreEditar');
+            $producto->idmarca               = $request->input('idmarcaEditar');
             $producto->slug                 = Str::slug($request->input('nombreEditar'));
             $producto->precio               = $request->input('precioEditar');
             $producto->stock               = $request->input('stockEditar');

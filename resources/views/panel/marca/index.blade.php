@@ -1,17 +1,17 @@
 @extends('panel.template.gentella')
 @section('cuerpo')
-@include('panel.producto.crear')
-@include('panel.producto.editar')
-@include('panel.producto.habilitar')
-@include('panel.producto.inhabilitar')
-@include('panel.producto.eliminar')
-@include('panel.producto.ver')
+@include('panel.marca.crear')
+@include('panel.marca.editar')
+@include('panel.marca.habilitar')
+@include('panel.marca.inhabilitar')
+@include('panel.marca.eliminar')
+@include('panel.marca.ver')
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header" style="background-color: #2a3f54">
-                         <p style="font-size: 20px" class="card-title text-center text-white mb-0"> Gestionar Productos</p>
+                         <p style="font-size: 20px" class="card-title text-center text-white mb-0"> Gestionar Marcas</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -45,7 +45,7 @@
                             </div>
 
                             <div class="col-12" id="listado">
-                                @include('panel.producto.listado')
+                                @include('panel.marca.listado')
                             </div>
 
 
@@ -58,19 +58,17 @@
 
 @endsection
 @push('js')
-    <script type="module">
+    <script type="module" >
 
 
-        const URL_LISTADO      = "{{ route('producto.listar') }}";
-        const URL_GUARDAR      = "{{ route('producto.store') }}";
-        const URL_VER          = "{{ route('producto.show','show') }}";
-        const URL_EDIT         = "{{ route('producto.edit','edit') }}";
-        const URL_MODIFICAR    = "{{ route('producto.update','update') }}";
-        const URL_HABILITAR    = "{{ route('producto.habilitar') }}";
-        const URL_INHABILITAR  = "{{ route('producto.destroy','destroy') }}";
-        const URL_ELIMINAR_FILE = "{{ route('producto.removeFile') }}";
-        const URL_SORT_FILES   = "{{ route('producto.sortFiles') }}";
-        const URL_ELIMINAR     = "";
+        const URL_LISTADO     = "{{ route('marca.listar') }}";
+        const URL_GUARDAR     = "{{ route('marca.store') }}";
+        const URL_VER         = "{{ route('marca.show','show') }}";
+        const URL_EDIT        = "{{ route('marca.edit','edit') }}";
+        const URL_MODIFICAR   = "{{ route('marca.update','update') }}";
+        const URL_HABILITAR   = "{{ route('marca.habilitar') }}";
+        const URL_INHABILITAR = "{{ route('marca.destroy','destroy') }}";
+        const URL_ELIMINAR    = "";
 
 
 
@@ -80,10 +78,9 @@
                 e.preventDefault();
                 $("#frmCrear span.error").remove();
                 $("#frmCrear")[0].reset();
-                CKEDITOR.instances.contenido.setData('');
+                // CKEDITOR.instances.contenido.setData('');
 
-                // $("#frmCrear .selectpicker").selectpicker("refresh");
-                $("#frmCrear .selectpicker").selectpicker("render");
+                $("#frmCrear .selectpicker").selectpicker("refresh");
                 $("#modalCrear").modal("show");
 
 
@@ -91,70 +88,54 @@
 
             $(document).on("click",".btnModalHabilitar",function(e){
                 e.preventDefault();
-                var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
-                $("#frmHabilitar input[name=idproducto]").val(idproducto);
+                var idmarca = $(this).closest('div.dropdown-menu').data('idmarca');
+                $("#frmHabilitar input[name=idmarca]").val(idmarca);
                 $("#modalHabilitar").modal("show");
             });
 
             $(document).on("click",".btnModalInhabilitar",function(e){
                 e.preventDefault();
-                var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
-                $("#frmInhabilitar input[name=idproducto]").val(idproducto);
+                var idmarca = $(this).closest('div.dropdown-menu').data('idmarca');
+                $("#frmInhabilitar input[name=idmarca]").val(idmarca);
                 $("#modalInhabilitar").modal("show");
             });
 
-            /*$(document).on("click",".btnModalEliminar",function(e){
+            $(document).on("click",".btnModalEliminar",function(e){
                 e.preventDefault();
-                var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
-                $("#frmEliminar input[name=idproducto]").val(idproducto);
+                var idmarca = $(this).closest('div.dropdown-menu').data('idmarca');
+                $("#frmEliminar input[name=idmarca]").val(idmarca);
                 $("#modalEliminar").modal("show");
-            });*/
+            });
 
             $(document).on("click",".btnModalEditar",function(e){
                 e.preventDefault();
-                var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
+                var idmarca = $(this).closest('div.dropdown-menu').data('idmarca');
 
                 cargando('Procesando...');
 
-                axios(URL_EDIT,{ params: {idproducto : idproducto} })
+                axios(URL_EDIT,{ params: {idmarca : idmarca} })
                 .then(response => {
                     const data = response.data;
 
                     stop();
                     $("#frmEditar")[0].reset();
-                    $("#frmEditar input[name=idproducto]").val(data.idproducto);
+                    $("#frmEditar input[name=idmarca]").val(data.idmarca);
 
 
-                    const $idcategorias = data.categorias.map( (elem) => {
-                        return elem.idcategoria_producto;
-                    })
-
-
-                    $("#idcategoria_productoEditar").selectpicker("val",$idcategorias);
-                    $("#codigoEditar").val(data.codigo);
-                    $("#idmarcaEditar").val(data.idmarca);
                     $("#nombreEditar").val(data.nombre);
-                    $("#precioEditar").val(data.precio);
-                    $("#stockEditar").val(data.stock);
-                    if (data.destacado){
-                        $("#destacadoEditar").attr('checked',true);
-                    }
-                    $("#descripcionEditar").val(data.descripcion);
-                    CKEDITOR.instances.contenidoEditar.setData(data.contenido);
 
-                    const imagenSetting = allFilesData(BASE_URL+"/panel/img/producto",data.imagenes)
+
                     $("#imagenEditar").fileinput('destroy').fileinput({
                         dropZoneTitle : 'Arrastre la imagen aquí',
-                        initialPreview : imagenSetting.urls,
-                        initialPreviewConfig : imagenSetting.settings,
-                        fileActionSettings : { showRemove : true, showDrag: true },
+                        initialPreview : [ BASE_URL+"/panel/img/marca/"+data.imagen ],
+                        initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
+                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
                         // uploadUrl : "#",
                         // uploadExtraData : _ => {},
-                        deleteUrl : URL_ELIMINAR_FILE,
-                        deleteExtraData : {
-                            _token : "{{ csrf_token() }}"
-                        },
+                        // deleteUrl : "#",
+                        // deleteExtraData : _ => {},
                     });
+
 
 
 
@@ -171,48 +152,26 @@
 
             $(document).on("click",".btnModalVer",function(e){
                 e.preventDefault();
-                var idproducto = $(this).closest('div.dropdown-menu').data('idproducto');
+                var idmarca = $(this).closest('div.dropdown-menu').data('idmarca');
 
 
                 cargando('Procesando...');
-                axios(URL_VER,{ params: {idproducto : idproducto} })
+                axios(URL_VER,{ params: {idmarca : idmarca} })
                 .then(response => {
                     const data = response.data;
 
                     stop();
 
-                    const $idcategorias = data.categorias.reduce( (acc,elem,idx) => {
-                        if(idx == 0){
-                            return elem.nombre
-                        }
-                        return acc+","+elem.nombre;
-                    },'');
-
-                    $("#categoriaShow").html($idcategorias == '' ? 'Sin Categoría' : $idcategorias);
-                    $("#marcaShow").html(data.marca ? data.marca.nombre : 'Sin Marca');
-                    $("#codigoShow").html(data.codigo);
                     $("#nombreShow").html(data.nombre);
-                    $("#precioShow").html("S/. "+number_format(data.precio,2,".",","));
-                    $("#stockShow").html(data.stock);
-                    if (data.destacado){
-                        $("#destacadoShow").html('si');
-                    }else{
-                        $("#destacadoShow").html('no');
-
-                    }
-                    $("#descripcionShow").html(data.descripcion);
                     $("#contenidoShow").html(data.contenido);
 
 
 
-                    if(data.imagenes){
-                        let html = ``;
-                        for (const item of data.imagenes) {
-                            html += `<img src="${ BASE_URL+"/panel/img/producto/"+item.nombre }" style ="width: 200px;" >`;
-
-                        }
-                        $("#imagenShow").html(html);
+                    if(data.imagen){
+                        const img = `<img src="${ BASE_URL+"/panel/img/marca/"+data.imagen }" style ="width: 200px;" >`;
+                        $("#imagenShow").html(img);
                     }
+
 
                     if (data.estado){
                         $("#estadoShow").html('<label class="badge badge-success">Habilitado</label>');
@@ -224,7 +183,7 @@
                     $("#modalVer").modal("show");
 
                 })
-                // .catch(errorCatch)
+                .catch(errorCatch)
 
 
             });
@@ -259,7 +218,6 @@
 
             $(document).on("submit","#frmBuscar", function(e) {
                 e.preventDefault();
-                const txtBuscar         = $("#txtBuscar").val();
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
@@ -299,7 +257,7 @@
             $(document).on("submit","#frmCrear",function(e){
                 e.preventDefault();
                 var form = new FormData($(this)[0]);
-                form.append('contenido',CKEDITOR.instances.contenido.getData());
+                // form.append('contenido',CKEDITOR.instances.contenido.getData());
                 cargando('Procesando...');
 
                 axios.post(URL_GUARDAR,form)
@@ -326,7 +284,7 @@
                 e.preventDefault();
 
                 var form = new FormData($(this)[0]);
-                form.append('contenidoEditar',CKEDITOR.instances.contenidoEditar.getData());
+                // form.append('contenidoEditar',CKEDITOR.instances.contenidoEditar.getData());
                 cargando('Procesando...');
 
                 axios.post(URL_MODIFICAR,form)
@@ -394,22 +352,7 @@
             } )
         }
 
-        const sortFiles = () => {
-            $('#imagenEditar').on('filesorted', function(event, params) {
-                // console.log('preview',params.previewId,'old',params.oldIndex,'new index',params.newIndex,'stack',params.stack);
-
-                axios.post(URL_SORT_FILES,{stack : JSON.stringify(params.stack) })
-                    .then( response => {
-                        console.log(response.data);
-                    })
-                    .catch( e => {
-                        console.log(e)
-                    })
-
-            });
-        }
-
-        /*const eliminar = () => {
+        const eliminar = () => {
             $(document).on( "submit","#frmEliminar" , function(e){
                 e.preventDefault();
 
@@ -431,14 +374,17 @@
                 .catch( errorCatch )
 
             } )
-        }*/
+        }
 
         $("#imagen").fileinput({
-            dropZoneTitle : 'Arrastre la imagen aquí'
+            dropZoneTitle : 'Arrastre la imagen aquí',
         });
         $("#imagenEditar").fileinput({
-            dropZoneTitle : 'Arrastre la imagen aquí'
+            dropZoneTitle : 'Arrastre la imagen aquí',
         });
+
+
+
 
 
         $(function () {
@@ -448,10 +394,8 @@
             modificar();
             habilitar();
             inhabilitar();
-            sortFiles();
 
-            CKEDITOR.replace('contenido',{ height : 200 });
-            CKEDITOR.replace('contenidoEditar',{ height : 200 });
+
 
         });
 
