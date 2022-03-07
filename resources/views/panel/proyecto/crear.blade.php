@@ -1,6 +1,6 @@
 
     <div class="modal fade" id="modalCrear" tabindex="-1" role="dialog"  aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog {{--modal-dialog-scrollable modal-xl--}}" role="document">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="fa fa-plus"></i> Nuevo registro</h5>
@@ -27,6 +27,27 @@
                                 <input type="text" name="nombre" id="nombre" required class="form-control"  placeholder="Nombre">
                             </div>
                         </div>
+
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="contenido">Contenido: <span class="text-danger">(*)</span></label>
+                                <textarea id="contenido" cols="30" rows="10" class="form-control" placeholder="Descripcion"></textarea>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="imagen" >Imagen:</label>
+                                <div class="file-loading">
+                                    <input  id="imagen" multiple required name="imagen[]" type="file" class="file" >
+                                </div>
+                            </div>
+                        </div>
+
 
 
 

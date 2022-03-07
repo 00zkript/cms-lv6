@@ -4,33 +4,27 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ImageHelperTrait;
-use App\Models\CategoriaHasProducto;
-use App\Models\CategoriaProducto;
-use App\Models\Marca;
-use App\Models\Producto;
-use App\Models\ProductoImagen;
+use App\Models\Proyecto;
+use App\Models\ProyectoImagen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class ProductoController extends Controller
+class ProyectoController extends Controller
 {
 
 
     public function index()
     {
 
-
-        $productos = Producto::query()
-            ->orderBy('idproducto','DESC')
+        $proyectos = Proyecto::query()
+            ->orderBy('idproyecto','DESC')
             ->paginate(10,['*'],'pagina',1);
 
 
-        $categorias = CategoriaProducto::query()->where('estado',1)->get();
-        $marcas = Marca::query()->where('estado',1)->get();
 
 
-        return view('panel.producto.index')->with(compact('productos','categorias','marcas'));
+        return view('panel.proyecto.index')->with(compact('proyectos'));
 
 
     }
@@ -43,19 +37,19 @@ class ProductoController extends Controller
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
-        $productoActual = $request->input('paginaActual');
+        $proyectoActual = $request->input('paginaActual');
         $txtBuscar = $request->input('txtBuscar');
 
-        $productos = Producto::query()
+        $proyectos = Proyecto::query()
             ->when($txtBuscar,function($query) use($txtBuscar){
                 return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
-            ->orderBy('idproducto','DESC')
-            ->paginate($cantidadRegistros,['*'],'pagina',$productoActual);
+            ->orderBy('idproyecto','DESC')
+            ->paginate($cantidadRegistros,['*'],'pagina',$proyectoActual);
 
 
 
-        return response()->json(view('panel.producto.listado')->with(compact('productos'))->render());
+        return response()->json(view('panel.proyecto.listado')->with(compact('proyectos'))->render());
 
     }
 
@@ -66,43 +60,31 @@ class ProductoController extends Controller
         }
 
         try {
-            $producto = new Producto();
-            $producto->codigo               = $request->input('codigo');
-            $producto->nombre               = $request->input('nombre');
-            $producto->idmarca               = $request->input('idmarca');
-            $producto->slug                 = Str::slug($request->input('nombre'));
-            $producto->precio               = $request->input('precio');
-            $producto->stock               = $request->input('stock');
-            $producto->destacado               = $request->input('destacado',0);
-            $producto->descripcion            = $request->input('descripcion');
-            $producto->contenido            = $request->input('contenido');
-            $producto->estado               = $request->input('estado');
-            $producto->save();
+            $proyecto = new Proyecto();
+            $proyecto->nombre    = $request->input('nombre');
+            $proyecto->slug      = Str::slug($request->input('nombre'));
+            $proyecto->contenido = $request->input('contenido');
+            // if ($request->hasFile('imagen')){
+            //     $nombreImagen = Storage::disk('panel')->putFile('proyecto',$request->file('imagen'));
+            //     $proyecto->imagen = basename($nombreImagen);
+            // }
+            $proyecto->estado    = $request->input('estado');
+
+            $proyecto->save();
 
             if (is_array($request->imagen)) {
                 foreach ($request->imagen as $key => $img) {
                     if ($request->hasFile('imagen.'.$key)){
-                        $nombreImagen = Storage::disk('panel')->putFile('producto',$img);
+                        $nombreImagen = Storage::disk('panel')->putFile('proyecto',$img);
 
-                        $imagen             = new ProductoImagen();
-                        $imagen->idproducto = $producto->idproducto ;
+                        $imagen             = new ProyectoImagen();
+                        $imagen->idproyecto = $proyecto->idproyecto ;
                         $imagen->nombre     = basename($nombreImagen);
                         $imagen->posicion      = $key+1;
                         $imagen->save();
                     }
                 }
             }
-
-            if (is_array($request->input('idcategoria_producto'))){
-                foreach ($request->input('idcategoria_producto') as $item){
-                    $categoria = new CategoriaHasProducto();
-                    $categoria->idproducto = $producto->idproducto;
-                    $categoria->idcategoria = $item;
-                    $categoria->save();
-                }
-
-            }
-
 
             return response()->json([
                 'mensaje'=> "Registro creado exitosamente.",
@@ -129,9 +111,7 @@ class ProductoController extends Controller
             return abort(403);
         }
 
-        $registro = Producto::query()
-            ->with(['categorias','imagenes','marca'])
-            ->find($request->input('idproducto'));
+        $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
@@ -148,14 +128,11 @@ class ProductoController extends Controller
             return abort(403);
         }
 
-        $registro = Producto::query()
-            ->with(['categorias','imagenes'])
-            ->find($request->input('idproducto'));
+        $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
 
         if(!$registro){
             return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
-
 
 
         return response()->json($registro);
@@ -169,51 +146,38 @@ class ProductoController extends Controller
         }
 
         try {
-            $producto = Producto::query()->findOrFail($request->input('idproducto'));
-            $producto->codigo               = $request->input('codigoEditar');
-            $producto->nombre               = $request->input('nombreEditar');
-            $producto->idmarca               = $request->input('idmarcaEditar');
-            $producto->slug                 = Str::slug($request->input('nombreEditar'));
-            $producto->precio               = $request->input('precioEditar');
-            $producto->stock               = $request->input('stockEditar');
-            $producto->destacado               = $request->input('destacadoEditar',0);
-            $producto->descripcion            = $request->input('descripcionEditar');
-            $producto->contenido            = $request->input('contenidoEditar');
-            $producto->estado               = $request->input('estadoEditar');
-            $producto->update();
+            $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
+
+            $proyecto->nombre    = $request->input('nombreEditar');
+            $proyecto->slug    =  Str::slug($request->input('nombreEditar'));
+            $proyecto->contenido = $request->input('contenidoEditar');
+            $proyecto->estado    = $request->input('estadoEditar');
+            // if ($request->hasFile('imagenEditar')){
+            //     $nombreImagen = Storage::disk('panel')->putFile('proyecto',$request->file('imagenEditar'));
+            //     $proyecto->imagen = basename($nombreImagen);
+            // }
+
+            $proyecto->update();
 
             if (is_array($request->imagenEditar)) {
                 foreach ($request->imagenEditar as $key => $img) {
                     if ($request->hasFile('imagenEditar.'.$key)){
-                        $nombreImagen = Storage::disk('panel')->putFile('producto',$img);
+                        $nombreImagen = Storage::disk('panel')->putFile('proyecto',$img);
 
-                        $max = ProductoImagen::query()
-                            ->where('idproducto',$producto->idproducto)
+                        $max = ProyectoImagen::query()
+                            ->where('idproyecto',$proyecto->idproyecto)
                             ->orderBy('posicion','desc')
                             ->first();
 
                         $posicion = $max ? ($max->posicion + $key + 1) : ($key + 1);
 
-                        $imagen             = new ProductoImagen();
-                        $imagen->idproducto = $producto->idproducto ;
+                        $imagen             = new ProyectoImagen();
+                        $imagen->idproyecto = $proyecto->idproyecto ;
                         $imagen->nombre     = basename($nombreImagen);
-                        $imagen->posicion   = $posicion;
+                        $imagen->posicion      = $posicion;
                         $imagen->save();
                     }
                 }
-            }
-
-            if (is_array($request->input('idcategoria_productoEditar'))){
-
-                CategoriaHasProducto::query()->where('idproducto',$producto->idproducto)->delete();
-
-                foreach ($request->input('idcategoria_productoEditar') as $item){
-                    $categoria = new CategoriaHasProducto();
-                    $categoria->idproducto = $producto->idproducto;
-                    $categoria->idcategoria = $item;
-                    $categoria->save();
-                }
-
             }
 
 
@@ -242,9 +206,9 @@ class ProductoController extends Controller
         }
 
         try {
-            $producto = Producto::query()->findOrFail($request->input('idproducto'));
-            $producto->estado    = 1;
-            $producto->update();
+            $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
+            $proyecto->estado    = 1;
+            $proyecto->update();
 
             return response()->json([
                 'mensaje'=> "Registro habilitado exitosamente.",
@@ -267,10 +231,10 @@ class ProductoController extends Controller
         }
 
         try {
-            $producto = Producto::query()->findOrFail($request->input('idproducto'));
-            $producto->estado    = 0;
+            $proyecto = Proyecto::query()->findOrFail($request->input('idproyecto'));
+            $proyecto->estado    = 0;
 
-            $producto->update();
+            $proyecto->update();
 
             return response()->json([
                 'mensaje'=> "Registro inhabilitado exitosamente.",
@@ -295,7 +259,7 @@ class ProductoController extends Controller
 
         try {
 
-            $imagen = ProductoImagen::query()->findOrFail($request->input('key'));
+            $imagen = ProyectoImagen::query()->findOrFail($request->input('key'));
             $imagen->delete();
 
             return response()->json([
@@ -322,7 +286,7 @@ class ProductoController extends Controller
         }
 
         foreach (json_decode($request->stack) as $key => $item) {
-            $imagen = ProductoImagen::query()->find($item->key);
+            $imagen = ProyectoImagen::query()->find($item->key);
             $imagen->posicion = $key+1;
             $imagen->update();
         }

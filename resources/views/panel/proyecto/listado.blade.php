@@ -1,33 +1,27 @@
-@if(count($productos) > 0)
+@if(count($proyectos) > 0)
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr class="text-center">
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-{{--                <th>Categoria</th>--}}
                 <th>Estado</th>
                 <th>Opciones</th>
             </tr>
             </thead>
             <tbody>
 
-            @foreach($productos AS $item)
+            @foreach($proyectos AS $item)
                 <tr>
-                    <td>{{ str_pad($item->idproducto,7,'0000000',STR_PAD_LEFT) }}</td>
+                    <td>{{str_pad($item->idproyecto,7,'0000000',STR_PAD_LEFT)}}</td>
                     <td>{{ $item->nombre }}</td>
-                    <td class="text-right">S/. {{ number_format($item->precio,2,".",",") }}</td>
-                    <td class="text-center">{{ $item->stock }}</td>
-{{--                    <td>{{ $item->categoria ? $item->categoria->nombre : 'Sin categoria'}}</td>--}}
-                    <td class="text-center">{!! $item->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
+                    <td>{!! $item->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu-{{$item->idproducto}}" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu-{{$item->idproyecto}}" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
                                 Seleccione
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu-{{$item->idproducto}}" data-idproducto="{{$item->idproducto}}">
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu-{{$item->idproyecto}}" data-idproyecto="{{$item->idproyecto}}">
                                 <button class="dropdown-item btnModalVer" type="button"><i class="fa fa-eye"></i> Ver</button>
                                 <button class="dropdown-item btnModalEditar" type="button"><i class="fa fa-pencil"></i> Editar</button>
                                 @if($item->estado)
@@ -46,12 +40,12 @@
             </tbody>
         </table>
         <p>
-            <input type="hidden" name="paginaActual" id="paginaActual" value="{{$productos->currentPage()}}">
-            Mostrando del registro {{$productos->firstItem()}} al {{$productos->lastItem()}} de un total de {{$productos->total()}} productos
+            <input type="hidden" name="paginaActual" id="paginaActual" value="{{$proyectos->currentPage()}}">
+            Mostrando del registro {{$proyectos->firstItem()}} al {{$proyectos->lastItem()}} de un total de {{$proyectos->total()}} registros
         </p>
 
         <div>
-            {{$productos->links()}}
+            {{$proyectos->links()}}
         </div>
 
     </div>

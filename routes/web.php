@@ -73,26 +73,17 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
     Route::resource('servicio', App\Http\Controllers\Panel\ServicioController::class);
 
 
+    Route::post('proyecto/sortFiles',[App\Http\Controllers\Panel\ProyectoController::class,'sortFiles'])->name('proyecto.sortFiles');
+    Route::post('proyecto/removeFile',[App\Http\Controllers\Panel\ProyectoController::class,'removeFile'])->name('proyecto.removeFile');
+    Route::post('proyecto/habilitar',[App\Http\Controllers\Panel\ProyectoController::class,'habilitar'])->name('proyecto.habilitar');
+    Route::post('proyecto/listar',[App\Http\Controllers\Panel\ProyectoController::class,'listar'])->name('proyecto.listar');
+    Route::resource('proyecto', App\Http\Controllers\Panel\ProyectoController::class);
 
 
 
     Route::post('categoria-producto/habilitar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'habilitar'])->name('categoria-producto.habilitar');
     Route::post('categoria-producto/listar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'listar'])->name('categoria-producto.listar');
     Route::resource('categoria-producto', App\Http\Controllers\Panel\CategoriaProductoController::class);
-
-
-    Route::post('producto/sortFiles',[App\Http\Controllers\Panel\ProductoController::class,'sortFiles'])->name('producto.sortFiles');
-    Route::post('producto/removeFile',[App\Http\Controllers\Panel\ProductoController::class,'removeFile'])->name('producto.removeFile');
-    Route::post('producto/habilitar',[App\Http\Controllers\Panel\ProductoController::class,'habilitar'])->name('producto.habilitar');
-    Route::post('producto/listar',[App\Http\Controllers\Panel\ProductoController::class,'listar'])->name('producto.listar');
-    Route::resource('producto', App\Http\Controllers\Panel\ProductoController::class);
-
-
-    Route::post('marca/habilitar',[App\Http\Controllers\Panel\MarcaController::class,'habilitar'])->name('marca.habilitar');
-    Route::post('marca/listar',[App\Http\Controllers\Panel\MarcaController::class,'listar'])->name('marca.listar');
-    Route::resource('marca', App\Http\Controllers\Panel\MarcaController::class);
-
-
 
 
 

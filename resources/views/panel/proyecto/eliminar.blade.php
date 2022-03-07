@@ -10,9 +10,9 @@
             </div>
             <div class="modal-body">
                 <form id="frmEliminar" autocomplete="off">
-                    <input type="hidden" name="idcategoria_producto" required>
+                    <input type="hidden" name="idproyecto" required>
                     @csrf
-                    @method('DELETE')
+                    {{-- @method('DELETE') --}}
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <p>¿Esta seguro de <b class="text-danger">eliminar</b> este registro?</p>

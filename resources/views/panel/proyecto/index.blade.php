@@ -1,17 +1,17 @@
 @extends('panel.template.gentella')
 @section('cuerpo')
-@include('panel.categoriaProducto.crear')
-@include('panel.categoriaProducto.editar')
-@include('panel.categoriaProducto.habilitar')
-@include('panel.categoriaProducto.inhabilitar')
-@include('panel.categoriaProducto.eliminar')
-@include('panel.categoriaProducto.ver')
+@include('panel.proyecto.crear')
+@include('panel.proyecto.editar')
+@include('panel.proyecto.habilitar')
+@include('panel.proyecto.inhabilitar')
+@include('panel.proyecto.eliminar')
+@include('panel.proyecto.ver')
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header" style="background-color: #2a3f54">
-                         <p style="font-size: 20px" class="card-title text-center text-white mb-0"> Gestionar Categorias</p>
+                         <p style="font-size: 20px" class="card-title text-center text-white mb-0"> Gestionar Proyectos</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -45,7 +45,7 @@
                             </div>
 
                             <div class="col-12" id="listado">
-                                @include('panel.categoriaProducto.listado')
+                                @include('panel.proyecto.listado')
                             </div>
 
 
@@ -58,16 +58,19 @@
 
 @endsection
 @push('js')
-    <script >
+    <script type="module" >
 
-        const URL_LISTADO     = "{{ route('categoria-producto.listar') }}";
-        const URL_GUARDAR     = "{{ route('categoria-producto.store') }}";
-        const URL_VER         = "{{ route('categoria-producto.show','show') }}";
-        const URL_EDIT        = "{{ route('categoria-producto.edit','edit') }}";
-        const URL_MODIFICAR   = "{{ route('categoria-producto.update','update') }}";
-        const URL_HABILITAR   = "{{ route('categoria-producto.habilitar') }}";
-        const URL_INHABILITAR = "{{ route('categoria-producto.destroy','destroy') }}";
+
+        const URL_LISTADO     = "{{ route('proyecto.listar') }}";
+        const URL_GUARDAR     = "{{ route('proyecto.store') }}";
+        const URL_VER         = "{{ route('proyecto.show','show') }}";
+        const URL_EDIT        = "{{ route('proyecto.edit','edit') }}";
+        const URL_MODIFICAR   = "{{ route('proyecto.update','update') }}";
+        const URL_HABILITAR   = "{{ route('proyecto.habilitar') }}";
+        const URL_INHABILITAR = "{{ route('proyecto.destroy','destroy') }}";
         const URL_ELIMINAR    = "";
+        const URL_FILE_REMOVE = "{{ route('proyecto.removeFile') }}";
+        const URL_SORT_FILES  = "{{ route('proyecto.sortFiles') }}";
 
 
 
@@ -77,6 +80,7 @@
                 e.preventDefault();
                 $("#frmCrear span.error").remove();
                 $("#frmCrear")[0].reset();
+                CKEDITOR.instances.contenido.setData('');
 
                 $("#frmCrear .selectpicker").selectpicker("refresh");
                 $("#modalCrear").modal("show");
@@ -86,41 +90,59 @@
 
             $(document).on("click",".btnModalHabilitar",function(e){
                 e.preventDefault();
-                var idcategoria_producto = $(this).closest('div.dropdown-menu').data('idcategoria_producto');
-                $("#frmHabilitar input[name=idcategoria_producto]").val(idcategoria_producto);
+                var idproyecto = $(this).closest('div.dropdown-menu').data('idproyecto');
+                $("#frmHabilitar input[name=idproyecto]").val(idproyecto);
                 $("#modalHabilitar").modal("show");
             });
 
             $(document).on("click",".btnModalInhabilitar",function(e){
                 e.preventDefault();
-                var idcategoria_producto = $(this).closest('div.dropdown-menu').data('idcategoria_producto');
-                $("#frmInhabilitar input[name=idcategoria_producto]").val(idcategoria_producto);
+                var idproyecto = $(this).closest('div.dropdown-menu').data('idproyecto');
+                $("#frmInhabilitar input[name=idproyecto]").val(idproyecto);
                 $("#modalInhabilitar").modal("show");
             });
 
             $(document).on("click",".btnModalEliminar",function(e){
                 e.preventDefault();
-                var idcategoria_producto = $(this).closest('div.dropdown-menu').data('idcategoria_producto');
-                $("#frmEliminar input[name=idcategoria_producto]").val(idcategoria_producto);
+                var idproyecto = $(this).closest('div.dropdown-menu').data('idproyecto');
+                $("#frmEliminar input[name=idproyecto]").val(idproyecto);
                 $("#modalEliminar").modal("show");
             });
 
             $(document).on("click",".btnModalEditar",function(e){
                 e.preventDefault();
-                var idcategoria_producto = $(this).closest('div.dropdown-menu').data('idcategoria_producto');
+                var idproyecto = $(this).closest('div.dropdown-menu').data('idproyecto');
 
                 cargando('Procesando...');
 
-                axios(URL_EDIT,{ params: {idcategoria_producto : idcategoria_producto} })
+                axios(URL_EDIT,{ params: {idproyecto : idproyecto} })
                 .then(response => {
                     const data = response.data;
 
                     stop();
                     $("#frmEditar")[0].reset();
-                    $("#frmEditar input[name=idcategoria_producto]").val(data.idcategoria_producto);
+                    $("#frmEditar input[name=idproyecto]").val(data.idproyecto);
 
 
                     $("#nombreEditar").val(data.nombre);
+                    CKEDITOR.instances.contenidoEditar.setData(data.contenido);
+
+                    const {urls : $urls,settings : $settings} = allFilesData(BASE_URL+"/panel/img/proyecto/",data.imagenes)
+
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle : 'Arrastre la imagen aquí',
+                        fileActionSettings : { showRemove : true, showUpload : false, showZoom : true, showDrag : true},
+                        initialPreview : $urls,
+                        initialPreviewConfig : $settings,
+                        // uploadUrl : "#",
+                        // uploadExtraData : _ => {},
+                        deleteUrl : URL_FILE_REMOVE,
+                        deleteExtraData : {
+                            _token : "{{ csrf_token() }}",
+                        },
+                    });
+
+
 
 
 
@@ -128,7 +150,7 @@
                     $("#modalEditar").modal("show");
 
                 })
-                .catch(errorCatch)
+                // .catch(errorCatch)
 
 
 
@@ -136,17 +158,25 @@
 
             $(document).on("click",".btnModalVer",function(e){
                 e.preventDefault();
-                var idcategoria_producto = $(this).closest('div.dropdown-menu').data('idcategoria_producto');
+                var idproyecto = $(this).closest('div.dropdown-menu').data('idproyecto');
 
 
                 cargando('Procesando...');
-                axios(URL_VER,{ params: {idcategoria_producto : idcategoria_producto} })
+                axios(URL_VER,{ params: {idproyecto : idproyecto} })
                 .then(response => {
                     const data = response.data;
 
                     stop();
 
                     $("#nombreShow").html(data.nombre);
+                    $("#contenidoShow").html(data.contenido);
+
+
+
+                    if(data.imagen){
+                        const img = `<img src="${ BASE_URL+"/panel/img/protecto/"+data.imagenes[0].nombre }" style ="width: 200px;" >`;
+                        $("#imagenShow").html(img);
+                    }
 
 
                     if (data.estado){
@@ -194,7 +224,6 @@
 
             $(document).on("submit","#frmBuscar", function(e) {
                 e.preventDefault();
-                const txtBuscar         = $("#txtBuscar").val();
                 const cantidadRegistros = $("#cantidadRegistros").val();
                 const paginaActual      = $("#paginaActual").val();
 
@@ -234,6 +263,7 @@
             $(document).on("submit","#frmCrear",function(e){
                 e.preventDefault();
                 var form = new FormData($(this)[0]);
+                form.append('contenido',CKEDITOR.instances.contenido.getData());
                 cargando('Procesando...');
 
                 axios.post(URL_GUARDAR,form)
@@ -260,6 +290,7 @@
                 e.preventDefault();
 
                 var form = new FormData($(this)[0]);
+                form.append('contenidoEditar',CKEDITOR.instances.contenidoEditar.getData());
                 cargando('Procesando...');
 
                 axios.post(URL_MODIFICAR,form)
@@ -352,6 +383,39 @@
         }
 
 
+        const sortFiles = () => {
+            $('#imagenEditar').on('filesorted', function(event, params) {
+                // console.log('preview',params.previewId,'old',params.oldIndex,'new index',params.newIndex,'stack',params.stack);
+
+                axios.post(URL_SORT_FILES,{stack : JSON.stringify(params.stack) })
+                .then( response => {
+                    console.log(response.data);
+                })
+                .catch( e => {
+                    console.log(e)
+                })
+
+
+
+
+
+            });
+        }
+
+
+        $("#imagen").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí',
+            fileActionSettings : { howRemove : true, showUpload : false, showZoom : true, showDrag : true},
+        });
+
+        $("#imagenEditar").fileinput({
+            dropZoneTitle : 'Arrastre la imagen aquí',
+            fileActionSettings : { showRemove : true, showUpload : false, showZoom : true, showDrag : true},
+        });
+
+
+
+
 
         $(function () {
             modales();
@@ -360,6 +424,7 @@
             modificar();
             habilitar();
             inhabilitar();
+            sortFiles();
 
             CKEDITOR.replace('contenido',{ height : 200 });
             CKEDITOR.replace('contenidoEditar',{ height : 200 });

@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="modalInhabilitar" tabindex="-1" role="dialog"  aria-hidden="true" data-keyboard="false" data-backdrop="static">
+<div class="modal fade" id="modalHabilitar" tabindex="-1" role="dialog"  aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -9,13 +9,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmInhabilitar" autocomplete="off">
-                    <input type="hidden" name="idcategoria_producto" required>
+                <form id="frmHabilitar" autocomplete="off">
+                    <input type="hidden" name="idproyecto" required>
                     @csrf
-                    @method('DELETE')
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <p>¿Esta seguro de <b class="text-danger">inhabilitar</b> este registro?</p>
+                            <p>¿Esta seguro de <b class="text-success">habilitar</b> este registro?</p>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
                             <hr>

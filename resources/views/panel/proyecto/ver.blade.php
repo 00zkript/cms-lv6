@@ -1,6 +1,6 @@
 
 <div class="modal fade" id="modalVer" tabindex="-1" role="dialog"  aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog {{--modal-dialog-scrollable modal-xl--}}" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fa fa-eye"></i> Ver registro</h5>
@@ -17,11 +17,23 @@
                         </div>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <p class="text-capitalize">nombre:</p>
+                                <p class="text-capitalize">Nombre:</p>
                                 <p id="nombreShow"></p>
                             <hr>
                         </div>
 
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">contenido:</p>
+                            <p id="contenidoShow"></p>
+                            <hr>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p class="text-capitalize">imagen:</p>
+                            <p id="imagenShow"></p>
+                            <hr>
+                        </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
