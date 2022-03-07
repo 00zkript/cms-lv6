@@ -4,6 +4,7 @@
             <thead class="thead-dark">
             <tr class="text-center">
                 <th>Código</th>
+                <th>Pariente</th>
                 <th>Nombre</th>
                 <th>Posición</th>
                 <th>Estado</th>
@@ -14,9 +15,10 @@
 
             @foreach($menu AS $m)
                 <tr>
-                    <td>{{str_pad($m->idmenu,7,'0000000',STR_PAD_LEFT)}}</td>
-                    <td>{{$m->nombre}}</td>
-                    <td>{{$m->posicion}}</td>
+                    <td>{{ str_pad($m->idmenu,7,'0000000',STR_PAD_LEFT) }}</td>
+                    <td>{{ $m->padre->nombre }}</td>
+                    <td>{{ $m->nombre }}</td>
+                    <td>{{ $m->posicion }}</td>
                     <td>{!! $m->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">

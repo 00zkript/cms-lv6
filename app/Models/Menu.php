@@ -46,7 +46,7 @@ class Menu extends Model
     public function padre()
     {
         return $this->hasOne(Menu::class,'idmenu','pariente')->withDefault([
-            "nombre" => ""
+            "nombre" => "Sin pariente"
         ]);
 
     }

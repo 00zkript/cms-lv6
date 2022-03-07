@@ -25,8 +25,7 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="parienteEditar">Pariente:</label>
-                                <select name="parienteEditar" id="parienteEditar" class="form-control selectpicker show-tick" data-size="5" data-live-search="true" title="[--Seleccione--]"> <option value="0">Sin Pariente</option>
-
+                                <select name="parienteEditar" id="parienteEditar" class="form-control selectpicker show-tick" data-size="5" data-live-search="true" title="[--Seleccione--]">
                                 </select>
                             </div>
                         </div>
@@ -43,26 +42,27 @@
                                 <label for="tipoRutaEditar">Tipo de ruta: <span class="text-danger">(*)</span></label>
                                 <select id="tipoRutaEditar" name="tipoRutaEditar" class="form-control" required>
                                     <option value="" hidden>[---Seleccione---]</option>
-                                    <option value="interna" >Interna</option>
-                                    <option value="externa" >Externa</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none" >
-                            <div class="form-group">
-                                <label for="rutaInternaEditar">Ruta interna: <span class="text-danger">(*)</span></label>
-                                <select id="rutaInternaEditar" name="rutaInternaEditar" class="form-control">
-                                        <option value="" hidden>[---Seleccione---]</option>
-                                    @foreach($rutaInterna as $r)
-                                        <option value="{{ $r->key }}">{{ $r->name }}</option>
+                                    @foreach($tipo_ruta as $t)
+                                        <option value="{{ $t->idtipo_ruta }}">{{ $t->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tipoRutaDivEditar" style="display:none" >
+                            <div class="form-group">
+                                <label for="rutaInternaEditar">Ruta interna: <span class="text-danger">(*)</span></label>
+                                <select id="rutaInternaEditar" name="rutaInternaEditar" class="form-control selectpicker" data-live-search="true">
+                                        <option value="" hidden>[---Seleccione---]</option>
+                                        @foreach($rutaInterna as $r)
+                                            <option style="font-size: 12px" value="{{ $r->key }}">{{ $r->name }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none" >
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tipoRutaDivEditar" style="display:none" >
                             <div class="form-group">
                                 <label for="rutaExternaEditar">Ruta Externa: <span class="text-danger">(*)</span></label>
                                 <input type="text" name="rutaExternaEditar" id="rutaExternaEditar"  class="form-control"  placeholder="Ruta">

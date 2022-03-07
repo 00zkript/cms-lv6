@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Models\TipoRuta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
@@ -17,12 +18,17 @@ class MenuController extends Controller
 
         $rutaInterna = Menu::getRoutesInternal();
 
+
+        $tipo_ruta = TipoRuta::query()->where('estado',1)->get();
+
+
         $menu = Menu::query()
+            ->with(['padre'])
             ->orderBy('idmenu','DESC')
             ->paginate(10,['*'],'pagina',1);
 
 
-        return view('panel.menu.index')->with(compact('menu','rutaInterna'));
+        return view('panel.menu.index')->with(compact('menu','rutaInterna','tipo_ruta'));
     }
 
     public function listar(Request $request)
@@ -36,6 +42,7 @@ class MenuController extends Controller
         $txtBuscar = $request->input('txtBuscar');
 
         $menu = Menu::query()
+            ->with(['padre'])
             ->when($txtBuscar,function($query) use($txtBuscar){
                 return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
@@ -56,22 +63,25 @@ class MenuController extends Controller
         }
 
         try{
-            $menu                        = new Menu;
-            $menu->nombre                = $request->input('nombre');
-            $menu->slug                  = Str::slug($request->input('nombre'));
-            $menu->pariente              = $request->input('pariente') ?: 0;
-            $menu->tipo_ruta             = $request->input('tipoRuta');
+            $ruta  = NULL;
 
-            if($request->input('tipoRuta') == "interna"){
-                $menu->ruta  = $request->input('rutaInterna') ?: 'javscript:void(0);';
+            if($request->input('tipoRuta') == 2){
+                $ruta  = $request->input('rutaInterna');
             }
 
-            if($request->input('tipoRuta')  == "externa"){
-                $menu->ruta   = $request->input('rutaExterna') ?: 'javscript:void(0);';
+            if($request->input('tipoRuta')  == 3){
+                $ruta   = $request->input('rutaExterna') ?: 'javscript:void(0);';
             }
 
-            $menu->posicion                 = $request->input('posicion');
-            $menu->estado                = $request->input('estado');
+
+            $menu              = new Menu;
+            $menu->pariente    = $request->input('pariente') ?: 0;
+            $menu->nombre      = $request->input('nombre');
+            $menu->slug        = Str::slug($request->input('nombre'));
+            $menu->idtipo_ruta = $request->input('tipoRuta');
+            $menu->ruta        = $ruta;
+            $menu->posicion    = $request->input('posicion');
+            $menu->estado      = $request->input('estado');
             $menu->save();
 
             return response()->json([
@@ -136,19 +146,25 @@ class MenuController extends Controller
         }
 
         try{
-            $menu                             =  Menu::query()->findOrFail($request->input('idmenu'));
-            $menu->nombre                     =  $request->input('nombreEditar');
-            $menu->tipo_ruta                 =  $request->input('tipoRutaEditar');
+            $ruta = NULL;
 
-            if($request->input('tipoRutaEditar')       == "interna"){
-                $menu->ruta                   =  $request->input('rutaInternaEditar');
-            }else if($request->input('tipoRutaEditar') == "externa"){
-                $menu->ruta                   =  $request->input('rutaExternaEditar');
+            if($request->input('tipoRutaEditar') == 2){
+                $ruta =  $request->input('rutaInternaEditar');
             }
-            $menu->slug                       =  Str::slug($request->input('nombreEditar'));
-            $menu->pariente                   =  $request->input('parienteEditar') ?: 0;
-            $menu->posicion                      =  $request->input('posicionEditar');
-            $menu->estado                     =  $request->input('estadoEditar');
+
+            if($request->input('tipoRutaEditar') == 3){
+                $ruta =  $request->input('rutaExternaEditar') ?: 'javscript:void(0);';
+            }
+
+
+            $menu               = Menu::query()->findOrFail($request->input('idmenu'));
+            $menu->pariente     = $request->input('parienteEditar') ?: 0;
+            $menu->nombre       = $request->input('nombreEditar');
+            $menu->slug         = Str::slug($request->input('nombreEditar'));
+            $menu->idtipo_ruta  = $request->input('tipoRutaEditar');
+            $menu->ruta         = $ruta;
+            $menu->posicion     = $request->input('posicionEditar');
+            $menu->estado       = $request->input('estadoEditar');
             $menu->update();
 
             return response()->json([
@@ -255,7 +271,10 @@ class MenuController extends Controller
             return abort(403);
         }
 
-        $menu = DB::table('menu')->count();
+        $pariente = $request->input('pariente');
+        $menu = DB::table('menu')
+            ->where('pariente',$pariente)
+            ->count();
 
 
         return response()->json(["posicion_maxima" => $menu + 1]);

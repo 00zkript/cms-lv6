@@ -23,9 +23,7 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="pariente">Pariente:</label>
-                                <select data-size="5" name="pariente" id="pariente" class="form-control selectpicker show-tick" data-live-search="true" title="[--Seleccione--]"> <option value="0">Sin Pariente</option>
-
-
+                                <select data-size="5" name="pariente" id="pariente" class="form-control selectpicker show-tick" data-live-search="true" title="[--Seleccione--]">
                                 </select>
                             </div>
                         </div>
@@ -40,28 +38,28 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="tipoRuta">Tipo de ruta: <span class="text-danger">(*)</span></label>
-                                <select id="tipoRuta" name="tipoRuta" class="form-control" required>
+                                <select id="tipoRuta" name="tipoRuta" class="form-control" title="[---Seleccione---]" required>
                                     <option value="" selected hidden>[---Seleccione---]</option>
-                                    <option value="interna" >Interna</option>
-                                    <option value="externa" >Externa</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none" >
-                            <div class="form-group">
-                                <label for="rutaInterna">Ruta interna: <span class="text-danger">(*)</span></label>
-                                <select id="rutaInterna" name="rutaInterna" class="form-control">
-                                        <option value="" selected hidden>[---Seleccione---]</option>
-                                    @foreach($rutaInterna as $r)
-                                        <option value="{{ $r->key }}">{{ $r->name }}</option>
+                                    @foreach($tipo_ruta as $t)
+                                        <option value="{{ $t->idtipo_ruta }}">{{ $t->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tipoRutaDiv" style="display:none" >
+                            <div class="form-group">
+                                <label for="rutaInterna">Ruta interna: <span class="text-danger">(*)</span></label>
+                                <select id="rutaInterna" name="rutaInterna" class="form-control selectpicker" data-live-search="true">
+                                        <option value="" selected hidden>[---Seleccione---]</option>
+                                        @foreach($rutaInterna as $r)
+                                            <option style="font-size: 12px" value="{{ $r->key }}">{{ $r->name }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none" >
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tipoRutaDiv" style="display:none" >
                             <div class="form-group">
                                 <label for="rutaExterna">Ruta Externa: <span class="text-danger">(*)</span></label>
                                 <input type="text" name="rutaExterna" id="rutaExterna"  class="form-control"  placeholder="Ruta">

@@ -58,7 +58,7 @@
 
 @endsection
 @push('js')
-    <script >
+    <script type="module">
 
         const URL_LISTADO     = "{{ route('menu.listar') }}";
         const URL_GUARDAR     = "{{ route('menu.store') }}";
@@ -78,9 +78,10 @@
                 e.preventDefault();
                 $("#frmCrear span.error").remove();
                 $("#frmCrear")[0].reset();
-                getPosicion("crear");
+                HideTypeRouteOptions();
+                getPosicion('crear');
                 getParientes();
-                $("#frmCrear .selectpicker").selectpicker("refresh");
+                $("#frmCrear .selectpicker").selectpicker("render");
                 $("#modalCrear").modal("show");
 
 
@@ -123,35 +124,31 @@
                     $("#frmEditar")[0].reset();
 
                     $("#frmEditar input[name=idmenu]").val(data.idmenu);
-                    getPosicion("editar",data.posicion);
-                    getParientes("editar");
 
+                    getParientes("editar");
+                    setTimeout(() => { $("#parienteEditar").selectpicker("val",data.pariente);}, 700);
 
                     $("#nombreEditar").val(data.nombre);
-                    // $("#rutaEditar").val(data.ruta);
-                    $("#estadoEditar").val(data.estado);
-                    $("#tipoRutaEditar").val(data.tipo_ruta);
+                    $("#tipoRutaEditar").val(data.idtipo_ruta);
 
-                    $('#rutaInternaEditar').parent().parent().hide();
-                    $('#rutaExternaEditar').parent().parent().hide();
+                    HideTypeRouteOptions('editar');
 
-
-                    if(data.tipo_ruta == 'interna'){
-                        $('#rutaInternaEditar').val(data.ruta);
-                        $('#rutaInternaEditar').parent().parent().show();
-
+                    if(data.idtipo_ruta == 2){
+                        $('#rutaInternaEditar').selectpicker('val',data.ruta);
+                        $('#rutaInternaEditar').closest('.tipoRutaDivEditar').show();
                     }
 
-                    if(data.tipo_ruta == 'externa'){
+                    if(data.idtipo_ruta == 3){
                         $('#rutaExternaEditar').val(data.ruta);
-                        $('#rutaExternaEditar').parent().parent().show();
+                        $('#rutaExternaEditar').closest('.tipoRutaDivEditar').show();
                     }
 
+                    getPosicion("editar",data.posicion,data.pariente);
+                    $("#estadoEditar").val(data.estado);
 
-                    setTimeout(() => {
-                        $("#parienteEditar").selectpicker("val",data.pariente);
 
-                    }, 700);
+
+
 
 
 
@@ -384,7 +381,7 @@
         }
 
 
-        const getPosicion = ( accion , valorActual = null ) => {
+        const getPosicion = ( accion , valorActual = null, pariente = null ) => {
 
 
             let orderSelector = accion == "editar" ? "posicionEditar" : "posicion";
@@ -392,7 +389,11 @@
 
             $("#"+orderSelector+" option").remove();
 
-            axios(URL_POSICION)
+            axios.get(URL_POSICION,{
+                params: {
+                    pariente : pariente
+                }
+            })
             .then(response => {
                 const data = response.data;
 
@@ -420,9 +421,9 @@
             .then(response => {
                 const data = response.data;
 
-                $("#"+parienteSelector).append("<option data-tokens='0' value='0'>Sin Parientes</option>");
+                $("#"+parienteSelector).append(`<option data-tokens='' value='' ${ accion != 'editar' ? 'selected' : '' } >Sin Parientes</option>`);
                 data.forEach(ele => {
-                    $("#"+parienteSelector).append("<option data-tokens="+ele.idmenu+" value="+ele.idmenu+">"+ele.nombre+"</option>");
+                    $("#"+parienteSelector).append(`<option data-tokens="${ ele.idmenu }" value="${ ele.idmenu }">${ ele.nombre }</option>`);
 
                 });
 
@@ -435,41 +436,83 @@
 
         }
 
+        const changePariente = () => {
+            document.querySelector('#pariente').addEventListener('change' ,function (e) {
+                e.preventDefault();
+                getPosicion('crear',null,this.value);
+            })
+
+            document.querySelector('#parienteEditar').addEventListener('change' ,function (e) {
+                e.preventDefault();
+                getPosicion('editar',null,this.value);
+            })
+
+
+
+        }
+
         const changeTypeRoute = () => {
 
             document.querySelector("#tipoRuta").addEventListener("change",function(){
                 const rutaInterna = document.querySelector("#rutaInterna");
                 const rutaExterna = document.querySelector("#rutaExterna");
+                const rutaInternaCategoria = document.querySelector("#rutaInternaCategoria");
 
-                rutaInterna.parentElement.parentElement.style.display = "none";
-                rutaInterna.removeAttribute("required");
+                HideTypeRouteOptions();
 
-                rutaExterna.parentElement.parentElement.style.display = "none";
-
-
-                if( this.value == "interna" ){
-                    rutaInterna.parentElement.parentElement.style.display = "";
-                    rutaInterna.setAttribute("required","");
-                }else if( this.value == "externa" ){
-                    rutaExterna.parentElement.parentElement.style.display = "";
+                if( this.value == 2 ){
+                    rutaInterna.closest('.tipoRutaDiv').style.display = "";
+                    rutaInterna.required = true;
+                    return false;
                 }
+
+                if( this.value == 3 ){
+                    rutaExterna.closest('.tipoRutaDiv').style.display = "";
+                    rutaExterna.required = true;
+                    return false;
+                }
+
+
             })
 
             document.querySelector("#tipoRutaEditar").addEventListener("change",function(){
                 const rutaInterna = document.querySelector("#rutaInternaEditar");
                 const rutaExterna = document.querySelector("#rutaExternaEditar");
+                const rutaInternaCategoria = document.querySelector("#rutaInternaCategoriaEditar");
 
-                rutaInterna.parentElement.parentElement.style.display = "none";
-                rutaInterna.removeAttribute("required");
+                HideTypeRouteOptions('editar');
 
-                rutaExterna.parentElement.parentElement.style.display = "none";
-
-                if( this.value == "interna" ){
-                    rutaInterna.parentElement.parentElement.style.display = "";
-                    rutaInterna.setAttribute("required","");
-                }else if( this.value == "externa" ){
-                    rutaExterna.parentElement.parentElement.style.display = "";
+                if( this.value == 2 ){
+                    rutaInterna.closest('.tipoRutaDivEditar').style.display = "";
+                    rutaInterna.required = true;
+                    return false;
                 }
+
+                if( this.value == 3 ){
+                    rutaExterna.closest('.tipoRutaDivEditar').style.display = "";
+                    rutaExterna.required = true;
+                    return false;
+                }
+
+            })
+
+
+        }
+
+        const HideTypeRouteOptions = (accion) => {
+            const elem = accion == 'editar' ? '.tipoRutaDivEditar' : '.tipoRutaDiv';
+
+            document.querySelectorAll(elem).forEach( ele => {
+                ele.style.display = 'none';
+
+                if ( ele.querySelector('input') ) {
+                    ele.querySelector('input').required = false;
+                }
+
+                if  ( ele.querySelector('select') ){
+                    ele.querySelector('select').required = false;
+                }
+
             })
 
 
@@ -490,6 +533,7 @@
             inhabilitar();
             eliminar();
 
+            changePariente();
             changeTypeRoute();
         });
 
