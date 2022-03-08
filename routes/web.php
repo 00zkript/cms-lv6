@@ -86,6 +86,13 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
     Route::resource('categoria-producto', App\Http\Controllers\Panel\CategoriaProductoController::class);
 
 
+    Route::post('banner/cantidadBanners',[\App\Http\Controllers\Panel\BannerController::class,'cantidadBanners'])->name("banner.cantidadBanners");
+    Route::post('banner/removerImagen',[\App\Http\Controllers\Panel\BannerController::class,'removerImagen'])->name("banner.removerImagen");
+    Route::post('banner/habilitar',[\App\Http\Controllers\Panel\BannerController::class,'habilitar'])->name("banner.habilitar");
+    Route::post('banner/inhabilitar',[\App\Http\Controllers\Panel\BannerController::class,'inhabilitar'])->name("banner.inhabilitar");
+    Route::post('banner/listar',[\App\Http\Controllers\Panel\BannerController::class,'listar'])->name("banner.listar");
+    Route::resource('banner',\App\Http\Controllers\Panel\BannerController::class);
+
 
 
 
