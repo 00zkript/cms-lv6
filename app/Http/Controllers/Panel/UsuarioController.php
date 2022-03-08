@@ -33,7 +33,7 @@ class UsuarioController extends Controller
     public function listar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
 
@@ -78,7 +78,7 @@ class UsuarioController extends Controller
     public function store(UsuarioRequest $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $usuario = new User();
@@ -111,7 +111,7 @@ class UsuarioController extends Controller
     public function show(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $usuario = DB::table('usuario AS u')
@@ -137,7 +137,7 @@ class UsuarioController extends Controller
     public function edit(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $usuario = DB::table('usuario')
@@ -166,7 +166,7 @@ class UsuarioController extends Controller
     public function update(UsuarioRequest $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $usuario =  User::findOrFail($request->input('idusuario'));
@@ -211,7 +211,7 @@ class UsuarioController extends Controller
     public function habilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $usuario = DB::table('usuario')

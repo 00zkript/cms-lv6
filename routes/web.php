@@ -80,12 +80,6 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
     Route::resource('proyecto', App\Http\Controllers\Panel\ProyectoController::class);
 
 
-
-    Route::post('categoria-producto/habilitar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'habilitar'])->name('categoria-producto.habilitar');
-    Route::post('categoria-producto/listar',[App\Http\Controllers\Panel\CategoriaProductoController::class,'listar'])->name('categoria-producto.listar');
-    Route::resource('categoria-producto', App\Http\Controllers\Panel\CategoriaProductoController::class);
-
-
     Route::post('banner/cantidadBanners',[\App\Http\Controllers\Panel\BannerController::class,'cantidadBanners'])->name("banner.cantidadBanners");
     Route::post('banner/removerImagen',[\App\Http\Controllers\Panel\BannerController::class,'removerImagen'])->name("banner.removerImagen");
     Route::post('banner/habilitar',[\App\Http\Controllers\Panel\BannerController::class,'habilitar'])->name("banner.habilitar");

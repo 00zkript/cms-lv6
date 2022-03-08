@@ -34,7 +34,7 @@ class MenuController extends Controller
     public function listar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
@@ -59,7 +59,7 @@ class MenuController extends Controller
     {
 
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try{
@@ -103,7 +103,7 @@ class MenuController extends Controller
     public function show(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $menu = DB::table('menu AS m')
@@ -123,7 +123,7 @@ class MenuController extends Controller
     public function edit(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $menu = DB::table('menu')
@@ -142,7 +142,7 @@ class MenuController extends Controller
     public function update(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try{
@@ -186,7 +186,7 @@ class MenuController extends Controller
     public function habilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -215,7 +215,7 @@ class MenuController extends Controller
     public function inhabilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try{
@@ -242,7 +242,7 @@ class MenuController extends Controller
     public function destroy(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try{
@@ -268,7 +268,7 @@ class MenuController extends Controller
     public function getPosicion(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $pariente = $request->input('pariente');
@@ -284,7 +284,7 @@ class MenuController extends Controller
     public function getParientes(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $pagina = DB::table('menu')

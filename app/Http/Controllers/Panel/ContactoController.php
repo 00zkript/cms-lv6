@@ -20,7 +20,7 @@ class ContactoController extends Controller
     public function update(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $contacto = Contacto::findOrFail($request->idcontacto);

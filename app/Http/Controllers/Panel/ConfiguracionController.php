@@ -30,7 +30,7 @@ class ConfiguracionController extends Controller
     public function update(ConfirguracionRequest $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
 

@@ -33,7 +33,7 @@ class ProyectoController extends Controller
     public function listar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
@@ -56,7 +56,7 @@ class ProyectoController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -108,7 +108,7 @@ class ProyectoController extends Controller
     public function show(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
@@ -125,7 +125,7 @@ class ProyectoController extends Controller
     public function edit(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $registro = Proyecto::query()->with(["imagenes"])->find($request->input('idproyecto'));
@@ -142,7 +142,7 @@ class ProyectoController extends Controller
     public function update(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -202,7 +202,7 @@ class ProyectoController extends Controller
     public function habilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -227,7 +227,7 @@ class ProyectoController extends Controller
     public function destroy(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -254,7 +254,7 @@ class ProyectoController extends Controller
     public function removeFile(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -282,7 +282,7 @@ class ProyectoController extends Controller
     public function sortFiles(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         foreach (json_decode($request->stack) as $key => $item) {

@@ -32,7 +32,7 @@ class ServicioController extends Controller
     public function listar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
@@ -55,7 +55,7 @@ class ServicioController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -92,7 +92,7 @@ class ServicioController extends Controller
     public function show(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $registro = Servicio::query()->find($request->input('idservicio'));
@@ -108,7 +108,7 @@ class ServicioController extends Controller
     public function edit(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $registro = Servicio::query()->find($request->input('idservicio'));
@@ -124,7 +124,7 @@ class ServicioController extends Controller
     public function update(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -161,7 +161,7 @@ class ServicioController extends Controller
     public function habilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -187,7 +187,7 @@ class ServicioController extends Controller
     public function inhabilitar(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {
@@ -212,7 +212,7 @@ class ServicioController extends Controller
     public function destroy(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try {

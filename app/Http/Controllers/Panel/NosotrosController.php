@@ -30,7 +30,7 @@ class NosotrosController extends Controller
    function update(Request $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         $nosotros = Nosotros::findOrFail($request->idnosotros);

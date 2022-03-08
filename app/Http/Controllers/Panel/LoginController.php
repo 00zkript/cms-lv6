@@ -23,7 +23,7 @@ class LoginController extends Controller
     public function verificar(LoginRequest $request)
     {
         if (!$request->ajax()){
-            return abort(403);
+            return abort(404);
         }
 
         try{
