@@ -122,7 +122,7 @@
                     $("#frmEditar input[name=idregistro]").val(data.idregistro);
 
 
-                    $("#tituloEditar").val(data.titulo);
+                    $("#nombreEditar").val(data.nombre);
                     CKEDITOR.instances.contenidoEditar.setData(data.contenido);
 
 
@@ -163,7 +163,7 @@
 
                     stop();
 
-                    $("#tituloShow").html(data.titulo);
+                    $("#nombreShow").html(data.nombre);
                     $("#contenidoShow").html(data.contenido);
 
 

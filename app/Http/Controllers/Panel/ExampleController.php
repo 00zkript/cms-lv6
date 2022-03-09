@@ -218,7 +218,7 @@ class ExampleController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function inhabilitar(Request $request)
     {
         if (!$request->ajax()){
             return abort(404);
@@ -238,6 +238,30 @@ class ExampleController extends Controller
 
             return response()->json([
                 'mensaje'=> "No se pudo inhabilitado el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
+        }
+    }
+
+    public function destroy(Request $request)
+    {
+        if (!$request->ajax()){
+            return abort(404);
+        }
+
+        try {
+            $registro = Example::query()->findOrFail($request->input('idregistro'));
+            $registro->delete();
+
+            return response()->json([
+                'mensaje'=> "Registro eliminado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo eliminado el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);

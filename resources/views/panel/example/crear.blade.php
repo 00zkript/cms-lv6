@@ -23,8 +23,8 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="titulo">Titulo: <span class="text-danger">(*)</span></label>
-                                <input type="text" name="titulo" id="titulo" required class="form-control"  placeholder="Titulo">
+                                <label for="nombre">Nombre: <span class="text-danger">(*)</span></label>
+                                <input type="text" name="nombre" id="nombre" required class="form-control"  placeholder="Nombre">
                             </div>
                         </div>
 
