@@ -20,10 +20,9 @@ class BannerController extends Controller
     public function index()
     {
 
-        $banners = DB::table('banner AS b')
-            ->selectRaw('b.*')
-            ->orderBy('b.orden', 'ASC')
-            ->orderBy('b.pagina')
+        $banners = Banner::query()
+            ->orderBy('pagina')
+            ->orderBy('posicion', 'ASC')
             ->paginate(10, ['*'], 'pagina', 1);
 
         return view('panel.banner.index')->with(compact('banners'));
@@ -36,16 +35,15 @@ class BannerController extends Controller
             return abort(404);
         }
 
-        $cantidadRegistros = $request->cantidadRegistros;
-        $paginaActual = $request->paginaActual;
-        $txtBuscar = trim($request->txtBuscar);
+        $cantidadRegistros = $request->input('cantidadRegistros');
+        $paginaActual = $request->input('paginaActual');
+        $txtBuscar = $request->input('txtBuscar');
 
-        $banners = DB::table('banner AS b')
-            ->selectRaw('b.*')
+        $banners = Banner::query()
             ->when(!empty($txtBuscar), function ($query) use ($txtBuscar) {
-                return $query->whereRaw('b.pagina LIKE ? ', ["%" . $txtBuscar . "%"]);
+                return $query->where('pagina', 'like', "%$txtBuscar%" );
             })
-            ->orderBy('b.orden', 'ASC')
+            ->orderBy('posicion', 'ASC')
             ->paginate($cantidadRegistros, ['*'], 'pagina', $paginaActual);
 
         return response()->json(view('panel.banner.listado')->with(compact('banners'))->render());
@@ -75,22 +73,40 @@ class BannerController extends Controller
             return abort(404);
         }
 
-        $banner = new Banner;
-        $banner->pagina = $request->input('pagina');
 
-        if ($request->hasFile('imagen')) {
-            $imagen = Storage::disk('panel')->putFile('banner', $request->file('imagen'));
-            $banner->imagen = basename($imagen);
+
+        try {
+
+            $banner = new Banner;
+            $banner->pagina    = $request->input('pagina');
+            $banner->contenido = $request->input('contenido');
+            $banner->ruta      = $request->input('ruta');
+            $banner->posicion  = $request->input('posicion');
+            $banner->estado    = $request->input('estado');
+            // $banner->video = $request->input('video');
+
+            if ($request->hasFile('imagen')) {
+                // $imagen = Storage::disk('panel')->putFile('banner', $request->file('imagen'));
+                $imagen = $request->file('imagen')->store('banner','panel');
+                $banner->imagen = basename($imagen);
+            }
+
+
+            $banner->save();
+
+            return response()->json([
+                'mensaje'=> "Registro creado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo crear el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
 
-        $banner->video = $request->input('video');
-
-        $banner->contenido = $request->input('contenido');
-        $banner->orden = $request->input('orden');
-        $banner->estado = $request->input('estado');
-        $banner->save();
-
-        return response()->json(["data" => "Nuevo registro guardado con exito."], 200);
 
 
     }
@@ -108,20 +124,14 @@ class BannerController extends Controller
         }
 
         $idbanner = $request->input('idbanner');
+        $banner = Banner::query()->find($idbanner);
 
-        $banner = Banner::find($idbanner);
-
-        if (!empty($banner)) {
-
-            return response()->json(["data" => $banner], 200);
-
-        } else {
-
-            return response()->json(["data" => "Registro no encontrado"], 400);
-
+        if(!$banner){
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
 
+        return response()->json($banner);
     }
 
     /**
@@ -137,20 +147,13 @@ class BannerController extends Controller
         }
 
         $idbanner = $request->input('idbanner');
+        $banner = Banner::query()->find($idbanner);
 
-        $banner = Banner::find($idbanner);
-
-        if (!empty($banner)) {
-
-            return response()->json(["data" => $banner], 200);
-
-        } else {
-
-            return response()->json(["data" => "Registro no encontrado"], 400);
-
+        if(!$banner){
+            return response()->json( ['mensaje' => "Registro no encontrado"],400);
         }
 
-
+        return response()->json($banner);
     }
 
     /**
@@ -166,73 +169,43 @@ class BannerController extends Controller
             return abort(404);
         }
 
-        $idbanner = $request->input('idbanner');
 
-        $banner = Banner::find($idbanner);
+        try {
 
-        if (!empty($banner)) {
-
-
-            $banner->pagina = $request->input('paginaEditar');
+            $banner            = Banner::query()->findOrFail($request->input('idbanner'));
+            $banner->pagina    = $request->input('paginaEditar');
+            $banner->contenido = $request->input('contenidoEditar');
+            $banner->ruta      = $request->input('rutaEditar');
+            $banner->posicion  = $request->input('posicionEditar');
+            $banner->estado    = $request->input('estadoEditar');
+            // $banner->video = $request->input('videoEditar');
 
             if ($request->hasFile('imagenEditar')) {
+
 
                 if (Storage::disk('panel')->exists('banner/' . $banner->imagen)) {
                     Storage::disk('panel')->delete('banner/' . $banner->imagen);
                 }
 
 
-                $imagen = Storage::disk('panel')->putFile('banner', $request->file('imagenEditar'));
+                $imagen = $request->file('imagenEditar')->store('banner','panel');
                 $banner->imagen = basename($imagen);
             }
 
-            $banner->video = $request->input('videoEditar');
 
-            $banner->contenido = $request->input('contenidoEditar');
-            $banner->orden = $request->input('ordenEditar');
-            $banner->estado = $request->input('estadoEditar');
             $banner->update();
 
+            return response()->json([
+                'mensaje'=> "Registro actualizado exitosamente.",
+            ]);
 
-            return response()->json(["data" => "Registro modificado con exito."], 200);
+        } catch (\Throwable $th) {
 
-        } else {
-            return response()->json(["data" => "El registro no pudo ser modificado"], 400);
-        }
-
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function destroy(Request $request, $id)
-    {
-        if (!$request->ajax()) {
-            return abort(404);
-        }
-
-        $idbanner = $request->input('idbanner');
-
-        $banner = Banner::find($idbanner);
-
-        if (!empty($banner)) {
-
-            if (Storage::disk('panel')->exists('banner/' . $banner->imagen)) {
-                Storage::disk('panel')->delete('banner/' . $banner->imagen);
-            }
-
-            $banner->delete();
-
-            return response()->json(["data" => "Registro eliminado con exito"], 200);
-
-        } else {
-
-            return response()->json(["data" => "Registro no encontrado"], 400);
-
+            return response()->json([
+                'mensaje'=> "No se pudo actualizar el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
 
 
@@ -245,22 +218,27 @@ class BannerController extends Controller
             return abort(404);
         }
 
-        $idbanner = $request->input('idbanner');
+        try {
 
-        $banner = Banner::find($idbanner);
-
-        if (!empty($banner)) {
-
+            $banner = Banner::query()->findOrFail($request->input('idbanner'));
             $banner->estado = 1;
             $banner->update();
 
-            return response()->json(["data" => "Registro habilitado con exito"], 200);
 
-        } else {
 
-            return response()->json(["data" => "Registro no encontrado"], 400);
+            return response()->json([
+                'mensaje'=> "Registro habilitado exitosamente.",
+            ]);
 
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo habilitar el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
+
 
 
     }
@@ -271,26 +249,67 @@ class BannerController extends Controller
             return abort(404);
         }
 
-        $idbanner = $request->input('idbanner');
+        try {
 
-        $banner = Banner::find($idbanner);
-
-        if (!empty($banner)) {
-
+            $banner = Banner::query()->findOrFail($request->input('idbanner'));
             $banner->estado = 0;
             $banner->update();
 
-            return response()->json(["data" => "Registro inhabilitado con exito"], 200);
 
-        } else {
 
-            return response()->json(["data" => "Registro no encontrado"], 400);
+            return response()->json([
+                'mensaje'=> "Registro inhabilitado exitosamente.",
+            ]);
 
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo inhabilitar el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
 
 
     }
 
+        /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        if (!$request->ajax()) {
+            return abort(404);
+        }
+
+        try{
+
+            $banner = Banner::query()->findOrFail($request->input('idbanner'));
+
+            if (Storage::disk('panel')->exists('banner/' . $banner->imagen)) {
+                Storage::disk('panel')->delete('banner/' . $banner->imagen);
+            }
+
+            $banner->delete();
+
+            return response()->json([
+                'mensaje'=> "Registro eliminado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo eliminar el registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
+        }
+
+
+    }
 
     public function removerImagen(Request $request)
     {
@@ -299,28 +318,34 @@ class BannerController extends Controller
         }
 
 
-        $banner = Banner::find($request->input('idbanner'));
 
-        if (!empty($banner)) {
 
+        try {
+
+            $banner = Banner::find($request->input('idbanner'));
             Storage::disk('panel')->delete('banner/' . $banner->imagen);
             $banner->imagen = null;
             $banner->update();
 
+            return response()->json([
+                "mensaje" => "Imagen eliminada con exito"
+            ]);
 
-            return response()->json(["data" => "Imagen eliminada con exito"], 200);
+        } catch (\Throwable $th) {
 
-        } else {
-
-            return response()->json(["data" => "Ocurrio algun error"], 400);
-
+            return response()->json([
+                'mensaje'=> "No se pudo eliminar la imagen del registro.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
+
 
 
     }
 
 
-    public function cantidadBanners(Request $request)
+    public function getPosicion(Request $request)
     {
         if (!$request->ajax()) {
             return abort(404);
@@ -328,11 +353,13 @@ class BannerController extends Controller
 
         $pagina = $request->input('pagina');
 
-        $cantidad = DB::table('banner')
+        $cantidad = Banner::query()
             ->where('pagina', $pagina)
             ->count();
 
-        return response()->json($cantidad + 1);
+        return response()->json([
+            "posicion_maxima" => $cantidad + 1
+        ]);
 
     }
 

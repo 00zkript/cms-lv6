@@ -17,10 +17,13 @@ DROP TABLE IF EXISTS `banner`;
 
 CREATE TABLE `banner` (
   `idbanner` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pagina` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `titulo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `subtitulo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contenido` text COLLATE utf8mb4_unicode_ci,
   `ruta` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `imagen` text COLLATE utf8mb4_unicode_ci,
+  `posicion` int(11) DEFAULT NULL,
   `estado` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idbanner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -360,49 +363,37 @@ CREATE TABLE `password_resets` (
 
 /*Data for the table `password_resets` */
 
-/*Table structure for table `producto` */
+/*Table structure for table `proyecto` */
 
-DROP TABLE IF EXISTS `producto`;
+DROP TABLE IF EXISTS `proyecto`;
 
-CREATE TABLE `producto` (
-  `idproducto` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `idmarca` int(11) DEFAULT NULL,
-  `codigo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stock` int(11) DEFAULT NULL,
-  `precio` double DEFAULT NULL,
-  `destacado` tinyint(1) NOT NULL DEFAULT '0',
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
-  `contenido` text COLLATE utf8mb4_unicode_ci,
-  `estado` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`idproducto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `proyecto` (
+  `idproyecto` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(250) DEFAULT NULL,
+  `slug` varchar(250) DEFAULT NULL,
+  `descripcion` text,
+  `contenido` text,
+  `imagen` text,
+  `estado` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`idproyecto`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `producto` */
+/*Data for the table `proyecto` */
 
-insert  into `producto`(`idproducto`,`idmarca`,`codigo`,`nombre`,`slug`,`stock`,`precio`,`destacado`,`descripcion`,`contenido`,`estado`) values (1,1,'ada','p1','p1',15,11.2,0,'kl','ghgfhgfhdfg',1);
-insert  into `producto`(`idproducto`,`idmarca`,`codigo`,`nombre`,`slug`,`stock`,`precio`,`destacado`,`descripcion`,`contenido`,`estado`) values (2,NULL,'ad','p2','p2',25,14.3,1,'ghdhnn','ttrhgrgergrr',1);
+/*Table structure for table `proyecto_imagen` */
 
-/*Table structure for table `producto_imagen` */
+DROP TABLE IF EXISTS `proyecto_imagen`;
 
-DROP TABLE IF EXISTS `producto_imagen`;
+CREATE TABLE `proyecto_imagen` (
+  `idproyecto_imagen` int(11) NOT NULL AUTO_INCREMENT,
+  `idproyecto` int(11) DEFAULT NULL,
+  `nombre` varchar(250) DEFAULT NULL,
+  `posicion` int(11) DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`idproyecto_imagen`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `producto_imagen` (
-  `idproducto_imagen` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `idproducto` int(11) DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `posicion` int(11) NOT NULL DEFAULT '1',
-  `estado` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`idproducto_imagen`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-/*Data for the table `producto_imagen` */
-
-insert  into `producto_imagen`(`idproducto_imagen`,`idproducto`,`nombre`,`posicion`,`estado`) values (1,1,'tB8AcQRjTVOun9FfrZQLtgQBlfHOnbwLMtXtdky1.jpg',1,0);
-insert  into `producto_imagen`(`idproducto_imagen`,`idproducto`,`nombre`,`posicion`,`estado`) values (2,1,'yYsZQOi25U5PNhARz6zm2kH1irB4SOJqILJ2YBF6.jpg',2,0);
-insert  into `producto_imagen`(`idproducto_imagen`,`idproducto`,`nombre`,`posicion`,`estado`) values (3,2,'jRuRBgZEcdcMKh5MEg8hbIsdP8rp8iabgEPnit2Q.jpg',1,0);
-insert  into `producto_imagen`(`idproducto_imagen`,`idproducto`,`nombre`,`posicion`,`estado`) values (4,2,'hBzG38BFFHEsTG4PN8W7WrhAo8vmdaaAa3QK3b7w.jpg',2,0);
+/*Data for the table `proyecto_imagen` */
 
 /*Table structure for table `servicio` */
 

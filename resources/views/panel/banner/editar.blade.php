@@ -32,10 +32,36 @@
                             </div>
                         </div>
 
+
+
+
+
+
+                        {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="videoEditar">Video: </label>
+                                <textarea  id="videoEditar" rows="6" name="videoEditar" class="form-control"></textarea>
+                            </div>
+                        </div> --}}
+
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="ordenEditar">Orden: <span class="text-danger">(*)</span></label>
-                                <select name="ordenEditar" id="ordenEditar" required class="form-control">
+                                <label for="contenidoEditar">Contenido: </label>
+                                <textarea  id="contenidoEditar" class="contenidoEditar"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="rutaEditar">Ruta: </label>
+                                <input type="text" id="rutaEditar" name="rutaEditar" placeholder="http://example.com" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="posicionEditar">Posición: <span class="text-danger">(*)</span></label>
+                                <select name="posicionEditar" id="posicionEditar" required class="form-control" title="[--- Seleccione ---]">
                                 </select>
                             </div>
                         </div>
@@ -43,24 +69,10 @@
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="imagenEditar" >Imagen: </label>
+                                <label for="imagenEditar" >Imagen: <span class="text-danger">(*)</span></label>
                                 <div class="file-loading">
                                     <input  id="imagenEditar"  name="imagenEditar" type="file" class="file" >
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="videoEditar">Video: </label>
-                                <textarea  id="videoEditar" rows="6" name="videoEditar" class="form-control"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="contenidoEditar">Contenido: </label>
-                                <textarea  id="contenidoEditar" class="contenidoEditar"></textarea>
                             </div>
                         </div>
 

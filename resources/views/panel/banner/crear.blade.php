@@ -30,32 +30,17 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="orden">Orden: <span class="text-danger">(*)</span></label>
-                                <select name="orden" id="orden" required class="form-control">
-
-                                </select>
-                            </div>
-                        </div>
 
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="imagen" >Imagen: </label>
-                                <div class="file-loading">
-                                    <input  id="imagen"  name="imagen" type="file" class="file" >
-                                </div>
-                            </div>
-                        </div>
 
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                        {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="video">Video: </label>
                                 <textarea  id="video" rows="6" name="video" class="form-control"></textarea>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="form-group">
@@ -64,6 +49,29 @@
                             </div>
                         </div>
 
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="ruta">Ruta: </label>
+                                <input type="text" id="ruta" name="ruta" placeholder="http://example.com" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="posicion">Posición: <span class="text-danger">(*)</span></label>
+                                <select name="posicion" id="posicion" required class="form-control" title="[--- Seleccione ---]">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="imagen" >Imagen: <span class="text-danger">(*)</span></label>
+                                <div class="file-loading">
+                                    <input  id="imagen"  name="imagen" required type="file" class="file" >
+                                </div>
+                            </div>
+                        </div>
 
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

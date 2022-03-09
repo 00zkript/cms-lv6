@@ -1,4 +1,4 @@
-@extends('panel.template.index')
+@extends('panel.template.gentella')
 @section('cuerpo')
 @include('panel.banner.crear')
 @include('panel.banner.editar')
@@ -59,102 +59,26 @@
 @endsection
 @push('js')
     <script !src="">
-        $(function () {
-            listado();
-            modales();
-            guardar();
-            modificar();
-            habilitar();
-            inhabilitar();
-            eliminar();
-            limpiarFormularios();
-            cantidadBanners();
 
-
-            CKEDITOR.replace('contenido',{
-                height : 200
-            });
-
-            CKEDITOR.replace('contenidoEditar',{
-                height : 200
-            });
-
-        });
-
-        const listado = () => {
-
-            $(document).on("click","a.page-link",(e)=>{
-                e.preventDefault();
-                var url = e.target.href;
-                var paginaActual = url.split("?pagina=")[1];
-                var cantidadRegistros = $("#cantidadRegistros").val();
-                var txtBuscar = $("#txtBuscar").val();
-
-                ajaxListado(cantidadRegistros,paginaActual,txtBuscar);
-            });
-
-            $("#cantidadRegistros").on("change",(e)=>{
-                e.preventDefault();
-                var paginaActual = $("#paginaActual").val();
-                var cantidadRegistros = e.target.value;
-                var txtBuscar = $("#txtBuscar").val();
-
-                ajaxListado(cantidadRegistros,paginaActual,txtBuscar);
-            });
-
-            $("#frmBuscar").on("submit",(e)=>{
-                e.preventDefault();
-                var txtBuscar = $("#txtBuscar").val();
-                var cantidadRegistros = $("#cantidadRegistros").val();
-                ajaxListado(cantidadRegistros,1);
-            });
-
-        }
-
-        const ajaxListado = (cantidadRegistros = 10,paginaActual = 1) => {
-            $.ajax({
-                url:'{{ route('banner.listar') }}',
-                method:'POST',
-                dataType:'json',
-                data: {
-                    cantidadRegistros:cantidadRegistros,
-                    paginaActual:paginaActual,
-                    txtBuscar: $("#txtBuscar").val().trim(),
-                },
-                beforeSend:function () {
-                    cargando();
-                },
-                success:function (data) {
-                    $("#listado").html(data);
-                },
-                error:function (data) {
-                    console.log(data);
-                },
-                complete:function () {
-                    stop();
-                }
-            })
-        }
-
-        const limpiarFormularios = () => {
-            $("#frmCrear input,select").on("keyup change",(e)=>{
-                e.preventDefault();
-                $("#frmCrear span.error").remove();
-            });
-            $("#frmEditar input,select").on("keyup change",(e)=>{
-                e.preventDefault();
-                $("#frmEditar span.error").remove();
-            });
-        }
+        const URL_LISTADO     = "{{ route('banner.listar') }}";
+        const URL_GUARDAR     = "{{ route('banner.store') }}";
+        const URL_VER         = "{{ route('banner.show','show') }}";
+        const URL_EDIT        = "{{ route('banner.edit','edit') }}";
+        const URL_MODIFICAR   = "{{ route('banner.update','update') }}";
+        const URL_HABILITAR   = "{{ route('banner.habilitar') }}";
+        const URL_INHABILITAR = "{{ route('banner.inhabilitar') }}";
+        const URL_ELIMINAR    = "{{ route('banner.destroy','destroy') }}";
+        const URL_ELIMINAR_IMAGEN = "{{ route('banner.removerImagen',) }}";
+        const URL_POSICION     = "{{ route('banner.getPosicion',) }}";
 
         const modales = () => {
 
-            $("#btnModalCrear").on("click",(e)=>{
+            $(document).on("click", "#btnModalCrear", function(e){
                 e.preventDefault();
+                $("#frmCrear")[0].reset();
                 $("#frmCrear span.error").remove();
                 CKEDITOR.instances.contenido.setData('');
-                $("#frmCrear")[0].reset();
-                $("#orden").html('');
+                getPosicion();
                 $("#modalCrear").modal("show");
 
             });
@@ -183,401 +107,317 @@
             $(document).on("click",".btnModalEditar",function(e){
                 e.preventDefault();
                 var idbanner = $(this).closest('div.dropdown-menu').data('idbanner');
-                $.ajax({
-                    url:'{{ route('banner.edit','edit') }}',
-                    method:'GET',
-                    dataType:'json',
-                    data: {
-                        idbanner:idbanner
-                    },
-                    beforeSend:function () {
-                        cargando('Procesando...')
-                    },
-                    success:function (response) {
 
-                        let banner = response.data;
+                cargando('Procesando...')
+                axios(URL_EDIT,{ params : { idbanner: idbanner } })
+                .then( response => {
+                    const data = response.data;
 
-                        $("#frmEditar")[0].reset();
-                        $("#frmEditar span.error").remove();
-                        $("#idbanner").val(banner.idbanner);
-                        $("#paginaEditar").val(banner.pagina);
-                        cantidadBannersEditar(banner.orden,banner.pagina);
-                        $("#imagenEditar").fileinput('destroy').fileinput({
-                            theme: 'fa',
-                            language: 'es',
-                            //uploadUrl: "#",
-                            uploadAsync:false,
-                            uploadExtraData:false,
-                            overwriteInitial: true,
-                            dropZoneTitle:'Arrastre la fotografia aquí',
-                            // dropZoneEnabled: false,
-                            //maxImageWidth: 1200,
-                            //maxImageHeight: 630,
-                            deleteExtraData:function () {
-                                return {
-                                    idbanner:banner.idbanner
-                                }
-                            },
-                            showUpload:false,
-                            showDrag :false,
-                            // required:true,
-                            validateInitialCount: true,
-                            initialPreviewAsData: true,
-                            previewFileType: "image",
-                            showRemove: false,
-                            allowedFileTypes: ['image'],
-                            allowedFileExtensions: ['jpg', 'png', 'jpeg'],
-                            removeFromPreviewOnError:true,
-                            maxFileSize: 20000,
-                            maxFileCount: 1,
-                            autoReplace:true,
-                            //minFileCount: 1,
-                            initialPreview:[ !vacio(banner.imagen) ? '{{ asset('panel/img/banner/') }}/'+banner.imagen : '{{ asset('panel/img/vacio_img.jpg') }}'],
-                            deleteUrl: "{{ route('banner.removerImagen') }}",
-                            fileActionSettings: {
-                                showRemove: false,
-                                showUpload: false,
-                                showZoom: false,
-                                showDrag: false,
-                            },
-                        });
+                    stop();
+                    $("#frmEditar")[0].reset();
+                    $("#frmEditar span.error").remove();
 
-                        $("#videoEditar").val(banner.video);
-                        CKEDITOR.instances.contenidoEditar.setData(banner.contenido);
-                        $("#estadoEditar").val(banner.estado);
 
-                        $("#modalEditar").modal("show");
-                    },
-                    error:function (data) {
-                        if (data.status === 400){
-                            notificacion('error','Error',data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
+                    $("#idbanner").val(data.idbanner);
+                    $("#paginaEditar").val(data.pagina);
+                    $("#rutaEditar").val(data.ruta);
+                    CKEDITOR.instances.contenidoEditar.setData(data.contenido);
+                    getPosicion("editar",data.posicion,data.pagina);
 
-                    },
-                    complete:function () {
-                        stop();
-                    }
-                });
+                    const imagen = !vacio(data.imagen)
+                        ? BASE_URL+'/panel/img/banner/'+data.imagen
+                        : BASE_URL+'/panel/img/vacio_img.jpg';
+
+                    $("#imagenEditar").fileinput('destroy').fileinput({
+                        dropZoneTitle: 'Arrastre la fotografia aquí',
+                        initialPreview:[ imagen],
+                        // deleteUrl: URL_ELIMINAR_IMAGEN,
+                        // deleteExtraData: {
+                            // idbanner: data.idbanner
+                        // },
+                    });
+
+                    // $("#videoEditar").val(data.video);
+                    $("#estadoEditar").val(data.estado);
+
+                    $("#modalEditar").modal("show");
+
+                })
+                // .catch(errorCatch)
+
+
+
             });
 
 
             $(document).on("click",".btnModalVer",function(e){
                 e.preventDefault();
                 var idbanner = $(this).closest('div.dropdown-menu').data('idbanner');
-                $.ajax({
-                    url:'{{ route('banner.show','show') }}',
-                    method:'GET',
-                    dataType:'json',
-                    data: {
-                        idbanner:idbanner
-                    },
-                    beforeSend:function () {
-                        cargando('Procesando...')
-                    },
-                    success:function (response) {
 
-                        let banner = response.data;
+                cargando('Procesando...');
+                axios(URL_VER,{ params: {idbanner : idbanner} })
+                .then(response => {
+                    const data = response.data;
 
-                        $("#txtPagina").html(banner.pagina);
+                    stop();
+                    $("#paginaShow").html(data.pagina);
+                    $("#contendioShow").html(data.contenido);
+                    $("#rutaShow").html(data.ruta);
+                    $("#posicionShow").html(data.posicion);
 
 
+                    const imagen = !vacio(banner.imagen)
+                        ? BASE_URL+'/panel/img/banner/'+data.imagen
+                        : BASE_URL+'/panel/img/vacio_img.jpg';
 
-                        if (!vacio(banner.imagen)){
-                            $("#txtImagen").attr('src','{{ asset('panel/img/banner/') }}/'+banner.imagen);
-                        }else{
-                            $("#txtImagen").attr('src','{{ asset('panel/img/vacio_img.jpg') }}');
-                        }
-
-                        $("#txtContenido").html(banner.contenido);
+                    $("#imagenShow").attr('src',imagen);
 
 
 
-                        if (banner.estado){
-                            $("#txtEstado").html('<label class="badge badge-success">Habilitado</label>');
-                        }else{
-                            $("#txtEstado").html('<label class="badge badge-danger">Inhabilitado</label>');
-                        }
 
-
-                        $("#modalVer").modal("show");
-                    },
-                    error:function (data) {
-                        if (data.status === 400){
-                            notificacion('error','Error',data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
-                    },
-                    complete:function () {
-                        stop();
+                    if (banner.estado){
+                        $("#estadoShow").html('<label class="badge badge-success">Habilitado</label>');
+                    }else{
+                        $("#estadoShow").html('<label class="badge badge-danger">Inhabilitado</label>');
                     }
-                });
+
+
+                    $("#modalVer").modal("show");
+
+
+                })
+                .catch(errorCatch)
+
+
+
             });
 
         }
 
-        const guardar = () => {
-            $("#frmCrear").on("submit",(e)=>{
+        const filtros = () => {
+
+            $(document).on("click", "a.page-link", function(e) {
                 e.preventDefault();
+                var url = e.target.href;
+                var paginaActual = url.split("?pagina=")[1];
+                var cantidadRegistros = $("#cantidadRegistros").val();
+                var txtBuscar = $("#txtBuscar").val();
 
-                   var form = new FormData($("#frmCrear")[0]);
-                   form.append('contenido',CKEDITOR.instances.contenido.getData());
+                listado(cantidadRegistros,paginaActual);
+            });
 
-                $.ajax({
-                    url:'{{ route('banner.store') }}',
-                    method:'POST',
-                    dataType:'json',
-                    data:form ,
-                    cache:false,
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        $("#frmCrear span.error").remove();
-                        cargando('Procesando...');
-                    },
-                    success:function (response) {
-                        $("#modalCrear").modal("hide");
-                        notificacion("success","En hora buena",response.data);
-                        ajaxListado();
-                    },
-                    error:function (data) {
+            $(document).on("change", "#cantidadRegistros", function(e) {
+                e.preventDefault();
+                var paginaActual = $("#paginaActual").val();
+                var cantidadRegistros = e.target.value;
+                var txtBuscar = $("#txtBuscar").val();
 
-                        if (data.status === 422){
-                            var errores = data.responseJSON.errors;
-                            var mensaje = '';
-                            $.each(errores,(posicion,valor)=>{
-                                mensaje += valor[0]+'\n';
-                                $("#"+posicion).closest('div.form-group').append('<span class="text-danger error">'+valor[0]+'</span>');
-                            });
+                listado(cantidadRegistros,paginaActual);
+            });
+
+            $(document).on("submit", "#frmBuscar", function(e) {
+                e.preventDefault();
+                var txtBuscar = $("#txtBuscar").val();
+                var cantidadRegistros = $("#cantidadRegistros").val();
+                listado(cantidadRegistros,1);
+            });
+
+        }
+
+        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
+            cargando();
+
+            const form = {
+                cantidadRegistros : cantidadRegistros,
+                paginaActual : paginaActual,
+                txtBuscar : $("#txtBuscar").val().trim(),
+            }
+
+            try{
+                const response = await axios.post(URL_LISTADO, form );
+                const data = response.data;
+
+                stop();
+                document.querySelector("#listado").innerHTML = data;
 
 
-                            notificacion("error","Error",mensaje);
-                        }else{
-                            console.log(data);
-                        }
+            }catch(error){
+                errorCatch(error);
+            }
+
+        }
 
 
 
-                    },
-                    complete:function () {
-                        stop();
-                    }
+
+        const guardar = () => {
+            $(document).on("submit","#frmCrear",function(e){
+                e.preventDefault();
+                var form = new FormData($(this)[0]);
+                form.append('contenido',CKEDITOR.instances.contenido.getData());
+                cargando('Procesando...');
+
+                axios.post(URL_GUARDAR,form)
+                .then(response => {
+                    const data = response.data;
+                    stop();
+
+                    $("#modalCrear").modal("hide");
+                    notificacion("success","Registro exitoso",data.mensaje);
+                    listado();
+
                 })
+                .catch(errorCatch)
+
+
+
+
             });
         }
 
 
         const modificar = () => {
-            $("#frmEditar").on("submit",(e)=>{
+            $(document).on("submit","#frmEditar",function(e){
                 e.preventDefault();
 
-                var form = new FormData($("#frmEditar")[0]);
+                var form = new FormData($(this)[0]);
                 form.append('contenidoEditar',CKEDITOR.instances.contenidoEditar.getData());
+                cargando('Procesando...');
 
-                $.ajax({
-                    url:'{{ route('banner.update','update') }}',
-                    method:'POST',
-                    dataType:'json',
-                    data: form,
-                    cache:false,
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        $("#frmEditar span.error").remove();
-                        cargando('Procesando...');
-                    },
-                    success:function (response) {
-                        $("#modalEditar").modal("hide");
-                        notificacion("success","En hora buena",response.data);
-                        ajaxListado($("#cantidadRegistros").val(),$("#paginaActual").val());
-                    },
-                    error:function (data) {
+                axios.post(URL_MODIFICAR,form)
+                .then(response => {
+                    const data = response.data;
 
-                        if (data.status === 422){
-                            var errores = data.responseJSON.errors;
-                            var mensaje = '';
-                            $.each(errores,(posicion,valor)=>{
-                                mensaje += valor[0]+'\n';
-                                $("#"+posicion).closest('div.form-group').append('<span class="text-danger error">'+valor[0]+'</span>');
-                            });
+                    stop();
+                    $("#modalEditar").modal("hide");
+                    notificacion("success","Modificación exitosa",data.mensaje);
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
 
-                            notificacion("error","Error",mensaje);
-                        }else if(data.status === 400){
-                            notificacion("error","Error",data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
-
-
-
-                    },
-                    complete:function () {
-                        stop();
-                    }
                 })
+                .catch(errorCatch)
+
+
             });
         }
-
-
-        const eliminar = () => {
-            $("#frmEliminar").on("submit",(e)=>{
-                e.preventDefault();
-                $.ajax({
-                    url:'{{ route('banner.destroy','destroy') }}',
-                    method:'POST',
-                    dataType:'json',
-                    data: new FormData($("#frmEliminar")[0]),
-                    cache:false,
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        cargando('Procesando...');
-                    },
-                    success:function (response) {
-                        $("#modalEliminar").modal("hide");
-                        notificacion("success","Eliminado",response.data);
-                        ajaxListado($("#cantidadRegistros").val(),$("#paginaActual").val());
-                    },
-                    error:function (data) {
-                        if(data.status === 400){
-                            notificacion("error","Error",data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
-                    },
-                    complete:function () {
-                        stop();
-                    }
-                })
-            });
-        }
-
 
         const habilitar = () => {
-            $("#frmHabilitar").on("submit",(e)=>{
+            $(document).on( "submit" ,"#frmHabilitar", function(e){
                 e.preventDefault();
-                $.ajax({
-                    url:'{{ route('banner.habilitar') }}',
-                    method:'POST',
-                    dataType:'json',
-                    data: new FormData($("#frmHabilitar")[0]),
-                    cache:false,
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        cargando('Procesando...');
-                    },
-                    success:function (response) {
-                        $("#modalHabilitar").modal("hide");
-                        notificacion("success","Habilitado",response.data);
-                        ajaxListado($("#cantidadRegistros").val(),$("#paginaActual").val());
-                    },
-                    error:function (data) {
-                        if(data.status === 400){
-                            notificacion("error","Error",data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
-                    },
-                    complete:function () {
-                        stop();
-                    }
+                var form = new FormData($(this)[0]);
+                cargando('Procesando...');
+
+                axios.post(URL_HABILITAR,form)
+                .then( response => {
+                    const data = response.data;
+                    stop();
+
+                    $("#modalHabilitar").modal("hide");
+
+                    notificacion("success","Habilitado",data.mensaje);
+
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
+
                 })
-            });
+                .catch( errorCatch )
+
+
+            } )
+
         }
 
         const inhabilitar = () => {
-            $("#frmInhabilitar").on("submit",(e)=>{
+            $(document).on( "submit","#frmInhabilitar" , function(e){
                 e.preventDefault();
-                $.ajax({
-                    url:'{{ route('banner.inhabilitar') }}',
-                    method:'POST',
-                    dataType:'json',
-                    data: new FormData($("#frmInhabilitar")[0]),
-                    cache:false,
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        cargando('Procesando...');
-                    },
-                    success:function (response) {
-                        $("#modalInhabilitar").modal("hide");
-                        notificacion("success","Inhabilitado",response.data);
-                        ajaxListado($("#cantidadRegistros").val(),$("#paginaActual").val());
-                    },
-                    error:function (data) {
-                        if(data.status === 400){
-                            notificacion("error","Error",data.responseJSON.data);
-                        }else{
-                            console.log(data);
-                        }
-                    },
-                    complete:function () {
-                        stop();
-                    }
-                })
-            });
+
+                var form = new FormData($(this)[0]);
+
+                cargando('Procesando...');
+
+                axios.post(URL_INHABILITAR,form)
+                .then( response => {
+                    const data = response.data;
+                    stop();
+                    $("#modalInhabilitar").modal("hide");
+
+                    notificacion("success","Inhabilitado",data.mensaje);
+
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
+
+                } )
+                .catch( errorCatch )
+
+            } )
+        }
+
+        const eliminar = () => {
+            $(document).on( "submit","#frmEliminar" , function(e){
+                e.preventDefault();
+
+                var form = new FormData($(this)[0]);
+
+                cargando('Procesando...');
+
+                axios.post(URL_ELIMINAR,form)
+                .then( response => {
+                    const data = response.data;
+                    stop();
+                    $("#modalEliminar").modal("hide");
+
+                    notificacion("success","Eliminado",data.mensaje);
+
+                    listado($("#cantidadRegistros").val(),$("#paginaActual").val());
+
+                } )
+                .catch( errorCatch )
+
+            } )
         }
 
 
-        var cantidadBanners = () => {
-                $("#pagina").on("change",function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url:'{{ route('banner.cantidadBanners') }}',
-                        method:'POST',
-                        dataType:'json',
-                        data:{
-                          pagina:$(this).val()
-                        },
-                        beforeSend:function () {
-                            $("#orden").html('');
-                        },
-                        success:function (response) {
-                            for (var i=1;i<=response;i++){
-                                $("#orden").append(
-                                    '<option '+(i===response ? 'selected' : '')+' value="'+i+'">'+i+'</option>'
-                                );
-                            }
-                        },
-                        error:function (data) {
-                            console.log(data);
-                        },
-                        complete:function () {
-
-                        }
-                    })
-                })
-        }
+        const getPosicion = (accion , valorActual = null, pagina = null) => {
 
 
-        var cantidadBannersEditar = (ordenActual,pagina) => {
-            $.ajax({
-                url:'{{ route('banner.cantidadBanners') }}',
-                method:'POST',
-                dataType:'json',
-                data:{
-                    pagina:pagina
-                },
-                beforeSend:function () {
-                    $("#ordenEditar").html('');
-                },
-                success:function (response) {
-                    for (var i=1;i<=response;i++){
-                        $("#ordenEditar").append(
-                            '<option '+(i===ordenActual ? 'selected' : '')+' value="'+i+'">'+i+'</option>'
-                        );
-                    }
-                },
-                error:function (data) {
-                    console.log(data);
-                },
-                complete:function () {
+            let orderSelector = accion == "editar" ? "posicionEditar" : "posicion";
 
+
+            $("#"+orderSelector+" option").remove();
+
+            $("#"+orderSelector).append(`<option ${vacio(valorActual) ? 'selected' : '' } value="" hidden>[--- Seleccione ---]</option>`);
+            axios.get(URL_POSICION,{
+                params: {
+                    pagina : pagina
                 }
             })
+            .then(response => {
+                const data = response.data;
+
+                for (let i = 1; i <= data.posicion_maxima ; i++) {
+                    $("#"+orderSelector).append("<option "+ ( i == valorActual ? 'selected' : '') +" value="+i+">"+i+"</option>");
+                };
+
+                // $("#"+orderSelector).selectpicker("refresh");
+            })
+            .catch(e => console.log(e))
+
+
+
+
+
+        }
+
+        const changePariente = () => {
+            document.querySelector('#pagina').addEventListener('change' ,function (e) {
+                e.preventDefault();
+                getPosicion('crear',null,this.value);
+            })
+
+            document.querySelector('#paginaEditar').addEventListener('change' ,function (e) {
+                e.preventDefault();
+                getPosicion('editar',null,this.value);
+            })
+
+
+
         }
 
 
@@ -614,6 +454,25 @@
                 showZoom: false,
                 showDrag: false,
             },
+        });
+
+
+        $(function () {
+            filtros();
+            modales();
+            guardar();
+            modificar();
+            habilitar();
+            inhabilitar();
+            eliminar();
+
+            changePariente();
+
+
+            CKEDITOR.replace('contenido',{ height : 200 });
+            CKEDITOR.replace('contenidoEditar',{ height : 200 });
+
+
         });
 
 

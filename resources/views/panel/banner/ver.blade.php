@@ -20,27 +20,43 @@
 
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <p>Pagina:</p>
-                        <p id="txtPagina"></p>
-                        <hr>
-                    </div>
-
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
-                        <p>Imagen:</p>
-                        <img style="width: 130px;height: 130px" class="img-thumbnail" src="" id="txtImagen">
+                        <p id="paginaShow"></p>
                         <hr>
                     </div>
 
 
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <p>Contenido:</p>
-                        <p id="txtContenido"></p>
+                        <p id="contenidoShow"></p>
+                        <hr>
+                    </div>
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p>Ruta:</p>
+                        <p id="rutaShow"></p>
+                        <hr>
+                    </div>
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p>posición:</p>
+                        <p id="posicionShow"></p>
                         <hr>
                     </div>
 
 
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                        <p>Imagen:</p>
+                        <img style="width: 130px;height: 130px" class="img-thumbnail" src="" id="imagenShow">
+                        <hr>
+                    </div>
+
+
+
+
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <p>Estado:</p>
-                        <p id="txtEstado"></p>
+                        <p id="estadoShow"></p>
                     </div>
 
                 </div>

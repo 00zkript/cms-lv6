@@ -3,9 +3,9 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr class="text-center text-nowrap">
-                <th>ORDEN</th>
                 <th>Imagen</th>
                 <th>Pagina</th>
+                <th>Posición</th>
                 <th>Estado</th>
                 <th>Opciones</th>
             </tr>
@@ -14,15 +14,12 @@
 
             @foreach($banners AS $b)
                 <tr>
-                    <td>{{ $b->orden}}</td>
                     <td class="text-center">
-                        @if(!empty($b->imagen))
-                            <img class="img-thumbnail" style="width: 80px;height: 80px" src="{{ asset('panel/img/banner/'.$b->imagen) }}" alt="">
-                        @else
-                            <img class="img-thumbnail" style="width: 80px;height: 80px" src="{{ asset('panel/img/vacio_img.jpg') }}" alt="">
-                        @endif
+                        @php( $img = $b->imagen ? asset('panel/img/banner/'.$b->imagen) : asset('panel/img/vacio_img.jpg') )
+                        <img class="img-thumbnail" style="width: 80px;height: 80px" src="{{ $img }}" alt="">
                     </td>
                     <td>{{ $b->pagina}}</td>
+                    <td>{{ $b->posicion}}</td>
                     <td>{!! $b->estado ? '<label class="badge badge-success">Habilidado</label>' : '<label class="badge badge-danger">Inhabilitado</label>' !!}</td>
                     <td class="text-center">
                         <div class="dropdown">
