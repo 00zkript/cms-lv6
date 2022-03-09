@@ -39,6 +39,6 @@ class ContactoEmail extends Mailable
             ->from(env('MAIL_USERNAME'), $data->correo)
             ->to(env('MAIL_USERNAME'))
             ->subject('Contacto de pagina web')
-            ->view('email.contacto.index')->with(compact('data'));
+            ->view('mail.contacto.index')->with(compact('data'));
     }
 }
