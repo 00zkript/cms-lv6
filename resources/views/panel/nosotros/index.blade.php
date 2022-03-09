@@ -24,10 +24,6 @@
 
                                 <div class="col-12">
                                     <br>
-
-                                    <h2 class="font-weight-bold text-center">Criterios de Búsqueda :</h2>
-                                    <hr>
-
                                     <div class="row">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group">
