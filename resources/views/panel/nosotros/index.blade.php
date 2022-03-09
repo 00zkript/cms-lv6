@@ -39,8 +39,8 @@
                                         </div>
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group">
-                                                <label for="somos">¿Quiénes somos?:</label>
-                                                <textarea id="somos" rows="5"  class="form-control" placeholder="¿Quiénes somos?"  >{{ $nosotros->quienes_somos }}</textarea>
+                                                <label for="quienes_somos">¿Quiénes somos?:</label>
+                                                <textarea id="quienes_somos" rows="5"  class="form-control" placeholder="¿Quiénes somos?"  >{{ $nosotros->quienes_somos }}</textarea>
                                             </div>
                                         </div>
 
@@ -78,7 +78,7 @@
                 var form = new FormData($(this)[0]);
                 form.append('mision',CKEDITOR.instances.mision.getData());
                 form.append('vision',CKEDITOR.instances.vision.getData());
-                form.append('somos',CKEDITOR.instances.somos.getData());
+                form.append('quienes_somos',CKEDITOR.instances.quienes_somos.getData());
 
                 cargando('Procesando...');
 
@@ -105,7 +105,7 @@
 
             CKEDITOR.replace('mision',{ height : 400});
             CKEDITOR.replace('vision',{ height : 400});
-            CKEDITOR.replace('somos',{ height : 400});
+            CKEDITOR.replace('quienes_somos',{ height : 400});
 
         });
 

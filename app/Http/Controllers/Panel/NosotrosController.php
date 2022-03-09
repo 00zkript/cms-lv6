@@ -33,10 +33,10 @@ class NosotrosController extends Controller
             return abort(404);
         }
 
-        $nosotros = Nosotros::findOrFail($request->idnosotros);
-        $nosotros->vision = $request->vision;
-        $nosotros->mision = $request->mision;
-        $nosotros->quienes_somos = $request->somos;
+        $nosotros = Nosotros::findOrFail($request->input('idnosotros'));
+        $nosotros->vision = $request->input('vision');
+        $nosotros->mision = $request->input('mision');
+        $nosotros->quienes_somos = $request->input('quienes_somos');
         $nosotros->update();
 
         return response()->json(['mensaje' => 'Información modificada satisfactoriamente']);
