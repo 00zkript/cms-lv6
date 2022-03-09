@@ -44,7 +44,7 @@
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group">
                                                 <label for="somos">¿Quiénes somos?:</label>
-                                                <textarea id="somos" rows="5"  class="form-control" placeholder="¿Quiénes somos?"  >{{ $nosotros->somos }}</textarea>
+                                                <textarea id="somos" rows="5"  class="form-control" placeholder="¿Quiénes somos?"  >{{ $nosotros->quienes_somos }}</textarea>
                                             </div>
                                         </div>
 
