@@ -128,7 +128,7 @@
 
                     $("#imagenEditar").fileinput('destroy').fileinput({
                         dropZoneTitle : 'Arrastre la imagen aquí',
-                        initialPreview : [ BASE_URL+"/panel/img/example/"+data.imagen ],
+                        initialPreview : [ BASE_URL+"/panel/img/carpeta/"+data.imagen ],
                         initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
                         // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
                         // uploadUrl : "#",
@@ -169,13 +169,13 @@
 
 
                     if(data.imagen){
-                        const img = `<img src="${ BASE_URL+"/panel/img/example/"+data.imagen }" style ="width: 200px;" >`;
+                        const img = `<img src="${ BASE_URL+"/panel/img/carpeta/"+data.imagen }" style ="width: 200px;" >`;
                         $("#imagenShow").html(img);
                     }
 
 
                     if(data.pdf){
-                        const pdf = `<a href="${ BASE_URL+"/panel/img/example/"+data.pdf }" target="_blank">Ver PDF</a>`;
+                        const pdf = `<a href="${ BASE_URL+"/panel/img/carpeta/"+data.pdf }" target="_blank">Ver PDF</a>`;
                         $("#pdfShow").html(pdf);
                     }
 
