@@ -389,6 +389,7 @@
 
             $("#"+orderSelector+" option").remove();
 
+            $("#"+orderSelector).append(`<option ${ vacio(valorActual) ? 'selected' : '' }  value="" hidden >[--- Seleccione ---]</option>`);
             axios.get(URL_POSICION,{
                 params: {
                     pariente : pariente
