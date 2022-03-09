@@ -381,7 +381,7 @@
         }
 
 
-        const getPosicion = ( accion , valorActual = null, pariente = null ) => {
+        const getPosicion = ( accion , valorActual = null, pariente = 0 ) => {
 
 
             let orderSelector = accion == "editar" ? "posicionEditar" : "posicion";
@@ -422,7 +422,7 @@
             .then(response => {
                 const data = response.data;
 
-                $("#"+parienteSelector).append(`<option data-tokens='' value='' ${ accion != 'editar' ? 'selected' : '' } >Sin Parientes</option>`);
+                $("#"+parienteSelector).append(`<option value='0' ${ accion != 'editar' ? 'selected' : '' } >Sin Parientes</option>`);
                 data.forEach(ele => {
                     $("#"+parienteSelector).append(`<option data-tokens="${ ele.idmenu }" value="${ ele.idmenu }">${ ele.nombre }</option>`);
 
