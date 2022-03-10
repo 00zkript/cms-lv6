@@ -31,7 +31,7 @@ class ExampleController extends Controller
         }
 
         $cantidadRegistros = $request->input('cantidadRegistros');
-        $registroActual = $request->input('paginaActual');
+        $paginaActual = $request->input('paginaActual');
         $txtBuscar = $request->input('txtBuscar');
 
         $registros = Example::query()
@@ -39,7 +39,7 @@ class ExampleController extends Controller
                 return $query->where('nombre','LIKE','%'.$txtBuscar.'%');
             })
             ->orderBy('idregistro','DESC')
-            ->paginate($cantidadRegistros,['*'],'pagina',$registroActual);
+            ->paginate($cantidadRegistros,['*'],'pagina',$paginaActual);
 
 
 
