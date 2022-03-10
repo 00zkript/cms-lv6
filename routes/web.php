@@ -91,6 +91,11 @@ Route::middleware(['admin'])->prefix('panel')->group(function (){
 
 
 
+    Route::post('blog/habilitar',[\App\Http\Controllers\Panel\BlogController::class,'habilitar'])->name("blog.habilitar");
+    Route::post('blog/inhabilitar',[\App\Http\Controllers\Panel\BlogController::class,'inhabilitar'])->name("blog.inhabilitar");
+    Route::post('blog/listar',[\App\Http\Controllers\Panel\BlogController::class,'listar'])->name("blog.listar");
+    Route::resource('blog',\App\Http\Controllers\Panel\BlogController::class);
+
 
 
 
