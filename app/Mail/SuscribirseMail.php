@@ -35,8 +35,8 @@ class SuscribirseMail extends Mailable
 
 
         return $this
-            ->from(env('MAIL_USERNAME'), $data->email)
-            ->to(env('MAIL_USERNAME'))
+            ->from(env('MAIL_FROM_ADDRESS'), $data->email)
+            ->to(env('MAIL_TO_ADDRESS'))
             ->subject('Deseo suscribirme')
             ->view('mail.suscribirse')->with(compact('data'));
     }
