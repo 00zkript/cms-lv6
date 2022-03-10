@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProyectoImagensTable extends Migration
+class CreateSuscripcionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateProyectoImagensTable extends Migration
      */
     public function up()
     {
-        Schema::create('proyecto_imagen', function (Blueprint $table) {
-            $table->bigIncrements('idproyecto_imagen');
-            $table->integer('idproyecto')->nullable();
-            $table->string('nombre')->nullable();
-            $table->integer('posicion')->default(1);
+        Schema::create('suscripcion', function (Blueprint $table) {
+            $table->bigIncrements('idsuscripcion');
+            $table->string('email')->nullable();
             $table->boolean('estado')->default(false);
-            // $table->timestamps();
+            $table->dateTime('fecha_registro');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateProyectoImagensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('proyecto_imagen');
+        Schema::dropIfExists('suscripcion');
     }
 }

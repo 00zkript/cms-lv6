@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuscripcionsTable extends Migration
+class CreateTipoUsoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateSuscripcionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('suscripcion', function (Blueprint $table) {
-            $table->bigIncrements('idsuscripcion');
-            $table->string('email')->nullable();
+        Schema::create('tipo_uso', function (Blueprint $table) {
+            $table->bigIncrements('idtipo_uso');
+            $table->string('nombre', 45)->nullable();
             $table->boolean('estado')->default(false);
-            $table->dateTime('fecha_registro');
-            // $table->timestamps();
         });
     }
 
@@ -29,6 +27,6 @@ class CreateSuscripcionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suscripcion');
+        Schema::dropIfExists('tipo_uso');
     }
 }

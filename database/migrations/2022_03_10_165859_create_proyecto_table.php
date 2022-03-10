@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaginasTable extends Migration
+class CreateProyectoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreatePaginasTable extends Migration
      */
     public function up()
     {
-        Schema::create('pagina', function (Blueprint $table) {
-            $table->bigIncrements('idpagina');
-            $table->string('slug')->nullable();
-            $table->string('titulo')->nullable();
-            $table->string('subtitulo')->nullable();
-            $table->string('autor')->nullable();
+        Schema::create('proyecto', function (Blueprint $table) {
+            $table->integer('idproyecto', true);
+            $table->string('nombre', 250)->nullable();
+            $table->string('slug', 250)->nullable();
             $table->text('descripcion')->nullable();
             $table->text('contenido')->nullable();
             $table->text('imagen')->nullable();
-            $table->boolean('estado')->default(false);
-            // $table->timestamps();
+            $table->boolean('estado')->nullable()->default(false);
         });
     }
 
@@ -34,6 +31,6 @@ class CreatePaginasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pagina');
+        Schema::dropIfExists('proyecto');
     }
 }

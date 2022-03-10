@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContactosTable extends Migration
+class CreateContactoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -29,7 +29,6 @@ class CreateContactosTable extends Migration
             $table->string('linkedin')->nullable();
             $table->text('ubicacion')->nullable();
             $table->text('direccion')->nullable();
-            // $table->timestamps();
         });
     }
 

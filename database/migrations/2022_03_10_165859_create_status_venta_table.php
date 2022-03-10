@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductoImagensTable extends Migration
+class CreateStatusVentaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateProductoImagensTable extends Migration
      */
     public function up()
     {
-        Schema::create('producto_imagen', function (Blueprint $table) {
-            $table->bigIncrements('idproducto_imagen');
-            $table->integer('idproducto')->nullable();
-            $table->string('nombre')->nullable();
-            $table->integer('posicion')->default(1);
+        Schema::create('status_venta', function (Blueprint $table) {
+            $table->bigIncrements('idstatus_venta');
+            $table->string('nombre', 45)->nullable();
             $table->boolean('estado')->default(false);
-            // $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateProductoImagensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('producto_imagen');
+        Schema::dropIfExists('status_venta');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmpresasTable extends Migration
+class CreateEmpresaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,8 +26,7 @@ class CreateEmpresasTable extends Migration
             $table->string('seo_author')->nullable();
             $table->text('seguimiento_head')->nullable();
             $table->text('seguimiento_body')->nullable();
-            $table->boolean('estado')->default(1);
-            // $table->timestamps();
+            $table->boolean('estado')->default(true);
         });
     }
 

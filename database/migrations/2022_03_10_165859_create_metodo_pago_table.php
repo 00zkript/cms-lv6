@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServicioImagensTable extends Migration
+class CreateMetodoPagoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateServicioImagensTable extends Migration
      */
     public function up()
     {
-        Schema::create('servicio_imagen', function (Blueprint $table) {
-            $table->bigIncrements('idservicio_imagen');
-            $table->integer('idservicio')->nullable();
-            $table->string('nombre')->nullable();
-            $table->integer('posicion')->default(1);
+        Schema::create('metodo_pago', function (Blueprint $table) {
+            $table->bigIncrements('idmetodo_pago');
+            $table->string('nombre', 45)->nullable();
             $table->boolean('estado')->default(false);
-            // $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateServicioImagensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicio_imagen');
+        Schema::dropIfExists('metodo_pago');
     }
 }

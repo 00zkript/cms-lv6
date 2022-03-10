@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProyectosTable extends Migration
+class CreateBannerImagenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateProyectosTable extends Migration
      */
     public function up()
     {
-        Schema::create('proyecto', function (Blueprint $table) {
-            $table->bigIncrements('idproyecto');
-            $table->string('slug')->nullable();
+        Schema::create('banner_imagen', function (Blueprint $table) {
+            $table->bigIncrements('idbanner_imagen');
+            $table->integer('idbanner')->nullable();
             $table->string('nombre')->nullable();
-            $table->text('descripcion')->nullable();
-            $table->text('contenido')->nullable();
-            $table->text('imagen')->nullable();
+            $table->integer('posicion')->default(1);
             $table->boolean('estado')->default(false);
-            // $table->timestamps();
         });
     }
 
@@ -32,6 +29,6 @@ class CreateProyectosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('proyecto');
+        Schema::dropIfExists('banner_imagen');
     }
 }

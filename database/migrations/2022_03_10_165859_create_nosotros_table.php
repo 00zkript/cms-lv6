@@ -18,7 +18,6 @@ class CreateNosotrosTable extends Migration
             $table->text('mision')->nullable();
             $table->text('vision')->nullable();
             $table->text('quienes_somos')->nullable();
-            // $table->timestamps();
         });
     }
 

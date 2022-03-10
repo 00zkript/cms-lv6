@@ -15,11 +15,10 @@ class CreateMarcaTable extends Migration
     {
         Schema::create('marca', function (Blueprint $table) {
             $table->bigIncrements('idmarca');
-            $table->string('nombre',250)->nullable();
-            $table->string('slug',250)->nullable();
+            $table->string('nombre', 250)->nullable();
+            $table->string('slug', 250)->nullable();
             $table->text('imagen')->nullable();
-            $table->boolean('estado')->default(0);
-//            $table->timestamps();
+            $table->boolean('estado')->default(false);
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBannerImagensTable extends Migration
+class CreateStatusPagoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateBannerImagensTable extends Migration
      */
     public function up()
     {
-        Schema::create('banner_imagen', function (Blueprint $table) {
-            $table->bigIncrements('idbanner_imagen');
-            $table->integer('idbanner')->nullable();
-            $table->string('nombre')->nullable();
-            $table->integer('posicion')->default(1);
+        Schema::create('status_pago', function (Blueprint $table) {
+            $table->bigIncrements('status_pago');
+            $table->string('nombre', 45)->nullable();
             $table->boolean('estado')->default(false);
-            // $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateBannerImagensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('banner_imagen');
+        Schema::dropIfExists('status_pago');
     }
 }
