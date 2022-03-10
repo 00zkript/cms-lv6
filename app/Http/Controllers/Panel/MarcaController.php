@@ -178,7 +178,7 @@ class MarcaController extends Controller
         } catch (\Throwable $th) {
 
             return response()->json([
-                'mensaje'=> "No se pudo habilitado el registro.",
+                'mensaje'=> "No se pudo habilitar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
@@ -204,7 +204,7 @@ class MarcaController extends Controller
         } catch (\Throwable $th) {
 
             return response()->json([
-                'mensaje'=> "No se pudo inhabilitado el registro.",
+                'mensaje'=> "No se pudo inhabilitar el registro.",
                 "error" => $th->getMessage(),
                 "linea" => $th->getLine(),
             ],400);
