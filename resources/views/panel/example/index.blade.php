@@ -61,16 +61,76 @@
     <script type="module" >
 
 
-        const URL_LISTADO     = "";
-        const URL_GUARDAR     = "";
-        const URL_VER         = "";
-        const URL_EDIT        = "";
-        const URL_MODIFICAR   = "";
-        const URL_HABILITAR   = "";
-        const URL_INHABILITAR = "";
-        const URL_ELIMINAR    = "";
+        const URL_LISTADO     = "{{ route('example.listar') }}";
+        const URL_GUARDAR     = "{{ route('example.store') }}";
+        const URL_VER         = "{{ route('example.show','show') }}";
+        const URL_EDIT        = "{{ route('example.edit','edit') }}";
+        const URL_MODIFICAR   = "{{ route('example.update','update') }}";
+        const URL_HABILITAR   = "{{ route('example.habilitar') }}";
+        const URL_INHABILITAR = "{{ route('example.inhabilitar') }}";
+        const URL_ELIMINAR    = "{{ route('example.destroy','destroy') }}";
+        const URL_SORTIMAGES    = "";
 
 
+        const filtros = () => {
+
+
+            $(document).on("click","a.page-link", function(e) {
+                e.preventDefault();
+                const url               = e.target.href;
+                const paginaActual      = url.split("?pagina=")[1];
+                const cantidadRegistros = $("#cantidadRegistros").val();
+
+                listado(cantidadRegistros,paginaActual);
+            } )
+
+
+
+            $(document).on("change","#cantidadRegistros", function(e) {
+                e.preventDefault();
+                const paginaActual      = $("#paginaActual").val();
+                const cantidadRegistros = e.target.val();
+
+                listado(cantidadRegistros,paginaActual);
+
+            } )
+
+
+
+            $(document).on("submit","#frmBuscar", function(e) {
+                e.preventDefault();
+                const cantidadRegistros = $("#cantidadRegistros").val();
+                const paginaActual      = $("#paginaActual").val();
+
+                listado(cantidadRegistros,1);
+
+            } )
+
+        }
+
+        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
+            cargando();
+
+            const form = {
+                cantidadRegistros : cantidadRegistros,
+                paginaActual : paginaActual,
+                txtBuscar : $("#txtBuscar").val().trim(),
+            }
+
+            try{
+                const response = await axios.post(URL_LISTADO, form );
+                const data = response.data;
+
+                stop();
+                document.querySelector("#listado").innerHTML = data;
+
+
+            }catch(error){
+                errorCatch(error);
+            }
+
+
+        }
 
         const modales = () => {
 
@@ -196,69 +256,6 @@
 
         }
 
-
-        const filtros = () => {
-
-
-            $(document).on("click","a.page-link", function(e) {
-                e.preventDefault();
-                const url               = e.target.href;
-                const paginaActual      = url.split("?pagina=")[1];
-                const cantidadRegistros = $("#cantidadRegistros").val();
-
-                listado(cantidadRegistros,paginaActual);
-            } )
-
-
-
-            $(document).on("change","#cantidadRegistros", function(e) {
-                e.preventDefault();
-                const paginaActual      = $("#paginaActual").val();
-                const cantidadRegistros = e.target.val();
-
-                listado(cantidadRegistros,paginaActual);
-
-            } )
-
-
-
-            $(document).on("submit","#frmBuscar", function(e) {
-                e.preventDefault();
-                const cantidadRegistros = $("#cantidadRegistros").val();
-                const paginaActual      = $("#paginaActual").val();
-
-                listado(cantidadRegistros,1);
-
-            } )
-
-        }
-
-        const listado = async (cantidadRegistros = 10,paginaActual = 1) => {
-            cargando();
-
-            const form = {
-                cantidadRegistros : cantidadRegistros,
-                paginaActual : paginaActual,
-                txtBuscar : $("#txtBuscar").val().trim(),
-            }
-
-            try{
-                const response = await axios.post(URL_LISTADO, form );
-                const data = response.data;
-
-                stop();
-                document.querySelector("#listado").innerHTML = data;
-
-
-            }catch(error){
-                errorCatch(error);
-            }
-
-
-        }
-
-
-
         const guardar = () => {
             $(document).on("submit","#frmCrear",function(e){
                 e.preventDefault();
@@ -283,7 +280,6 @@
 
             });
         }
-
 
         const modificar = () => {
             $(document).on("submit","#frmEditar",function(e){
@@ -380,6 +376,31 @@
                 .catch( errorCatch )
 
             } )
+        }
+
+        const sortImagenes = () => {
+
+            $("#imagenEditar").on('filesorted', function(e, params) {
+                e.preventDefault();
+                let stack = params.stack;
+
+                axios.post(URL_SORTIMAGES, {
+                    stack : JSON.stringify(stack)
+                })
+                .then( response => {
+                    const data = response.data;
+                    console.log(data.mensaje);
+                })
+                .catch( error => {
+                    const response = error.response;
+                    const data = response.data;
+
+                    console.log(data);
+                })
+
+
+            });
+
         }
 
         $("#imagen").fileinput({
