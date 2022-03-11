@@ -154,21 +154,24 @@ class ExampleController extends Controller
             $registro->update();
 
             if (is_array($request->imagenEditar)) {
+
+                $max = ExampleImagen::query()
+                    ->where('idregistro',$registro->idregistro)
+                    ->orderBy('posicion','desc')
+                    ->first();
+
+                $maximaPosicion = $max ? $max->posicion : 0;
+
+
                 foreach ($request->imagenEditar as $key => $img) {
                     if ($request->hasFile('imagenEditar.'.$key)){
+
                         $nombreImagen = Storage::disk('panel')->putFile('registro',$img);
-
-                        $max = ExampleImagen::query()
-                            ->where('idregistro',$registro->idregistro)
-                            ->orderBy('posicion','desc')
-                            ->first();
-
-                        $posicion = $max ? ($max->posicion + $key + 1) : ($key + 1);
 
                         $imagen             = new ExampleImagen();
                         $imagen->idregistro = $registro->idregistro ;
                         $imagen->nombre     = basename($nombreImagen);
-                        $imagen->posicion      = $posicion;
+                        $imagen->posicion   = $maximaPosicion + $key + 1;;
                         $imagen->save();
                     }
                 }
@@ -303,20 +306,26 @@ class ExampleController extends Controller
             return abort(404);
         }
 
-        foreach (json_decode($request->stack) as $key => $item) {
-            $imagen = ExampleImagen::query()->find($item->key);
-            $imagen->posicion = $key+1;
-            $imagen->update();
+        try {
+
+            foreach (json_decode($request->stack) as $key => $item) {
+                $imagen = ExampleImagen::query()->find($item->key);
+                $imagen->posicion = $key+1;
+                $imagen->update();
+            }
+
+            return response()->json([
+                'mensaje'=> "Orden modificado exitosamente.",
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'mensaje'=> "No se pudo modificar el orden.",
+                "error" => $th->getMessage(),
+                "linea" => $th->getLine(),
+            ],400);
         }
-
-
-
-        return response()->json([
-            'mensaje'=> "Orden modificado exitosamente.",
-        ]);
-
-
-    }
 
 
 
