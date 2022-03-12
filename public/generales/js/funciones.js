@@ -438,7 +438,13 @@ const getFirstElemnto = (data) => {
     return data[Object.keys(data)[0]]
 }
 
-
+/**
+ * Funcion para traer un objeto con las url y los setting necesarios del Fileinpput
+ * @param { string } path ruta de la carpeta de las imagenes ejemplo "htttp::/example.com/imagense/etc..."
+ * @param { array } data coleccion de objetos a transformar
+ * @param { string || null } type Tipo de datos ejemplo "pdf"
+ * @return {{settings: [], urls: []}}
+ */
 const allFilesData = (path, data, type = null ) => {
 
     const $urls = [];
