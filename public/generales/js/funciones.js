@@ -424,8 +424,8 @@ const listErrors = (data) => {
     let errors = data.errors;
 
     let msj = `<ul style="text-align: left">`;
-    for(const item of errors){
-        msj += `<li> ${ item[0] } </li>`;
+    for(const key in errors){
+        msj += `<li> ${ errors[key][0] } </li>`;
     }
     msj += `</ul>`;
 
