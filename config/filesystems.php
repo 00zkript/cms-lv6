@@ -60,6 +60,11 @@ return [
             'root' => public_path('panel/img'),
             'url' => env('APP_URL').'/panel/img',
             'visibility' => 'public',
+            'cache' => [
+                'store' => 'file',
+                'expire' => 60*60*24*7,
+                'prefix' => 'panel',
+            ],
         ],
 
         'web' => [
@@ -67,6 +72,11 @@ return [
             'root' => public_path('/web'),
             'url' => env('APP_URL').'/web',
             'visibility' => 'public',
+            'cache' => [
+                'store' => 'file',
+                'expire' => 60*60*24*7,
+                'prefix' => 'web',
+            ],
         ],
 
         's3' => [
@@ -77,6 +87,11 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
+            'cache' => [
+                'store' => 'file',
+                'expire' => 60*60*24*7,
+                'prefix' => 's3',
+            ],
         ],
 
     ],
