@@ -405,7 +405,7 @@
 
         $("#imagen").fileinput({
             dropZoneTitle : 'Arrastre la imagen aquí',
-            fileActionSettings : { howRemove : true, showUpload : false, showZoom : true, showDrag : true},
+            fileActionSettings : { showRemove : true, showUpload : false, showZoom : true, showDrag : true},
         });
 
         $("#imagenEditar").fileinput({

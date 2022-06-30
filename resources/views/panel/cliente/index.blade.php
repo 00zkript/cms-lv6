@@ -128,7 +128,7 @@
                         dropZoneTitle : 'Arrastre la imagen aquí',
                         initialPreview : [ BASE_URL+"/panel/img/cliente/"+data.imagen ],
                         initialPreviewConfig : { caption : data.imagen , width: "120px", height : "120px" },
-                        // fileActionSettings : { howRemove : false, showUpload : false, showZoom : true, showDrag : false},
+                        // fileActionSettings : { showRemove : false, showUpload : false, showZoom : true, showDrag : false},
                         // uploadUrl : "#",
                         // uploadExtraData : _ => {},
                         // deleteUrl : "#",

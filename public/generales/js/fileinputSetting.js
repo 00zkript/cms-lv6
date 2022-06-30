@@ -4,7 +4,7 @@ const fileinputSetting = ({
     allowedFileExtensions  = false,
     overwriteInitial = false,
     fileActionSettings = {
-        howRemove  : false,
+        showRemove  : false,
         showUpload  : false,
         showZoom    : true,
         showDrag    : false,
